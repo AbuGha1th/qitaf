@@ -94,7 +94,7 @@ const logoImg=c=>`<img class="${c}" src="${LOGO}" onerror="this.remove()">`;
 function fit(el,min){let f=parseFloat(getComputedStyle(el).fontSize);while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+2)&&f>min){f-=2;el.style.fontSize=f+'px'}}
 // mode=subs: each subtitle drawn to a transparent strip the renderer lays over the video
 async function subs(){
-  const W=H.w,Ht=H.h,dpr=1,lay=H.layout;const QF=H.reading==='warsh'?'Warsh':'"Amiri Quran"';await Promise.all([document.fonts.load('700 50px Sans'),document.fonts.load('50px '+QF,'قُلْ إِن تُخْفُوا۟')]);
+  const W=H.w,Ht=H.h,dpr=1,lay=H.layout;const QF=H.reading==='warsh'?'Warsh':'"Amiri Quran"';await Promise.allSettled([document.fonts.load('700 50px Sans'),document.fonts.load('50px '+QF,'قُلْ إِن تُخْفُوا۟')]);
   const cv=document.createElement('canvas');cv.width=W;cv.height=Ht;const c=cv.getContext('2d');c.direction='rtl';c.textAlign='center';c.textBaseline='middle';
   const out=[];
   for(const it of H.items){
@@ -136,7 +136,7 @@ function thumb(){
 }
 document.fonts.ready.then(async()=>{
   if(H.mode==='subs')return subs();
-  await Promise.all(['900 60px Sans','700 40px Sans','900 60px QSerif'].map(f=>document.fonts.load(f)));
+  await Promise.allSettled(['900 60px Sans','700 40px Sans','900 60px QSerif'].map(f=>document.fonts.load(f)));  // a missing font falls back; it must never stop the drawing
   H.mode==='thumb'?thumb():frame();
   document.title='done';
 });

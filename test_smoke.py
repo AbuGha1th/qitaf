@@ -73,7 +73,7 @@ for layout in ("band", "board", "sound"):
     assert os.path.exists(v[:-4] + " thumbnail 1.jpg") and os.path.exists(v[:-4] + ".srt")
     if layout == "sound":  # this pass uses Warsh: the verse must come from al-mushaf.com, with its own reading
         assert "قُلِ" in open(v[:-4] + ".srt", encoding="utf-8").read(), "no Warsh text"
-    if layout == "board":  # the frame must be fully painted: the bottom edge is the ground colour, never black
+    if layout != "sound":  # the frame must be fully painted: the bottom edge is the ground colour, never black
         g = subprocess.run(["ffmpeg", "-v", "error", "-ss", "6", "-i", v, "-frames:v", "1", "-vf", "crop=1920:8:0:1068,scale=1:1", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True).stdout
         assert sum(g) > 60, f"unpainted board edge: {list(g)}"
     shutil.copy(v[:-4] + " thumbnail 1.jpg", os.path.join(shots, f"thumb-{layout}.jpg"))
