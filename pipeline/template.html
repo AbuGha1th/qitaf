@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ar"><head><meta charset="utf-8"><title>Qitaf clip</title>
+<script src="assets/gsap.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@600;700&family=Amiri:wght@700&family=Amiri+Quran&family=Cairo:wght@700&family=Tajawal:wght@700&family=Reem+Kufi:wght@600&family=Lateef:wght@700&family=Scheherazade+New:wght@700&family=El+Messiri:wght@600&family=Markazi+Text:wght@600&family=Aref+Ruqaa:wght@700&family=Manrope:wght@600;700&family=Montserrat:wght@600;700&family=Lora:wght@600&family=Playfair+Display:wght@600&family=Merriweather:wght@700&family=Lalezar&family=Marhey:wght@700&family=Rakkas&display=block" rel="stylesheet">
+<style>
+@font-face{font-family:'Thmanyah Sans';src:url(assets/fonts/thmanyahsans-Medium.woff2) format('woff2');font-weight:400 600}
+@font-face{font-family:'Thmanyah Sans';src:url(assets/fonts/thmanyahsans-Black.woff2) format('woff2');font-weight:700 900}
+@font-face{font-family:'Thmanyah Serif';src:url(assets/fonts/thmanyahserifdisplay-Bold.woff2) format('woff2')}
+@font-face{font-family:'Basseet';src:url(assets/fonts/BasseetFree-Bold.ttf) format('truetype')}
+@font-face{font-family:'Almaghribi Warsh';src:url('assets/fonts/Almaghribi Warsh-Quran.otf') format('opentype')}
+@font-face{font-family:'AMoshref Naskh';src:url('assets/fonts/AMoshref Naskh.ttf') format('truetype')}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#qitaf{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+#camwrap{position:absolute;inset:0;transform-origin:50% 35%}
+#camwrap video{width:100%;height:100%;object-fit:cover;display:block}
+#camwrap::after{content:'';position:absolute;inset:0;background:#000;opacity:var(--dim,0)}  /* darken the video: text and graphics stand out */
+#fade{position:absolute;inset:0;pointer-events:none;z-index:5;background:__FADE__}
+.ov{position:absolute;left:140px;right:140px;text-align:center;direction:rtl;z-index:10}
+#title{display:flex;flex-direction:column;align-items:center;gap:12px;line-height:1.35}
+#title span,#name span{display:inline-block;white-space:nowrap;color:var(--fg);font-weight:700}
+.pill span{background:var(--bg);border-radius:999px;padding:6px 40px}
+.banner span{background:var(--bg);border-radius:6px;padding:0 30px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.shadow span,.plain span{text-shadow:0 4px 10px rgba(0,0,0,.85),0 0 40px rgba(0,0,0,.6)}
+.outline span{-webkit-text-stroke:4px var(--bg);paint-order:stroke fill;text-shadow:0 6px 18px rgba(0,0,0,.5)}
+#name{display:flex;justify-content:center}
+#name span{font-weight:600;padding:4px 30px}
+#brand{font:600 34px 'Thmanyah Sans',sans-serif;color:#FDE68A;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+#caps{position:absolute;inset:0;z-index:9;pointer-events:none}
+.cw{display:inline-block}
+/* hook → clip: a warm "burn" flash marks where the hook ends and the lesson starts */
+#burn{position:absolute;inset:-10%;z-index:20;pointer-events:none;opacity:0;mix-blend-mode:screen;
+  background:radial-gradient(circle at 50% 52%,rgba(255,250,235,.95) 0%,rgba(255,176,64,.85) 20%,rgba(190,60,16,.55) 42%,rgba(0,0,0,0) 68%)}
+#cd{position:absolute;display:flex;align-items:center;gap:calc(12px*var(--k,1));padding:calc(9px*var(--k,1)) calc(22px*var(--k,1)) calc(9px*var(--k,1)) calc(10px*var(--k,1));
+  border-radius:999px;background:rgba(15,15,13,.55);border:1px solid rgba(255,251,235,.18);z-index:11;color:#FFFBEB;
+  font:700 calc(38px*var(--k,1))/1 'Manrope',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+#cd .bar{display:none}
+/* countdown designs: pill (default) · minimal · circle · bar */
+#cd.cd-minimal{background:none;border:0;padding:0;gap:calc(8px*var(--k,1));text-shadow:0 2px 10px rgba(0,0,0,.8)}#cd.cd-minimal svg{width:calc(26px*var(--k,1));height:calc(26px*var(--k,1))}
+#cd.cd-circle{background:rgba(15,15,13,.45);border:0;padding:0;border-radius:50%;width:calc(104px*var(--k,1));height:calc(104px*var(--k,1));justify-content:center}
+#cd.cd-circle svg{position:absolute;inset:0;width:100%!important;height:100%!important}#cd.cd-circle span{font-size:calc(28px*var(--k,1))}
+#cd.cd-bar{flex-direction:column;align-items:flex-start;background:none;border:0;padding:0;gap:calc(8px*var(--k,1));text-shadow:0 2px 10px rgba(0,0,0,.8)}
+#cd.cd-bar svg{display:none}#cd.cd-bar .bar{display:block;width:calc(230px*var(--k,1));height:calc(6px*var(--k,1));border-radius:6px;background:rgba(255,251,235,.22);overflow:hidden}
+#cd.cd-bar .bar b{display:block;height:100%;background:var(--cdc,#F59E0B);transform-origin:left;border-radius:6px}
+/* the lesson's name, small, top right inside the safe zone */
+#lesson{position:absolute;z-index:11;direction:rtl;text-align:right;max-width:46%;color:rgba(255,251,235,.86);
+  font:600 calc(30px*var(--k,1))/1.35 'Thmanyah Sans',sans-serif;text-shadow:0 2px 10px rgba(0,0,0,.75);padding-bottom:calc(6px*var(--k,1));
+  border-bottom:calc(2px*var(--k,1)) solid var(--cdc,#F59E0B)}
+/* video looks: a colour grade on the footage + optional vignette, moving film grain, drifting light leak */
+#grade,#leak,#grain,#vig{position:absolute;inset:0;pointer-events:none;z-index:4;display:none}
+#vig{background:radial-gradient(ellipse 75% 65% at 50% 45%,transparent 55%,rgba(0,0,0,.6) 100%)}
+#grain{inset:-50%;opacity:.13;mix-blend-mode:overlay;background-size:320px 320px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#leak{mix-blend-mode:screen;opacity:.45;background:radial-gradient(ellipse 60% 45% at 50% 50%,rgba(255,170,90,.75),rgba(255,90,40,.25) 45%,transparent 70%)}
+/* your handle + platform icons, Nahj style: a slim frosted pill (logos | handle), or a minimal line with an accent underline */
+#social{position:absolute;left:0;right:0;z-index:12;display:none;justify-content:center}
+#social .in{display:flex;align-items:center;gap:calc(14px*var(--k,1));direction:ltr}
+#social .ico{display:flex;gap:calc(12px*var(--k,1))}
+#social svg{width:calc(30px*var(--k,1));height:calc(30px*var(--k,1));fill:var(--sc,#FFFBEB)}
+#social .hd{color:var(--sc,#FFFBEB);font:600 calc(32px*var(--k,1)) 'Manrope',sans-serif;letter-spacing:.02em}
+#social .dv{width:calc(2px*var(--k,1));height:calc(30px*var(--k,1));background:var(--sa,#F59E0B);border-radius:2px}
+#social.pill .in{padding:calc(14px*var(--k,1)) calc(28px*var(--k,1));border-radius:999px;background:rgba(18,18,16,.48);
+  border:1px solid rgba(255,251,235,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#social.line .in{opacity:.82;padding-bottom:calc(8px*var(--k,1));border-bottom:calc(2px*var(--k,1)) solid var(--sa,#F59E0B);filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+#social.line .dv{display:none}
+#flash{position:absolute;inset:0;z-index:21;background:#fff;opacity:0;pointer-events:none}
+#cd svg{width:calc(42px*var(--k,1));height:calc(42px*var(--k,1));transform:rotate(-90deg)}
+#cd circle{fill:none;stroke-width:3.5}#cd .t{stroke:rgba(255,251,235,.18)}#cd .p{stroke:var(--cdc,#F59E0B);stroke-linecap:round;stroke-dasharray:94.25}
+.ew{display:inline-block}.en-plain,.en-box{text-shadow:none}.en-italic{font-style:italic}
+.en-box{left:50%!important;right:auto!important;width:max-content;max-width:calc(100% - 220px);background:rgba(15,15,13,.72);border-radius:10px;padding:6px 22px}
+.en{position:absolute;left:110px;right:110px;text-align:center;direction:ltr;color:#fff;font-family:'Manrope',sans-serif;font-weight:600;
+  line-height:1.3;opacity:0;visibility:hidden;z-index:9;text-shadow:0 3px 12px rgba(0,0,0,.8);text-wrap:balance}
+.qb{display:inline-block;margin:0 .15em;opacity:.85}.nw{white-space:nowrap}
+.cgi{display:inline-block;padding:4px 30px}
+.cg.lk-plain,.cg.lk-pill,.cg.lk-box{text-shadow:none}
+.cg.lk-pill .cgi{background:var(--cbg);border-radius:999px;padding:8px 44px}
+.cg.lk-box .cgi{background:var(--cbg);border-radius:10px;padding:6px 34px;box-shadow:0 8px 26px rgba(0,0,0,.3)}
+.cg{position:absolute;left:110px;right:110px;text-align:center;direction:rtl;color:#fff;font-weight:600;line-height:1.4;
+  opacity:0;visibility:hidden;text-shadow:0 3px 14px rgba(0,0,0,.75)}
+#wave{position:absolute;left:240px;right:240px;height:calc(56px*var(--k,1));display:flex;align-items:center;justify-content:center;gap:9px;z-index:10}
+#wave i{flex:1;max-width:12px;height:100%;border-radius:6px;background:var(--wc);transform:scaleY(.15)}
+#wave.line i{max-width:6px}
+/* wave designs: bars · line · dots · eq (rises from a baseline) · smooth (one flowing mirrored curve) */
+#wave{opacity:var(--wo,1)}#wave.soft{-webkit-mask-image:linear-gradient(to right,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(to right,transparent,#000 22%,#000 78%,transparent);filter:drop-shadow(0 0 calc(10px*var(--k,1)) var(--wc))}
+#wave.dots i{flex:0 0 auto;width:calc(11px*var(--k,1));height:calc(11px*var(--k,1));border-radius:50%}
+#wave.eq{align-items:flex-end}#wave.eq i{transform-origin:bottom;border-radius:3px 3px 1px 1px}
+#wave svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}#wave.smooth i{display:none}
+#wave svg path{fill:var(--wc);fill-opacity:.28;stroke:var(--wc);stroke-width:2.5;stroke-linejoin:round}
+#outro{position:absolute;inset:0;z-index:30;background:#0d2b28;opacity:0;display:grid;place-items:center}
+#oc{width:640px;height:640px;border-radius:50%;background:#efe4cc;border:10px solid #a87b2c;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;direction:rtl;color:#0f4a44;text-align:center}
+#oc .a{font:500 52px 'Thmanyah Sans'}#oc .b{font:900 104px/1.1 'Thmanyah Sans'}#oc .c{font:500 52px 'Thmanyah Sans'}
+#oc .h{margin-top:22px;font:600 36px 'Thmanyah Sans';color:#a87b2c;direction:ltr}#oc .f{font:500 34px 'Thmanyah Sans';color:#0f4a44}
+</style></head>
+<body>
+<div id="qitaf" data-composition-id="qitaf" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920">
+<div id="camwrap"><video id="cam" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="__D__" data-track-index="0"></video></div>
+<audio id="voice" src="assets/speaker.mp4" data-start="0" data-duration="__D__" data-track-index="1" data-volume="1"></audio>
+<div id="grade"></div><div id="leak"></div><div id="grain"></div><div id="vig"></div>
+<div id="fade"></div>
+<div id="caps" class="clip" data-start="0" data-duration="__D__" data-track-index="3"></div>
+<div id="title" class="ov clip" data-start="0" data-duration="__D__" data-track-index="4"></div>
+<div id="name" class="ov clip" data-start="0" data-duration="__D__" data-track-index="5"></div>
+<div id="brand" class="ov clip" data-start="0" data-duration="__D__" data-track-index="6">نهج الأثر</div>
+<div id="wave" class="clip" data-start="0" data-duration="__D__" data-track-index="7"></div>
+<div id="burn"></div>
+<!--HOOKFX-->
+<div id="cd" class="clip" data-start="0" data-duration="__D__" data-track-index="9"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" class="t"/><circle cx="18" cy="18" r="15" class="p"/></svg><span>0:00</span><i class="bar"><b></b></i></div>
+<div id="lesson" class="clip" data-start="0" data-duration="__D__" data-track-index="31"></div>
+<div id="flash"></div>
+<div id="social" class="clip" data-start="0" data-duration="__D__" data-track-index="33"></div>
+<!--INTROFX-->
+<div id="outro" class="clip" data-start="0" data-duration="__TOTAL__" data-track-index="8"><div id="oc">
+  <div class="a">قناة</div><div class="b">نهج الأثر</div><div class="c">الدعوية</div>
+  <div class="h">@nahj_al.athar</div><div class="f">تابعونا على إنستغرام</div></div></div>
+<div id="sfx"></div>
+</div>
+<script>
+const {S,R,D,TOTAL,CAPS,ENV,TITLE,HOOK_END,EMPH,EN=[],ICONS={}}=__DATA__;
+const $=s=>document.querySelector(s), esc=t=>String(t).replace(/[<&]/g,c=>c=='<'?'&lt;':'&amp;');
+const W=1080,H=1920;
+// text scale for square/wide frames (same as the site preview); the wave shrinks with it
+const K=H===1920?1:W===H?.8:.75;document.documentElement.style.setProperty('--dim',(+S.videoDim||0)/100);document.documentElement.style.setProperty('--k',K);
+const WAVES={yellow:'#FDE68A',amber:'#F59E0B',white:'#F8FAFC',cream:'#FFFBEB'};
+const txt=S.textMode!=='none', caps=S.textMode==='captions';
+
+
+// title, name
+const t=$('#title'); t.className='ov clip '+S.titleLook;
+t.innerHTML=(TITLE||'').split('\n').filter(Boolean).map(l=>`<span>${esc(l)}</span>`).join('');
+t.style.setProperty('--bg',S.titleBg);t.style.setProperty('--fg',S.titleFg);
+t.style.fontFamily=`'${S.titleFont}',serif`;t.style.fontSize=parseFloat({s:'44px',m:'58px',l:'78px'}[S.titleSize])*K+'px';
+const n=$('#name'); n.className='ov clip '+S.nameLook; n.innerHTML=S.speaker?`<span>${esc(S.speaker)}</span>`:'';
+n.style.setProperty('--bg',S.nameBg);n.style.setProperty('--fg',S.nameFg);
+n.style.fontFamily=`'${S.nameFont}',serif`;n.style.fontSize=parseFloat({s:'36px',m:'44px',l:'54px'}[S.nameSize])*K+'px';
+
+// captions
+// every word in its own span so word-level animations can follow the speech
+// one inner span per line carries the pill / box behind the whole line (caption look)
+// English: "under" the Arabic, or "only" (instead of it); position for English: under / middle / bottom / captions
+const TR=S.translate||'off', ar=TR!=='only', EP=TR==='under'&&(S.enPos||'under')==='under'?'under':(S.enPos==='under'?'captions':S.enPos||'captions');
+$('#caps').insertAdjacentHTML('afterend',`<div id="ens">${EN.map((e,i)=>`<div class="en" id="en${i}">${e.t.split(' ').map((w,k)=>`<span class="ew" id="en${i}w${k}">${esc(w)}</span>`).join(' ')}</div>`).join('')}</div>`);
+document.querySelectorAll('.en').forEach(e=>{e.style.fontSize=(TR==='only'?52:38)*K*({s:.85,m:1,l:1.2}[S.enSize||'m'])+'px';
+  e.style.fontFamily=`'${S.enFont||'Manrope'}',sans-serif`;if(S.enColour)e.style.color=S.enColour;e.classList.add('en-'+(S.enLook||'shadow'));
+  if(!['plain','box'].includes(S.enLook)){const v=(S.enShadow??70)/100;e.style.textShadow=v?`0 3px ${6+14*v}px rgba(0,0,0,${(.25+.7*v).toFixed(2)}),0 0 ${30*v}px rgba(0,0,0,${(.5*v).toFixed(2)})`:'none'}});
+$('#caps').innerHTML=CAPS.map((c,i)=>`<div class="cg lk-${S.capLook||'shadow'}${c.q?' qv qv-'+c.q:''}" id="cg${i}"><span class="cgi">${(ws=>{ws=ws.map((w,k)=>`<span class="cw" id="cg${i}w${k}">${esc(w)}</span>`);
+  // ﴿ ﴾ stay glued to the first and last word, never alone on a line
+  if(c.qo)ws[0]=`<span class="nw"><span class="qb">﴿</span>${ws[0]}</span>`;if(c.qc)ws[ws.length-1]=`<span class="nw">${ws[ws.length-1]}<span class="qb">﴾</span></span>`;return ws.join(' ')})(c.t.split(' '))}</span></div>`).join('');
+$('#caps').style.setProperty('--cbg',S.capBg||'#1F1F1D');
+document.querySelectorAll('.cg').forEach(e=>{e.style.fontFamily=`'${S.capFont}',serif`;e.style.fontSize=parseFloat({s:'54px',m:'66px',l:'82px'}[S.capSize])*K+'px'});
+
+// wave
+const WS=S.wave==='smooth';
+$('#wave').innerHTML='<i></i>'.repeat(24)+(WS?'<svg viewBox="0 0 230 56" preserveAspectRatio="none"><path/></svg>':'');
+$('#wave').className='clip '+(S.wave||'bars')+(S.waveSoft!==false?' soft':'');
+document.documentElement.style.setProperty('--wo',(S.waveOpacity??100)/100);
+$('#wave').style.setProperty('--wc',WAVES[S.waveColour]||S.waveColour||'#FDE68A');
+// any colour the user chose (hex codes allowed)
+document.querySelectorAll('.cg').forEach(e=>e.style.color=S.capColour||'#fff');
+// Qur'an: its own font (Hafs → Amiri Quran, Warsh → Almaghribi Warsh) and colour, never mixed
+document.querySelectorAll('.qv').forEach(e=>{e.style.fontFamily=e.classList.contains('qv-warsh')?"'Almaghribi Warsh',serif":"'Amiri Quran',serif";e.style.color=S.verseColour||'#FDE68A';e.style.lineHeight='1.9'});
+$('#brand').style.color=S.brandColour||'#FDE68A';
+
+// layout: same stacking rules as the site preview (rules.json), in real pixels
+// a title or name line wider than the safe zone shrinks the whole block evenly until every line fits
+const fitLines=e=>{const w=e.clientWidth,m=Math.max(0,...[...e.querySelectorAll('span')].map(x=>x.offsetWidth));
+  if(m>w)e.style.fontSize=parseFloat(getComputedStyle(e).fontSize)*w/m*.98+'px'};
+function layout(){
+  fitLines(t);fitLines(n);
+  const s=R.safe,gap=H*.012,show={title:txt&&!!TITLE,name:txt&&!!S.speaker,wave:S.wave!=='off',brand:!!S.brand};
+  const el={title:t,name:n,wave:$('#wave'),brand:$('#brand')},pos={title:S.titlePos,name:S.namePos,wave:S.wavePos,brand:'bottom'};
+  for(const k in el)el[k].style.display=show[k]?'':'none';
+  // countdown: top-left corner of the safe zone; anything else at the top starts under it
+  // top corners: countdown left, lesson name right; whatever else sits at the top starts under the taller of them
+  const cd=$('#cd'), ls=$('#lesson'); cd.style.display=S.countdown?'':'none'; cd.className='clip cd-'+(S.cdStyle||'pill');
+  ls.textContent=S.lessonText||''; ls.style.display=S.lessonText?'':'none';
+  let y=s.top*H, corner=0;
+  if(S.countdown){cd.style.left=s.left*W+'px';cd.style.top=y+'px';corner=cd.offsetHeight}
+  if(S.lessonText){ls.style.right=(1-s.right)*W+'px';ls.style.top=y+'px';corner=Math.max(corner,ls.offsetHeight)}
+  if(corner)y+=corner+gap;
+  for(const k of['title','name','wave'])if(show[k]&&pos[k]==='top'){el[k].style.top=y+'px';y+=el[k].offsetHeight+gap}
+  let b=s.bottom*H; for(const k of['brand','name','wave','title'])if(show[k]&&pos[k]==='bottom'){b-=el[k].offsetHeight;el[k].style.top=b+'px';b-=gap}
+  if(show.title&&(pos.title==='upper'||pos.title==='centre'))t.style.top=(R.slots[pos.title==='upper'?'title_upper':'title_centre'].y*H-t.offsetHeight/2)+'px';
+  const ens=[...document.querySelectorAll('.en')], enH=Math.max(0,...ens.map(e=>e.offsetHeight));
+  if(EP==='under'&&ens.length){  // Arabic bottoms line up; the English sits right under them, all above the bottom stack
+    const capH=Math.max(0,...[...document.querySelectorAll('.cg')].map(c=>c.offsetHeight)), base=Math.min(R.slots.captions.y*H+capH/2,b-enH-gap*3);
+    document.querySelectorAll('.cg').forEach(c=>{c.style.visibility='hidden';c.style.top=(base-c.offsetHeight)+'px'});
+    ens.forEach(e=>e.style.top=(base+gap)+'px');
+  }else{
+    const bb=EP==='bottom'&&ens.length?b-enH-gap*2:b;  // English at the bottom: the Arabic stacks above it
+    document.querySelectorAll('.cg').forEach(c=>{c.style.visibility='hidden';c.style.top=Math.min(R.slots.captions.y*H-c.offsetHeight/2,bb-c.offsetHeight-gap*2)+'px'});
+    ens.forEach(e=>e.style.top=(EP==='middle'?H*.5-e.offsetHeight/2:EP==='bottom'?b-e.offsetHeight-gap*2:Math.min(R.slots.captions.y*H-e.offsetHeight/2,b-e.offsetHeight-gap*2))+'px');
+  }
+}
+layout();
+document.fonts&&document.fonts.ready.then(layout);  // measure again once the real fonts (Amiri Quran…) are in: a verse can grow to two lines
+
+const tl=gsap.timeline({paused:true});
+// entrances
+if(TITLE&&txt)tl.from('#title span',{opacity:0,y:-30,duration:.45,stagger:.12,ease:'power3.out'},.2);
+if(S.speaker&&txt)tl.from('#name',{opacity:0,y:20,duration:.45,ease:'power2.out'},.5);
+if(S.brand)tl.from('#brand',{opacity:0,duration:.6},.8);
+
+// captions
+const ANIM0=S.capAnim||'fadeup', HL=S.capHighlight||'#F59E0B', BASE=S.capColour||'#fff';
+// countdown of the FINISHED video (D is the length after silences and slips are cut): one tick a second, ring drains
+if(S.countdown){const sp='#cd span',f=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+  document.documentElement.style.setProperty('--cdc',S.cdColour||S.capHighlight||'#F59E0B');
+  for(let t=0;t<D;t++)tl.set(sp,{textContent:f(Math.ceil(D-t))},t);tl.set(sp,{textContent:'0:00'},Math.max(0,D-.05));
+  tl.fromTo('#cd .p',{strokeDashoffset:0},{strokeDashoffset:94.25,duration:D,ease:'none'},0);
+  tl.fromTo('#cd .bar b',{scaleX:1},{scaleX:0,duration:D,ease:'none'},0);
+  tl.from('#cd',{opacity:0,y:-14,duration:.4,ease:'power2.out'},.1)}
+if(S.lessonText)tl.from('#lesson',{opacity:0,x:20,duration:.5,ease:'power2.out'},.3);
+// intro effect, at the very start: a camera "snap" (white flash + blurred zoom settling) or a burned-film flare
+if(S.introFx==='zoom'){tl.fromTo('#flash',{opacity:.85},{opacity:0,duration:.35,ease:'power2.out'},0);
+  tl.fromTo('#camwrap',{scale:1.22,filter:'blur(12px) brightness(1.25)'},{scale:1,filter:'blur(0px) brightness(1)',duration:.7,ease:'power3.out'},0)}
+else if(S.introFx==='focus'){  // a camera hunting for focus: soft → almost → softer → sharp, the frame breathing slightly
+  tl.fromTo('#camwrap',{scale:1.05,filter:'blur(16px) brightness(1.05)'},{scale:1.01,filter:'blur(3px) brightness(1)',duration:.35,ease:'power2.out'},0);
+  tl.fromTo('#camwrap',{scale:1.01,filter:'blur(3px) brightness(1)'},{immediateRender:false,scale:1.03,filter:'blur(9px) brightness(1)',duration:.22,ease:'power1.inOut'},.35);
+  tl.fromTo('#camwrap',{scale:1.03,filter:'blur(9px) brightness(1)'},{immediateRender:false,scale:1,filter:'blur(0px) brightness(1)',duration:.3,ease:'power3.out'},.57)}
+else if(S.introFx==='film'){tl.fromTo('#burn',{opacity:1,scale:1.4},{opacity:0,scale:2.3,duration:1,ease:'power2.out'},0);
+  tl.fromTo('#camwrap',{filter:'sepia(.9) saturate(1.6) brightness(1.7) contrast(1.15) blur(3px)'},{filter:'sepia(0) saturate(1) brightness(1) contrast(1) blur(0px)',duration:1.1,ease:'power2.out'},0)}
+// the video's look (colour grade + overlays); grain moves every frame (with the wave, in the per-frame update below)
+const LOOKS={cinematic:{f:'contrast(1.12) saturate(.92) brightness(.97)',g:'linear-gradient(180deg,rgba(0,90,110,.22),rgba(0,0,0,0) 45%,rgba(255,140,60,.16))',b:'soft-light'},
+  golden:{f:'sepia(.18) saturate(1.18) brightness(1.05) contrast(1.02)',g:'radial-gradient(ellipse at 70% 20%,rgba(255,190,110,.35),rgba(255,140,60,.08) 60%)',b:'soft-light'},
+  moody:{f:'contrast(1.18) brightness(.86) saturate(.72)',g:'linear-gradient(180deg,rgba(20,40,70,.32),rgba(10,20,30,.18))',b:'multiply'},
+  vintage:{f:'sepia(.32) contrast(.9) saturate(.82) brightness(1.04)',g:'linear-gradient(rgba(60,40,20,.14),rgba(60,40,20,.14))',b:'lighten'},
+  mono:{f:'grayscale(1) contrast(1.18) brightness(1.02)',g:'',b:'normal'},
+  dreamy:{f:'brightness(1.06) saturate(1.12) contrast(.95)',g:'radial-gradient(ellipse at 50% 40%,rgba(255,240,230,.22),transparent 70%)',b:'screen'}};
+const LK=LOOKS[S.look];if(LK){$('#cam').style.filter=LK.f;if(LK.g){$('#grade').style.cssText+=`display:block;background:${LK.g};mix-blend-mode:${LK.b}`}}
+if(S.lookVignette||S.look==='moody'||S.look==='vintage')$('#vig').style.display='block';
+if(S.lookGrain||S.look==='vintage'||S.look==='mono')$('#grain').style.display='block';
+if(S.lookLeak){$('#leak').style.display='block';tl.fromTo('#leak',{xPercent:-60,yPercent:-30,opacity:0},{xPercent:60,yPercent:25,opacity:.45,duration:Math.min(D,9),ease:'sine.inOut'},0.3);
+  if(D>9.3)tl.fromTo('#leak',{xPercent:60,yPercent:25,opacity:.45},{immediateRender:false,xPercent:-40,yPercent:-20,opacity:.25,duration:D-9.3,ease:'sine.inOut'},9.3)}
+const GR=$('#grain').style.display==='block'?$('#grain'):null;
+// handle + icons (bottom or top, outside the safe zone is fine); shown the whole time or just the last 4 seconds
+const SO=$('#social');
+if(S.socialHandle||Object.keys(ICONS).length){SO.style.display='flex';SO.style.setProperty('--sc',S.socialColour||'#fff');
+  SO.className='clip '+(S.socialStyle||'pill');SO.style.setProperty('--sa',S.cdColour||'#F59E0B');
+  const ic=Object.values(ICONS).map(d=>`<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`).join('');
+  SO.innerHTML=`<div class="in">${ic?`<div class="ico">${ic}</div>`:''}${ic&&S.socialHandle?'<i class="dv"></i>':''}${S.socialHandle?`<div class="hd">${esc(S.socialHandle)}</div>`:''}</div>`;
+  SO.style.top=(S.socialPos==='top'?H*.04:H*.9)+'px';
+  if(S.socialWhen==='end'){tl.set(SO,{opacity:0},0);tl.fromTo(SO,{opacity:0,y:16},{immediateRender:false,opacity:1,y:0,duration:.5,ease:'power2.out'},Math.max(.5,D-4))}
+  else tl.from(SO,{opacity:0,duration:.6},.4)}
+// the hook is over: burn through to the lesson (only when a hook plays first)
+if(HOOK_END>0.5){tl.fromTo('#burn',{opacity:0,scale:.5},{opacity:1,scale:1.5,duration:.3,ease:'power2.in'},HOOK_END-.3);
+  tl.to('#burn',{opacity:0,scale:2,duration:.5,ease:'power2.out'},HOOK_END);
+  tl.fromTo('#camwrap',{filter:'brightness(1) sepia(0) saturate(1) blur(0px)'},{immediateRender:false,filter:'brightness(1.7) sepia(.5) saturate(1.4) blur(2px)',duration:.28,ease:'power2.in'},HOOK_END-.28);
+  tl.fromTo('#camwrap',{filter:'brightness(1.7) sepia(.5) saturate(1.4) blur(2px)'},{immediateRender:false,filter:'brightness(1) sepia(0) saturate(1) blur(0px)',duration:.45,ease:'power2.out'},HOOK_END)}
+// English lines: fade in with their spoken line, stay for all of it
+const EA=S.enAnim||'fade';
+if(S.enLook==='box')gsap.set('.en',{xPercent:-50});  // centred by GSAP, so slide/fade-up add to it instead of replacing it
+EN.forEach((e,i)=>{const x='#en'+i,len=e.e-e.s,n=e.t.split(' ').length;tl.set(x,{visibility:'visible'},e.s);
+  if(EA==='fadeup')tl.fromTo(x,{opacity:0,y:14},{opacity:1,y:0,duration:.25,ease:'power2.out'},e.s);
+  else if(EA==='slide')tl.fromTo(x,{opacity:0,x:-70},{opacity:1,x:0,duration:.3,ease:'power3.out'},e.s);
+  else if(EA==='typewriter'){tl.set(x,{opacity:1},e.s);tl.fromTo(x,{clipPath:'inset(-30% 100% -30% 0%)'},{clipPath:'inset(-30% 0% -30% 0%)',duration:Math.min(1.2,len*.6),ease:'none'},e.s)}
+  else if(EA==='word'){tl.set(x,{opacity:1},e.s);for(let k=0;k<n;k++)tl.fromTo('#en'+i+'w'+k,{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:'power2.out'},e.s+len*.85*k/n)}
+  else if(EA==='none')tl.set(x,{opacity:1},e.s);
+  else tl.fromTo(x,{opacity:0},{opacity:1,duration:.2},e.s);
+  tl.to(x,{opacity:0,duration:.12},Math.max(e.s+.2,e.e-.12));tl.set(x,{visibility:'hidden'},e.e)});
+if(caps&&ar)CAPS.forEach((c,i)=>{const e='#cg'+i, n=c.t.split(' ').length, len=c.e-c.s, ANIM=c.q?'fadeup':ANIM0;  // a verse just fades in, never word games
+  // word start times: from the aligner; if the caption was edited and the word count changed, spread evenly
+  const ws=(c.w&&c.w.length===n)?c.w:Array.from({length:n},(_,k)=>c.s+len*k/n);
+  const W=k=>'#cg'+i+'w'+k;
+  tl.set(e,{visibility:'visible'},c.s);
+  if(ANIM==='fadeup')tl.fromTo(e,{opacity:0,y:12},{opacity:1,y:0,duration:.18,ease:'power2.out'},c.s);
+  else if(ANIM==='pop')tl.fromTo(e,{opacity:0,scale:.6},{opacity:1,scale:1,duration:.32,ease:'back.out(2.2)'},c.s);
+  else if(ANIM==='slide')tl.fromTo(e,{opacity:0,x:90},{opacity:1,x:0,duration:.28,ease:'power3.out'},c.s);
+  else if(ANIM==='typewriter'){tl.set(e,{opacity:1},c.s);tl.fromTo(e,{clipPath:'inset(-30% 0% -30% 100%)'},{clipPath:'inset(-30% 0% -30% 0%)',duration:Math.min(.7,len*.6),ease:'none'},c.s)}
+  else if(ANIM==='word'){tl.set(e,{opacity:1},c.s);ws.forEach((t,k)=>tl.fromTo(W(k),{opacity:0,y:14},{opacity:1,y:0,duration:.16,ease:'power2.out'},Math.max(c.s,t-.03)))}
+  else if(ANIM==='karaoke'){tl.fromTo(e,{opacity:0},{opacity:1,duration:.12},c.s);
+    ws.forEach((t,k)=>{tl.set(W(k),{color:HL,scale:1.06},Math.max(c.s,t-.03));if(k+1<n)tl.set(W(k),{color:BASE,scale:1},ws[k+1]-.03)})}
+  else tl.set(e,{opacity:1},c.s);  // none
+  tl.to(e,{opacity:0,duration:.08},Math.max(c.s+.18,c.e-.08));
+  tl.set(e,{visibility:'hidden'},c.e);});
+
+// zooms only on the key moments (EMPH = caption lines Claude marked): punch in as the line starts,
+// hold through it plus a beat, then ease back out
+const Z={off:0,subtle:1.08,punchy:1.18}[S.zoom||'subtle'], sfx=[];
+if(Z)(EMPH||[]).forEach(i=>{const c=CAPS[i];if(!c||c.s>=D-1)return;
+  if(c.s<1.2&&['zoom','film','focus'].includes(S.introFx))return;  // the intro effect owns the first second
+  const out=Math.min(c.e+1.2,D-.3);
+  tl.fromTo('#camwrap',{scale:1},{immediateRender:false,scale:Z,duration:.12,ease:'power2.out'},c.s);  // explicit from/to: renders the same in every parallel worker
+  tl.fromTo('#camwrap',{scale:Z},{immediateRender:false,scale:1,duration:.5,ease:'power2.inOut'},out);
+  if(c.s>1.2)sfx.push(['tap.wav',c.s-.02,.18,.12]);});
+if(TITLE&&txt&&!['zoom','film','focus'].includes(S.introFx))sfx.push(['swoosh-in.wav',.15,.55,.15]);
+if(S.sfx==='subtle')$('#sfx').innerHTML=sfx.map(([f,s,d,v],i)=>`<audio id="sfx${i}" src="assets/sfx/${f}" data-start="${s.toFixed(3)}" data-duration="${d}" data-track-index="${20+i}" data-volume="${v}"></audio>`).join('');
+
+// sound wave follows the voice loudness, frame by frame
+const bars=[...document.querySelectorAll('#wave i')];
+if(S.wave!=='off'||GR)tl.eventCallback('onUpdate',()=>{const f=Math.floor(tl.time()*30);
+  if(GR)GR.style.transform=`translate(${((f*73)%100)-50}px,${((f*151)%100)-50}px)`;  // grain jumps every frame, like real film
+  if(S.wave==='off')return;
+  const vs=bars.map((b,i)=>{const v=ENV[Math.max(0,Math.min(ENV.length-1,f-Math.abs(i-11.5)|0))]||0;return .12+v*(1-.6*Math.abs(i-11.5)/12)});
+  if(WS){  // one smooth curve through the 24 levels, mirrored around the middle line
+    const n=vs.length,X=i=>i*230/(n-1),up=vs.map((v,i)=>[X(i),28-v*26]),dn=vs.map((v,i)=>[X(i),28+v*26]).reverse();
+    const curve=pts=>pts.map((p,i)=>i?`Q${((pts[i-1][0]+p[0])/2).toFixed(1)} ${pts[i-1][1].toFixed(1)} ${p[0].toFixed(1)} ${p[1].toFixed(1)}`:`M${p[0]} ${p[1].toFixed(1)}`).join(' ');
+    $('#wave path').setAttribute('d',curve(up)+' L'+dn[0][0]+' '+dn[0][1].toFixed(1)+' '+curve(dn).slice(1)+' Z')}
+  else bars.forEach((b,i)=>b.style.transform=S.wave==='dots'?`scale(${(.35+vs[i]*1.1).toFixed(3)})`:`scaleY(${vs[i].toFixed(3)})`)});
+
+// outro: circle closes on the video, then the channel card, then shrinks to a dot
+if(S.outro){
+  tl.fromTo('#camwrap',{clipPath:'circle(150% at 50% 45%)',filter:'blur(0px)'},{clipPath:'circle(0% at 50% 45%)',filter:'blur(14px)',duration:.7,ease:'power2.in'},D-.1);
+  tl.set('#outro',{opacity:1},D);
+  tl.from('#oc',{scale:0,duration:.55,ease:'back.out(1.6)'},D+.1);
+  tl.from('#oc > div',{opacity:0,y:16,stagger:.1,duration:.35},D+.4);
+  tl.to('#oc',{scale:0,duration:.45,ease:'power2.in'},TOTAL-.55);
+}  // outro off: it stays at opacity 0 (no display change on clip elements)
+tl.set({},{},TOTAL);
+tl.seek(0);
+window.__timelines=window.__timelines||{};window.__timelines['qitaf']=tl;
+</script>
+</body></html>

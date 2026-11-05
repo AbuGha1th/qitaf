@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Qitaf · قِطاف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@600;700&family=Lora:wght@600&family=Playfair+Display:wght@600&family=Merriweather:wght@700&family=Noto+Naskh+Arabic:wght@600;700&family=Amiri:wght@700&family=Amiri+Quran&family=Cairo:wght@700&family=Tajawal:wght@700&family=Reem+Kufi:wght@600&family=Lateef:wght@700&family=Scheherazade+New:wght@700&family=El+Messiri:wght@600&family=Markazi+Text:wght@600&family=Aref+Ruqaa:wght@700&family=Lalezar&family=Marhey:wght@700&family=Rakkas&display=swap" rel="stylesheet">
+<script src="/i18n.js"></script>
+<style>
+@font-face{font-family:'Thmanyah Sans';src:url(/fonts/thmanyahsans-Medium.woff2) format('woff2');font-weight:400 600}
+@font-face{font-family:'Thmanyah Sans';src:url(/fonts/thmanyahsans-Black.woff2) format('woff2');font-weight:700 900}
+@font-face{font-family:'Thmanyah Serif';src:url(/fonts/thmanyahserifdisplay-Bold.woff2) format('woff2')}
+@font-face{font-family:'Basseet';src:url(/fonts/BasseetFree-Bold.ttf) format('truetype')}
+@font-face{font-family:'AMoshref Naskh';src:url('/fonts/AMoshref%20Naskh.ttf') format('truetype')}
+@font-face{font-family:'Almaghribi Warsh';src:url('/fonts/Almaghribi%20Warsh-Quran.otf') format('opentype')}
+/* Qitaf — Mizan's quiet-luxury structure, amber signal */
+:root{
+  --bg:#1F1F1D;--s1:#232320;--s2:#2a2a26;--s3:#33332e;
+  --line:rgba(255,251,235,.07);--line-2:rgba(255,251,235,.13);
+  --ivory:#FFFBEB;--white:#F8FAFC;--stone:#bdb8a8;--dim:#8f8a7c;
+  --amber:#F59E0B;--yellow:#FDE68A;--amber-soft:rgba(245,158,11,.1);--amber-line:rgba(245,158,11,.42);
+  --serif:"Fraunces",Georgia,serif;--sans:"Manrope",system-ui,sans-serif;
+  --r:20px;--r-sm:12px;--ease:cubic-bezier(.22,1,.36,1);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,rgba(245,158,11,.07),transparent 60%),var(--bg);color:var(--stone);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh}
+::selection{background:var(--amber);color:#1F1F1D}
+h1,h2,h3{margin:0;color:var(--ivory);font-weight:400}
+:focus-visible{outline:2px solid var(--amber)!important;outline-offset:3px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.skip{position:absolute;left:12px;top:-60px;z-index:99;background:var(--amber);color:#1f1f1d;padding:8px 14px;border-radius:8px;font-weight:600}.skip:focus{top:12px}
+.hidden{display:none!important}
+
+header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 32px;
+  background:rgba(31,31,29,.72);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:12px}
+.brand .ar{font:700 26px 'Aref Ruqaa',serif;color:var(--amber);text-shadow:0 0 22px rgba(245,158,11,.35)}
+.brand .en{font:400 19px var(--serif);color:var(--ivory)}
+.brand .en em{color:var(--dim);font-style:italic;font-size:14px;margin-left:6px}
+.locked{font-size:12.5px;color:var(--dim);padding:7px 14px;border-radius:999px;border:1px solid var(--line-2)}
+.locked b{color:var(--yellow);font-weight:500}
+
+.clips{display:grid;gap:14px}
+.mrows{display:grid;gap:8px}
+.mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.mrow .mn{font:italic 16px var(--serif);color:var(--amber);width:18px}
+.mrow .mt{width:84px!important}.mrow .mtitle{flex:1;min-width:140px;width:auto!important;padding:7px 12px!important;border-radius:999px!important}
+.mlen{font-size:12px;color:var(--dim);min-width:60px}.mlen.bad{color:#f19a9a}
+.hex{width:104px!important;border-radius:999px!important;padding:8px 12px!important;font:600 13px ui-monospace,Menlo,monospace!important;text-transform:uppercase}
+.hex.bad{border-color:#c0474f!important}
+.cp-row{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:10px;margin-bottom:8px}.cp-row .hint{margin:0}
+.pal{display:flex;align-items:center;gap:0;padding:6px 14px 6px 6px;border-radius:999px;border:1px solid var(--line-2);background:rgba(255,251,235,.02);color:var(--stone);cursor:pointer;font:500 13px var(--sans)}
+.pal i{width:22px;height:22px;border-radius:50%;margin-right:-6px;border:2px solid var(--s2)}.pal span{margin-left:14px}
+.pal.on{border-color:var(--amber-line);background:var(--amber-soft);color:var(--ivory)}
+.cap-row{grid-template-columns:120px 1fr}.cap-t{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.nudge.sm{width:26px;height:26px;font-size:14px;margin-right:4px}
+.clip video{width:100%;max-width:320px;aspect-ratio:9/16;border-radius:14px;background:#000;justify-self:center}
+.clip{padding:18px 20px;border:1px solid var(--line-2);border-radius:var(--r-sm);background:rgba(20,20,18,.45);display:grid;gap:12px;transition:opacity .3s}
+.clip.off{opacity:.45}
+.clip-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.clip-n{font:italic 400 20px var(--serif);color:var(--amber)}
+.score{font-size:12px;color:#1F1F1D;background:var(--yellow);border-radius:999px;padding:2px 9px;font-weight:700}
+.dur{margin-left:auto;font:400 17px var(--serif);color:var(--ivory)}
+.clip-title{font:600 19px 'Thmanyah Sans','Noto Naskh Arabic',serif!important}
+.trim{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.trim .lbl{margin:0 2px 0 8px}.trim .lbl:first-child{margin-left:0}
+.nudge{width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);background:none;color:var(--ivory);cursor:pointer;font-size:16px}
+.nudge:hover{border-color:var(--amber-line)}
+.tval{font:400 16px var(--serif);color:var(--yellow);min-width:44px;text-align:center}
+details summary{cursor:pointer;font-size:13px;color:var(--dim)}
+.excerpt{margin-top:8px;font:500 16px/1.9 'Thmanyah Sans','Noto Naskh Arabic',serif;color:var(--stone)}
+.indet{width:30%!important;animation:ind 1.4s var(--ease) infinite}
+@keyframes ind{0%{transform:translateX(-100%)}100%{transform:translateX(340%)}}
+.spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:2px solid var(--amber-line);border-top-color:var(--amber);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.step2{max-width:900px;margin:auto;padding:28px 32px 60px}
+@media(max-width:960px){.step2{padding:20px 16px}}
+.ed-top{display:flex;justify-content:space-between;margin-bottom:10px}
+.segs{max-height:62vh;overflow:auto;border:1px solid var(--line);border-radius:var(--r-sm);background:rgba(20,20,18,.5)}
+.seg-side{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.seg-times{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--dim)}
+.tin{width:54px!important;padding:3px 4px!important;border-radius:6px!important;font:500 12px var(--sans)!important;font-variant-numeric:tabular-nums;text-align:center;background:transparent!important;border:1px solid transparent!important;color:var(--dim)!important}
+.tin:hover,.tin:focus{border-color:var(--line-2)!important;background:var(--s2)!important;color:var(--ivory)!important}
+.tin.bad{border-color:#c0474f!important}
+.seg-times.pinned .tin{border-color:var(--amber-line)!important;color:var(--yellow)!important}
+.unpin{background:none;border:0;color:var(--dim);font-size:12px;cursor:pointer;text-decoration:underline}
+.seg-row{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:start;padding:10px 14px;border-bottom:1px solid var(--line);transition:background .3s}
+.seg-row:last-child{border-bottom:0}
+.seg-row.playing{background:var(--amber-soft)}
+.ts{font:500 12px var(--sans);color:var(--yellow);background:none;border:1px solid var(--line-2);border-radius:999px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+.seg-text{font:600 18px/1.9 'Noto Naskh Arabic',serif;color:var(--ivory);outline:none;border-radius:8px;padding:2px 8px}
+.seg-text:focus{background:rgba(255,251,235,.04);box-shadow:0 0 0 1px var(--amber-line)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:24px;padding:28px 32px 60px;max-width:1280px;margin:auto}
+@media(max-width:960px){main{grid-template-columns:1fr;padding:20px 16px}header{padding:14px 16px}.locked{display:none}}
+
+.card{position:relative;padding:26px 28px;margin-bottom:18px;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--line);border-radius:var(--r)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.035),transparent 30%)}
+.card h2{font:400 21px var(--serif);display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+.card h2 .n{font:italic 400 15px var(--serif);color:var(--amber);opacity:.85}
+.field{margin-bottom:18px}.field:last-child{margin-bottom:0}
+.lbl{display:block;font-size:12.5px;color:var(--dim);margin-bottom:9px;letter-spacing:.01em}
+.wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* pills */
+.pill{font:500 13.5px var(--sans);color:var(--stone);background:rgba(255,251,235,.02);padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);cursor:pointer;transition:color .3s,border-color .3s,background .3s}
+.pill:hover{color:var(--ivory)}
+.pill.on{color:var(--ivory);border-color:var(--amber-line);background:var(--amber-soft);box-shadow:0 0 24px -8px var(--amber)}
+.tick{display:inline-flex;gap:10px;align-items:center;cursor:pointer;padding:9px 16px 9px 12px;border-radius:999px;border:1px solid var(--line-2);color:var(--stone);font-size:13.5px;transition:all .3s}
+.tick input{appearance:none;width:16px;height:16px;margin:0;border-radius:50%;border:1.5px solid var(--dim);display:grid;place-items:center;transition:all .3s}
+.tick input:checked{border-color:var(--amber);background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.tick input:checked::after{content:"";width:5px;height:5px;border-radius:50%;background:#1F1F1D}
+.tick:has(input:checked){color:var(--ivory);border-color:var(--amber-line)}
+
+input[type=text],input[type=number],textarea,select{background:rgba(20,20,18,.7);border:1px solid var(--line-2);color:var(--ivory);border-radius:var(--r-sm);padding:11px 14px;font:inherit;outline:none;transition:border-color .3s,box-shadow .3s}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--amber-line);box-shadow:0 0 0 4px var(--amber-soft)}
+input[type=text],textarea{width:100%}textarea{min-height:76px;resize:vertical;line-height:1.7}
+textarea.ar{font:600 16px 'Noto Naskh Arabic',serif;direction:rtl}
+input[type=number],input.num{width:76px;border-radius:999px;text-align:center;padding:9px 10px}
+select{border-radius:999px;padding:9px 34px 9px 16px;appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--amber) 50%),linear-gradient(135deg,var(--amber) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:140px;height:4px;border-radius:2px;background:var(--s3);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);cursor:pointer}
+input[type=color]{width:34px;height:34px;padding:0;border:1px solid var(--line-2);border-radius:50%;background:none;cursor:pointer}
+input[type=color]::-webkit-color-swatch-wrapper{padding:3px}input[type=color]::-webkit-color-swatch{border:0;border-radius:50%}
+.val{font:italic 400 14px var(--serif);color:var(--yellow);min-width:40px;text-align:right}
+
+/* fonts grid */
+.fonts{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.font{padding:12px 10px 9px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:rgba(255,251,235,.02);cursor:pointer;text-align:center;color:var(--ivory);transition:all .3s}
+.font b{display:block;font-size:20px;font-weight:inherit;line-height:1.5}
+.font span{font:500 12px var(--sans);color:var(--dim)}
+.font.on{border-color:var(--amber-line);background:var(--amber-soft);box-shadow:0 0 24px -10px var(--amber)}
+
+/* swatches */
+.sw{width:34px;height:34px;border-radius:50%;border:1px solid var(--line-2);cursor:pointer;padding:0;position:relative;transition:transform .3s var(--ease)}
+.sw:hover{transform:scale(1.08)}
+.sw.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--amber)}
+
+/* drop */
+.drop{position:relative;border:1.5px dashed var(--line-2);border-radius:var(--r);padding:34px 20px;text-align:center;cursor:pointer;transition:all .4s var(--ease)}
+.drop:hover,.drop.over{border-color:var(--amber-line);background:var(--amber-soft)}
+.drop .big{font:400 22px var(--serif);color:var(--ivory)}
+.drop .big em{color:var(--amber)}
+.drop p{margin:6px 0 0;font-size:13px;color:var(--dim)}
+.prog{margin-top:16px}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:8px}
+.prog-top .pct{font:400 26px var(--serif);color:var(--yellow)}
+.track{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--yellow));box-shadow:0 0 14px var(--amber);transition:width .2s}
+.fileinfo{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.fileinfo span{font-size:12.5px;color:var(--stone);padding:6px 12px;border-radius:999px;border:1px solid var(--line-2)}
+.fileinfo span:first-child{color:var(--ivory);border-color:var(--amber-line)}
+
+/* buttons */
+.btn{font:600 14.5px var(--sans);padding:13px 24px;border-radius:999px;border:0;cursor:pointer;color:#1F1F1D;background:linear-gradient(180deg,var(--yellow),var(--amber));box-shadow:0 0 0 1px rgba(245,158,11,.5),0 10px 30px -10px var(--amber);transition:transform .3s var(--ease),box-shadow .3s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 0 0 1px var(--amber),0 14px 40px -10px var(--amber)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.ghost{font:500 14px var(--sans);padding:12px 20px;border-radius:999px;cursor:pointer;color:var(--ivory);background:none;border:1px solid var(--line-2)}
+.go{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+
+/* glow (from Mizan) */
+.glow{position:relative;isolation:isolate;overflow:hidden}
+.glow::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;opacity:0;pointer-events:none;
+  background:radial-gradient(var(--glow-size,160px) circle at var(--mx,50%) var(--my,50%),rgba(245,158,11,.18),transparent 60%);transition:opacity .4s var(--ease)}
+.glow:hover::before{opacity:1}.glow:hover{border-color:var(--amber-line)}
+
+/* preview */
+.side{position:sticky;top:86px;align-self:start}
+.steps{display:flex;gap:4px;padding:4px;border-radius:999px;border:1px solid var(--line);background:rgba(20,20,18,.5)}
+.steps span{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;font-size:13px;color:var(--dim);transition:all .3s}
+.steps i{font:600 12px var(--sans);font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-2)}
+.steps .on{color:var(--ivory);background:var(--amber-soft)}.steps .on i{background:var(--amber);color:#1F1F1D;border-color:var(--amber)}
+.steps .done i{border-color:var(--amber-line);color:var(--amber)}
+.steps b{font-weight:500}
+@media(max-width:960px){.steps span{padding:4px}.steps b{display:none}.steps .on b{display:inline;padding-right:8px}.brand .en em{display:none}.card.opt .sum{display:none}.card.opt .chev{margin-left:auto}}
+.card.opt h2{cursor:pointer;user-select:none;margin-bottom:18px}
+.card.opt .sum{margin-left:auto;font:400 13px var(--sans);color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%;opacity:0;transition:opacity .3s}
+.card.opt .chev{font:400 18px var(--sans);color:var(--dim);transition:transform .3s var(--ease);margin-left:8px}
+.card.opt.closed .sum{opacity:1}.card.opt:not(.closed) .sum{visibility:hidden}
+.card.opt.closed .chev{transform:rotate(-90deg)}
+.card.opt.closed{padding-bottom:22px}.card.opt.closed h2{margin-bottom:0}
+.card.opt.closed>*:not(h2){display:none!important}
+.card.opt:hover{border-color:var(--line-2)}
+.go.bar{position:sticky;bottom:0;z-index:5;margin:0 -8px;padding:14px 8px;background:linear-gradient(180deg,transparent,var(--bg) 35%)}
+.rules-d{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}.rules-d summary{font-size:13px}
+
+@media(max-width:960px){.side{position:static}}
+#scrub{flex-wrap:nowrap;gap:6px}#scrub input[type=range]{min-width:0}#scrub .val{min-width:0;font-size:13px}
+.phone #pv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.phone{position:relative;width:100%;max-width:330px;aspect-ratio:9/16;margin:auto;border-radius:26px;overflow:hidden;background:#141412 center/cover no-repeat;
+  border:1px solid var(--line-2);box-shadow:0 30px 80px -30px rgba(0,0,0,.9),0 0 0 6px rgba(255,251,235,.03)}
+.phone.visualy{background:#EDE6DC!important}
+.phone.visualy .ov.name span{color:var(--vink,#161613)!important;text-shadow:none!important;background:none!important}.phone.visualy .ov.mark{color:var(--vacc,#1E4D3A);text-shadow:none}.phone.visualy .fade{display:none}
+.qrow{margin-top:4px;display:flex;gap:8px;align-items:center}.qbox{flex:1;resize:none;overflow:hidden;font-size:21px;line-height:1.9;color:var(--amber,#F59E0B);padding:6px 12px}.qbox.qh{font-family:'Amiri Quran',serif}.qbox.qw{font-family:'Almaghribi Warsh',serif}.qref{color:var(--dim);font-size:12px}
+.cwl{display:flex;flex-direction:column;gap:4px;align-items:stretch}.qchip{border:1px solid var(--line,#333);background:none;color:var(--dim);border-radius:999px;padding:2px 8px;font:15px 'Amiri Quran',serif;cursor:pointer}.qchip.on{color:var(--amber,#F59E0B);border-color:var(--amber-line);background:var(--amber-soft)}
+.wsum{list-style:none;display:inline-flex;gap:10px;align-items:center;padding:9px 16px;border-radius:999px;border:1px solid var(--amber-line);background:var(--amber-soft);color:var(--ivory)!important;font:500 13.5px var(--sans)!important}.wsum::-webkit-details-marker{display:none}.wsum span{color:var(--dim);font-size:12.5px}details[open]>.wsum{background:none}
+.cwords{display:grid;gap:6px;margin-top:10px}.cwrow{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start}
+.fade,.zone{position:absolute;inset:0;pointer-events:none}
+.zone i{position:absolute;background:rgba(220,60,60,.28)}
+.ov{position:absolute;left:13%;right:13%;text-align:center;transform:translateY(-50%);font-family:'Noto Naskh Arabic',serif;direction:rtl;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.ov.name{display:flex;justify-content:center;text-shadow:none}
+.ov.name span{display:inline-block;padding:1px 10px;white-space:nowrap;color:var(--tfg)}
+.ov.name.pill span{background:var(--tbg);border-radius:999px;padding:2px 12px}
+.ov.name.banner span{background:var(--tbg);border-radius:2px;padding:1px 10px}
+.ov.name.shadow span{text-shadow:0 2px 3px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.7)}
+.ov.title{display:flex;flex-direction:column;align-items:center;gap:4px;text-shadow:none;line-height:1.35}
+.ov.title span{display:inline-block;padding:1px 10px;white-space:nowrap;color:var(--tfg);font-weight:700}
+.ov.title.pill span{background:var(--tbg);border-radius:999px;padding:2px 13px}
+.ov.title.banner span{background:var(--tbg);border-radius:2px;padding:0 10px;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.ov.title.shadow span{text-shadow:0 2px 3px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.7)}
+.ov.title.outline span{-webkit-text-stroke:1.2px var(--tbg);paint-order:stroke fill;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+.ov.cap{font-weight:700;color:#fff}
+.ov.cap .cgi{display:inline-block;padding:2px 12px}
+.ov.cap.lk-plain{text-shadow:none}.ov.cap.lk-pill,.ov.cap.lk-box{text-shadow:none}
+.ov.cap.lk-pill .cgi{background:var(--cbg);border-radius:999px;padding:3px 16px}
+.ov.cap.lk-box .cgi{background:var(--cbg);border-radius:4px}.ov.cap em{font-style:normal;color:var(--amber)}
+
+.ov.mark{font-size:10px;color:var(--yellow)}
+.wave{position:absolute;left:22%;right:22%;height:16px;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;gap:3px}
+.wave i{flex:1;max-width:4px;border-radius:2px;background:var(--wc,#FDE68A);animation:bob 1.1s ease-in-out infinite}
+.wave.line i{max-width:2px}
+@keyframes bob{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.wave i{animation:none}}
+.vcard{position:absolute;left:13%;right:13%;top:16%;bottom:24%;direction:rtl;text-align:center;color:#161613;font-family:'Thmanyah Sans',sans-serif}
+.vcard .vn{font-size:11px;opacity:.7;letter-spacing:2px}.vcard .vh{font-weight:700;font-size:27px;margin-top:10px}.vcard .vh b{color:#1E4D3A}
+.vcard svg{width:62%;margin-top:26px}
+.under{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+.under .wrap{justify-content:center}
+.rules{margin:0;padding:0;list-style:none;font-size:13px;display:grid;gap:10px}
+.rules li{position:relative;padding-left:22px}
+.rules li::before{content:"";position:absolute;left:2px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.rules li.no::before{background:#dc3c3c;box-shadow:0 0 8px #dc3c3c}
+.hint{font-size:12.5px;color:var(--dim);margin-top:8px}
+
+/* clips + videos: each clip shown as the 9:16 frame it becomes, with where it sits in the lesson */
+.clip.has-p{grid-template-columns:112px 1fr;align-items:start;column-gap:18px}
+.poster{display:grid;gap:8px}.poster img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:10px;background:var(--s2);display:block}
+.poster.none img{visibility:hidden}.where{height:4px;border-radius:2px;background:var(--s3);position:relative}.where i{position:absolute;top:0;bottom:0;background:var(--amber);border-radius:2px;min-width:3px}
+.cbody{display:grid;gap:12px;min-width:0}
+.clip-sum{display:flex;gap:16px;color:var(--dim);font-size:13px;margin:0 0 14px}.clip-sum b{color:var(--ivory);font:italic 400 17px var(--serif)}
+.empty{padding:28px;text-align:center;color:var(--stone);border:1px dashed var(--line-2);border-radius:var(--r-sm)}.empty b{display:block;color:var(--ivory);font:400 19px var(--serif);margin-bottom:6px}
+#renders{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));align-items:start}
+.vt{display:grid;gap:10px}.vt-h{display:flex;gap:10px;align-items:baseline;min-width:0}.vt-h span[dir]{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ivory);font:600 16px 'Thmanyah Sans','Noto Naskh Arabic',serif}
+.vt-f{position:relative;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#000 center/cover no-repeat}
+.vt-f video{position:absolute;inset:0;width:100%;height:100%;max-width:none;border-radius:0}
+.vt-o{position:absolute;inset:0;display:grid;align-content:end;gap:8px;padding:16px;background:linear-gradient(to top,rgba(15,15,13,.92),rgba(15,15,13,.35) 60%,rgba(15,15,13,.15))}
+.vt-o .big{font:italic 300 40px var(--serif);color:var(--ivory)}.vt-o .lab{font-size:13px;color:var(--stone)}.vt-o.err{background:rgba(40,12,12,.85);align-content:center;text-align:center}.vt-o.err p{color:#f6b4b4;font-size:13px;margin:0}
+.vt .wrap{gap:6px}.vt .wrap .pill{padding:6px 12px;font-size:13px}
+.steps b{white-space:nowrap}
+@media(max-width:1200px){.brand .en em{display:none}}
+@media(max-width:600px){#renders{grid-template-columns:1fr 1fr;gap:12px}.vt-h span[dir]{font-size:14px}.vt-o .big{font-size:28px}.vt .wrap .pill{padding:5px 10px;font-size:12px}.clip.has-p{grid-template-columns:1fr;padding:14px}.clip.has-p .poster{grid-template-columns:40px 1fr;align-items:center;gap:12px}.wsum{flex-wrap:wrap;row-gap:2px}}
+#renders>div:has(.capedit:not(.hidden)){grid-column:1/-1}#renders>div:has(.capedit:not(.hidden)) .vt-f{max-width:300px}
+
+/* step 2: the transcript reads like the lesson text; tools stay quiet until you reach for them */
+.keys{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 16px;color:var(--dim);font-size:12.5px}.keys kbd{font:600 11.5px var(--sans);color:var(--yellow);border:1px solid var(--line-2);border-radius:6px;padding:1px 6px;margin-right:4px;background:var(--s2)}
+.seg-row{border-left:2px solid transparent}.seg-row.playing{border-left-color:var(--amber)}
+.seg-row:hover .seg-text:not(:focus){background:rgba(255,251,235,.025)}
+.seg-times>span{opacity:.5}
+.ed-top{position:sticky;top:0;z-index:2}
+@media(max-width:600px){.seg-row{grid-template-columns:1fr;gap:4px;padding:10px}.seg-side{flex-direction:row;align-items:center;flex-wrap:wrap}.segs{max-height:none}.keys span:nth-child(n+4){display:none}}
+
+.lib-btn{margin-left:auto}.lib-btn.on{color:var(--ivory);border-color:var(--amber-line);background:var(--amber-soft)}
+.lesson{padding:16px 18px;border:1px solid var(--line-2);border-radius:var(--r-sm);background:rgba(20,20,18,.45);display:grid;gap:12px}
+.lesson-h{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}.lesson-n{flex:1;min-width:200px;color:var(--ivory);font:600 17px 'Thmanyah Sans','Noto Naskh Arabic',serif}.lesson-m{color:var(--dim);font-size:13px}
+.lesson-v{display:grid;grid-auto-flow:column;grid-auto-columns:132px;gap:10px;overflow-x:auto;padding-bottom:4px}
+.lv{display:grid;gap:6px}.lv video{width:100%;aspect-ratio:9/16;border-radius:10px;background:#000;object-fit:contain}.lv span{font-size:12px;color:var(--stone);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:600px){.lib-btn{padding:6px 10px;font-size:12px}}
+.lv{position:relative}.lv-x{position:absolute;top:6px;right:6px;z-index:1;width:26px;height:26px;border-radius:50%;border:0;background:rgba(15,15,13,.75);color:var(--ivory);font-size:16px;line-height:1;cursor:pointer}.lv-x:hover{background:#7f1d1d}
+.pill.danger{color:#f6b4b4;border-color:rgba(220,80,80,.35)}.pill.danger:hover{background:rgba(220,80,80,.12)}
+.fixes{margin:-6px 0 14px;font-size:12.5px;color:var(--dim)}.fixes summary{cursor:pointer}.fixes summary b{color:var(--yellow);font-weight:600}
+#fixList{display:grid;gap:6px;margin-top:8px}.fx{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 10px;border:1px solid var(--line);border-radius:10px}.fx span{color:var(--ivory);font-size:15px}.fx s{color:var(--dim)}.fx .pill{padding:3px 10px;font-size:12px}
+.post{font-size:12.5px;color:var(--dim)}.post summary{cursor:pointer}.post pre{white-space:pre-wrap;font:15px/1.8 'Noto Naskh Arabic',serif;color:var(--ivory);background:var(--s2);border-radius:10px;padding:10px 12px;margin:8px 0 4px}
+.cwrow{grid-template-columns:auto 1fr;row-gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}.cwrow>.cwl{grid-row:span 2}.cwrow>.cwt{grid-column:2;justify-self:start}.cwrow>div:last-child{grid-column:2}
+.cwt{width:100%}.rowadd,.rowdel{width:26px;height:26px;border-radius:50%;border:1px solid var(--line-2);background:none;color:var(--dim);font-size:15px;line-height:1;cursor:pointer}.rowadd{margin-left:auto}.rowadd:hover{color:var(--yellow);border-color:var(--amber-line)}
+.rowdel{width:26px;height:26px;border-radius:50%;border:1px solid var(--line-2);background:none;color:var(--dim);font-size:15px;line-height:1;cursor:pointer}.rowdel:hover{color:#f6b4b4;border-color:rgba(220,80,80,.45);background:rgba(220,80,80,.1)}
+.cwrow .seg-text:empty::before{content:'اكتب السطر هنا…';color:var(--dim)}
+.ov.en{direction:ltr;font-family:'Manrope',sans-serif;font-weight:600;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.8);transform:none}
+.pic-btn{cursor:pointer}
+.ov.en.en-plain,.ov.en.en-box{text-shadow:none}.ov.en.en-box{background:rgba(15,15,13,.72);border-radius:4px;padding:2px 6px;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:max-content;max-width:74%}.ov.en.en-italic{font-style:italic}
+.sw-auto{background:conic-gradient(#F59E0B,#1E4D3A,#FFFBEB,#0E1A33,#F59E0B)!important;color:#1F1F1D;font:700 12px var(--sans);text-shadow:0 0 3px #fff}
+.cdp{position:absolute;display:flex;align-items:center;gap:4px;padding:2px 7px 2px 3px;border-radius:999px;background:rgba(15,15,13,.55);border:1px solid rgba(255,251,235,.18);z-index:3;color:#FFFBEB;font:700 11px/1 var(--sans);font-variant-numeric:tabular-nums}
+.cdp svg{width:13px;height:13px;transform:rotate(-90deg)}.cdp circle{fill:none;stroke-width:3.5}.cdp .t{stroke:rgba(255,251,235,.18)}.cdp .p{stroke:var(--cdc,#F59E0B);stroke-linecap:round;stroke-dasharray:94.25;stroke-dashoffset:30}
+.spk{display:grid;gap:4px}.spk .lbl{margin:0}.spk input{font:500 15px 'Thmanyah Sans','Noto Naskh Arabic',serif}
+.spk-v{grid-template-columns:1fr auto;align-items:center}.spk-v input{padding:6px 10px!important;font-size:13px}.spk-v .pill{padding:5px 10px;font-size:12px}
+#bulk{width:100%;min-height:60vh;font:600 17px/2 'Noto Naskh Arabic',serif;resize:vertical}.ed-mode{margin:0 0 10px}
+.fo{margin:0}.fo .pill{padding:5px 11px;font-size:12.5px}
+.enrows{display:grid;gap:10px;max-height:60vh;overflow:auto;margin-bottom:10px}.enrow{display:grid;gap:4px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.enrow div{color:var(--dim);font:500 15px/1.7 'Noto Naskh Arabic',serif}.enrow textarea{font:500 14px/1.5 var(--sans);resize:vertical}
+/* the preview element that belongs to the card you're in */
+.hl{outline:2px dashed var(--amber)!important;outline-offset:3px;border-radius:6px}#phone.hl{outline-offset:6px}#fade.hl,#wave.hl{outline-offset:-3px}
+.subhead{margin:18px 0 8px;padding-top:14px;border-top:1px solid var(--line);font:italic 400 15px var(--serif);color:var(--yellow)}.subhead:first-of-type{border-top:0;padding-top:0;margin-top:4px}
+@media(max-width:600px){header .brand .en{display:none}header{gap:8px}.steps span{padding:3px}.steps .on b{padding-right:6px}.lib-btn{padding:6px 10px!important;font-size:12px!important;flex-shrink:0}}
+.ov.ll{left:auto;right:13%;width:auto;max-width:46%;text-align:right;font:600 9px/1.35 'Thmanyah Sans',sans-serif;color:rgba(255,251,235,.86);padding-bottom:2px;border-bottom:1px solid var(--cdc,#F59E0B);text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.cdp .bar{display:none}.cdp.cd-minimal{background:none;border:0;padding:0}.cdp.cd-minimal svg{width:9px;height:9px}
+.cdp.cd-circle{background:rgba(15,15,13,.45);border:0;padding:0;border-radius:50%;width:30px;height:30px;justify-content:center}.cdp.cd-circle svg{position:absolute;inset:0;width:100%;height:100%}.cdp.cd-circle span{font-size:8px}
+.cdp.cd-bar{flex-direction:column;align-items:flex-start;background:none;border:0;padding:0;gap:3px}.cdp.cd-bar svg{display:none}.cdp.cd-bar .bar{display:block;width:66px;height:2px;border-radius:2px;background:rgba(255,251,235,.22);overflow:hidden}.cdp.cd-bar .bar b{display:block;height:100%;width:70%;background:var(--cdc,#F59E0B)}
+.sw-rand{background:var(--s3)!important;color:var(--ivory);font-size:17px;line-height:1}
+.wave.soft{-webkit-mask-image:linear-gradient(to right,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(to right,transparent,#000 22%,#000 78%,transparent);filter:drop-shadow(0 0 3px var(--wc,#FDE68A))}
+.wave.dots i{flex:0 0 auto;width:4px;height:4px!important;border-radius:50%}.wave.eq{align-items:flex-end}.wave.eq i{transform-origin:bottom}
+.wave svg{display:none}.wave.smooth svg{display:block;position:absolute;inset:0;width:100%;height:100%}.wave.smooth i{display:none}.wave svg path{fill:var(--wc,#FDE68A);fill-opacity:.28;stroke:var(--wc,#FDE68A);stroke-width:2}
+.lk{position:absolute;inset:0;pointer-events:none;display:none;z-index:1}.lk-vig{background:radial-gradient(ellipse 75% 65% at 50% 45%,transparent 55%,rgba(0,0,0,.6) 100%)}
+.lk-grain{opacity:.16;mix-blend-mode:overlay;background-size:160px 160px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.lk-leak{mix-blend-mode:screen;opacity:.45;background:radial-gradient(ellipse 60% 45% at 30% 30%,rgba(255,170,90,.75),rgba(255,90,40,.25) 45%,transparent 70%)}
+.sop{position:absolute;left:0;right:0;z-index:4;display:flex;justify-content:center}.sop .in{display:flex;align-items:center;gap:4px;direction:ltr}
+.sop .ico{display:flex;gap:3px}.sop svg{width:8px;height:8px;fill:var(--sc,#FFFBEB)}.sop .hd{color:var(--sc,#FFFBEB);font:600 8.5px var(--sans)}
+.sop .dv{width:1px;height:8px;background:var(--sa,#F59E0B)}.sop.pill .in{padding:3px 8px;border-radius:999px;background:rgba(18,18,16,.48);border:1px solid rgba(255,251,235,.16);backdrop-filter:blur(4px)}
+.sop.line .in{opacity:.82;padding-bottom:2px;border-bottom:1px solid var(--sa,#F59E0B)}.sop.line .dv{display:none}
+.sopk svg{width:14px;height:14px;fill:currentColor;margin-right:6px;vertical-align:-2px}
+#ambient{position:fixed;inset:-12%;z-index:-1;pointer-events:none;background:radial-gradient(60% 50% at 75% 15%,var(--ambc,transparent),transparent 70%)}
+#ambient i{position:absolute;inset:0;background:center/cover no-repeat;filter:blur(70px) saturate(1.5) brightness(.5);opacity:0;transition:opacity 1.1s var(--ease)}
+body.restyling [data-sec="source"],body.restyling [data-sec="clips"],body.restyling #styleRow,body.restyling .no-restyle,body.restyling #framingField{display:none}
+.yt-only,#ytPrev{display:none}body.yt .yt-only{display:block}
+body.yt .lesson-only,body.yt .visualy-only,body.yt .no-yt,body.yt .no-lesson,body.yt .card.opt:not([data-sec="source"]):not([data-sec="look"]){display:none!important}
+body.yt #phone>*:not(#pv):not(#ytPrev),body.yt .rules-d,body.yt label:has(#showZones){display:none!important}
+@media(min-width:961px){body.yt main{grid-template-columns:minmax(0,1fr) 540px}}
+body.yt #ytPrev{display:block;position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;pointer-events:none;z-index:2;background:transparent}
+#renders:has(.vt.yt){grid-template-columns:minmax(0,760px)}.vt.yt .vt-f{aspect-ratio:16/9}.ytth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.ytth img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;cursor:pointer;display:block}
+html.ar body,html.ar h1,html.ar h2,html.ar h3,html.ar .btn,html.ar .ghost,html.ar .pill,html.ar .lbl,html.ar .hint,html.ar input,html.ar textarea,html.ar select{font-family:'Thmanyah Sans','Noto Naskh Arabic',sans-serif}
+html.ar #phone,html.ar .vt-f{direction:ltr}
+html.ar .locked{white-space:nowrap}@media(max-width:1360px){html.ar .locked{display:none}}
+body.amb{background:var(--bg)}body.amb .card{background:linear-gradient(180deg,rgba(42,42,38,.72),rgba(35,35,32,.78))}
+@media(prefers-reduced-motion:reduce){#ambient i{transition:none}}
+/* action bar: floating glass, with room below the list so nothing hides behind it */
+.go.bar{bottom:12px;margin:8px 0 0;padding:10px 12px;border-radius:999px;background:rgba(30,30,27,.72);border:1px solid var(--line-2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.card.opt:has(+ .go.bar){margin-bottom:12px}main>div:first-child{padding-bottom:12px}
+.card.opt .sum{color:var(--stone);font-size:13.5px}
+.card.opt.changed h2 .n::after{content:'';display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:var(--amber);vertical-align:middle}
+/* steps 2-4 + library: no card-inside-a-card; items float as glass over the footage, actions in the same bar as Set up */
+.step2>.card{background:none!important;border:0;padding:6px 4px}
+.clip,.lesson,.segs{background:linear-gradient(180deg,rgba(42,42,38,.72),rgba(35,35,32,.78));border-color:var(--line-2)}
+.step2>.go{margin-top:18px;position:sticky;bottom:12px;z-index:5;padding:10px 12px;border-radius:999px;background:rgba(30,30,27,.72);border:1px solid var(--line-2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+#renders .vt{padding:12px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:linear-gradient(180deg,rgba(42,42,38,.72),rgba(35,35,32,.78))}
+.step2 .hint,.keys{font-size:14px;color:var(--stone)}
+@media(max-width:600px){.step2>.go,.go.bar{flex-wrap:nowrap;padding:8px;gap:6px;border-radius:18px}.step2>.go button,.go.bar button{padding:9px 11px;font-size:13px;white-space:nowrap;min-width:0}.go.bar select{flex:1 1 0;width:0;min-width:0;padding:9px 8px;font-size:13px}.go.bar #savePreset{padding:9px 8px;font-size:12px}.go.bar #start{padding:9px 10px;font-size:13px}}
+</style>
+</head>
+<body>
+<div id="ambient" aria-hidden="true"><i></i><i></i></div>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<h1 class="sr">Qitaf — Arabic reel editor for Islamic lessons</h1>
+  <div class="brand"><span class="ar" lang="ar">قِطاف</span><span class="en">Qitaf<em>harvest the best of every lesson</em></span></div>
+  <nav class="steps" aria-label="Progress"><span data-st="1" class="on"><i>1</i><b>Set up</b></span><span data-st="2"><i>2</i><b>Words</b></span><span data-st="3"><i>3</i><b>Clips</b></span><span data-st="4"><i>4</i><b>Videos</b></span></nav>
+  <button class="pill glow lib-btn" id="libBtn">Library</button>
+  <button class="pill glow lib-btn" id="langBtn" lang="en">English</button>
+  <a class="pill glow lib-btn" href="/guide" target="_blank" rel="noopener" style="text-decoration:none">Help</a>
+  <div class="locked">Always on: <b>no music</b> · no AI faces · no women on screen</div>
+</header>
+<main id="main">
+<div>
+  <section class="card opt" data-sec="source">
+    <h2><span class="n">i.</span>Source<span class="sum" id="sum-source"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+    <div class="field"><span class="lbl">Start from</span><div class="wrap" data-k="source"><button class="pill glow" data-v="video">Video</button><button class="pill glow" data-v="audio">Audio (mp3)</button></div></div>
+    <div class="field media-only no-yt"><span class="lbl">Length</span><div class="wrap" data-k="mode"><button class="pill glow" data-v="long">Long lesson → cut into clips</button><button class="pill glow" data-v="single">Use the whole thing</button></div></div>
+    <div class="field text-only"><span class="lbl">Your text: one sentence per line. It becomes a silent motion graphic (quiet sound effects only), timed at a calm reading pace.</span>
+      <textarea class="ar" data-k="sourceText" style="min-height:160px" placeholder="قال الإمام ابن القيّم&#10;مفسدات القلب خمسة&#10;كثرة الخلطة&#10;…"></textarea></div>
+    <div class="field text-only"><span class="lbl">Voice</span><div class="wrap" data-k="voice"><button class="pill glow" data-v="none">No voice (silent video)</button><button class="pill glow" data-v="record">Record myself</button><button class="pill glow" data-v="upload">Upload a recording</button><button class="pill glow" data-v="computer">Computer voice</button></div>
+      <div class="voice-rec hidden" id="voiceRec">
+        <p class="hint">Read the text above aloud, line by line. The visuals will follow your voice word by word.</p>
+        <div class="wrap"><button class="btn" id="recBtn">● Record</button><span class="val" id="recTime" style="font-size:20px">0:00</span><span class="hint" id="recState" style="margin:0"></span></div>
+      </div>
+      <div class="voice-up hidden" id="voiceUp"><div class="wrap"><button class="ghost glow" id="voiceFileBtn">Choose a recording…</button><span class="hint" id="voiceFileName" style="margin:0"></span></div>
+        <input type="file" id="voiceFile" accept="audio/*" hidden></div>
+      <div class="voice-tts hidden" id="voiceTts">
+        <p class="hint">Claude reads your text with a voice built into your Mac (nothing is sent online). It sounds like a computer. For Qur'an verses, record a real reciter instead; a computer voice shouldn't recite the Qur'an.</p>
+        <div class="field wrap"><select id="ttsVoice"></select><span class="lbl" style="margin:0 0 0 6px">Speed</span><input type="range" min="120" max="220" data-k="ttsRate"><span class="val" id="ttsRateVal"></span></div>
+        <div class="wrap"><button class="ghost glow" id="ttsPreview">▶ Hear the first line</button><span class="hint" id="ttsState" style="margin:0"></span></div>
+        <p class="hint">Want a more natural voice? On your Mac: System Settings → Accessibility → Spoken Content → System voice → Manage Voices → Arabic, and download "Majed (Enhanced)" or a Premium voice. It will appear in the list above.</p>
+      </div>
+      <audio id="voicePlay" controls class="hidden" style="width:100%;margin-top:12px"></audio>
+    </div>
+    <div class="drop glow media-only" id="drop" tabindex="0" role="button" style="--glow-size:420px"><div class="big" id="dropBig">Drop a lesson <em>here</em></div><p>or click to choose · pick several to edit them all the same way · your original file is never changed</p></div>
+    <input type="file" id="file" accept="video/*,audio/*" multiple hidden>
+    <div class="field media-only" style="margin-top:14px"><span class="lbl">Background</span><div class="wrap" data-k="background"><button class="pill glow" data-v="footage">The original video</button><button class="pill glow" data-v="picture">A picture</button></div>
+      <div class="wrap pic-only" style="margin-top:8px"><button class="ghost glow" id="bgBtn">Choose a picture…</button><span class="hint" id="bgName" style="margin:0"></span></div>
+      <input type="file" id="bgFile" accept="image/*" hidden>
+      <p class="hint pic-only">The picture fills the 9:16 frame (cropped to fit) and the voice plays over it. Works for audio too, as a lesson reel.</p></div>
+    <div class="prog hidden" id="prog">
+      <div class="prog-top"><span id="progLbl">Uploading…</span><span class="pct" id="pct">0%</span></div>
+      <div class="track"><i id="bar"></i></div>
+      <div class="hint" id="progSub"></div>
+    </div>
+    <div class="fileinfo hidden" id="fileinfo"></div>
+  </section>
+
+  <section class="card opt" data-sec="look">
+    <h2><span class="n">ii.</span>Look<span class="sum" id="sum-look"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+    <div class="field wrap" data-k="style" id="styleRow"><button class="pill glow" data-v="idrisi">Lesson reel</button><button class="pill glow" data-v="youtube" id="ytPill">YouTube long video</button></div>
+    <p class="hint no-lesson" style="margin:-6px 0 14px">Audio has no picture: choose YouTube long video, or set Background to A picture above to make a reel.</p>
+    <div class="yt-only">
+      <div class="field" id="ytLayoutField"><span class="lbl">Layout</span><div class="wrap" data-k="ytLayout"><button class="pill glow" data-v="band">Video with a title band</button><button class="pill glow" data-v="board">Video on a board</button><button class="pill glow" data-v="sound">Sound only</button></div></div>
+      <div class="field"><span class="lbl">Colours</span><div class="wrap" data-k="ytTheme"><button class="pill glow" data-v="ink">Ink</button><button class="pill glow" data-v="forest">Forest</button><button class="pill glow" data-v="navy">Navy</button><button class="pill glow" data-v="maroon">Maroon</button><button class="pill glow" data-v="paper">Paper</button></div></div>
+      <div class="field"><span class="lbl">Title on the video (leave empty and Claude writes one)</span><input type="text" dir="rtl" lang="ar" data-k="titleText" placeholder="عنوان الدرس"></div>
+      <div class="field"><span class="lbl">Shaykh's name</span><input type="text" dir="rtl" lang="ar" data-k="speaker" placeholder="الشيخ …"></div>
+      <div class="field"><span class="lbl">Book or series (optional)</span><input type="text" dir="rtl" lang="ar" data-k="ytKicker" placeholder="شرح كتاب التوحيد"></div>
+      <div class="field"><span class="lbl">Channel handle</span><input type="text" dir="ltr" data-k="ytHandle"></div>
+      <div class="field wrap"><label class="tick"><input type="checkbox" data-k="ytSubs"> Subtitles on the video</label></div>
+      <div class="yt-pic"><div class="field"><span class="lbl">Zoom in: hides the source's own border, logos and title strip</span><div class="wrap"><input type="range" min="0" max="60" data-k="ytZoom"><span class="val" data-show="ytZoom"></span></div></div>
+      <div class="field"><span class="lbl">Move the picture: left and right</span><div class="wrap"><input type="range" min="-100" max="100" data-k="ytX"></div></div>
+      <div class="field"><span class="lbl">Move the picture: up and down</span><div class="wrap"><input type="range" min="-100" max="100" data-k="ytY"></div></div></div>
+      <p class="hint">An hour of video takes about 15 minutes. You also get 3 thumbnails, titles, a description with chapters, and subtitles for YouTube's CC button.</p>
+    </div>
+    <div class="visualy-only">
+      <div class="field"><span class="lbl">Look</span><div class="wrap" data-k="motionLook"><button class="pill glow" data-v="minimal">Minimal (cream · green · black)</button><button class="pill glow" data-v="lineart">Gold line-art (black)</button><button class="pill glow" data-v="grid">Dark grid (framed cards)</button></div></div>
+      <div class="field"><span class="lbl" id="palLbl">Colours</span><div class="wrap" id="palettes"></div></div>
+      <div class="field custom-pal hidden"><span class="lbl">Your palette</span>
+        <div class="cp-row"><span class="hint">Light ground</span><div class="wrap" id="palLightPick"></div></div>
+        <div class="cp-row"><span class="hint">Middle ground</span><div class="wrap" id="palMidPick"></div></div>
+        <div class="cp-row"><span class="hint">Dark ground</span><div class="wrap" id="palDarkPick"></div></div>
+        <div class="cp-row"><span class="hint">Accent</span><div class="wrap" id="palAccPick"></div></div></div>
+      <div class="field"><span class="lbl">Heading font</span><div class="fonts" id="motionFonts"></div></div>
+      <div class="field"><span class="lbl">Heading size</span><div class="wrap" data-k="motionSize"><button class="pill glow" data-v="s">Small</button><button class="pill glow" data-v="m">Medium</button><button class="pill glow" data-v="l">Large</button></div></div>
+      <div class="field wrap"><label class="tick"><input type="checkbox" data-k="checklists"> Allow checklists</label></div>
+      <div class="field not-text"><span class="lbl">Script for the visuals (optional): what should appear on screen. One point per line; leave empty and it builds from the speech.</span>
+        <textarea class="ar" data-k="script" placeholder="مثال:&#10;شروط قبول العمل&#10;الإخلاص&#10;المتابعة"></textarea></div>
+    </div>
+    <div class="subhead lesson-only">Frame</div>
+    <div class="field lesson-only no-restyle"><span class="lbl">Shape</span><div class="wrap" data-k="ratio"><button class="pill glow" data-v="9:16">9:16 reel</button><button class="pill glow" data-v="1:1">1:1 square</button><button class="pill glow" data-v="16:9">16:9 YouTube</button></div></div>
+    <div class="field lesson-only" id="framingField"><span class="lbl">Framing</span><div class="wrap" data-k="framing"><button class="pill glow" data-v="face">Follow the speaker</button><button class="pill glow" data-v="centre">Fixed centre</button></div></div>
+    <div class="field lesson-only"><span class="lbl">Zooms</span><div class="wrap" data-k="zoom"><button class="pill glow" data-v="off">Off</button><button class="pill glow" data-v="subtle">Subtle</button><button class="pill glow" data-v="punchy">Punchy</button></div></div>
+    <div class="subhead lesson-only">Colour &amp; film look</div>
+    <div class="field lesson-only"><div class="wrap" data-k="look"><button class="pill glow" data-v="none">Natural</button><button class="pill glow" data-v="cinematic">Cinematic</button><button class="pill glow" data-v="golden">Golden hour</button><button class="pill glow" data-v="moody">Moody</button><button class="pill glow" data-v="vintage">Vintage film</button><button class="pill glow" data-v="mono">Black &amp; white</button><button class="pill glow" data-v="dreamy">Dreamy glow</button></div></div>
+    <div class="field wrap lesson-only"><label class="tick"><input type="checkbox" data-k="lookVignette"> Vignette (darker corners)</label><label class="tick"><input type="checkbox" data-k="lookGrain"> Film grain</label><label class="tick"><input type="checkbox" data-k="lookLeak"> Light leak (a warm glow drifting across)</label></div>
+  </section>
+
+  <section class="card opt" data-sec="captions">
+    <h2><span class="n">iii.</span>Arabic captions<span class="sum" id="sum-captions"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+    <div class="field lesson-only"><span class="lbl">What appears on screen</span><div class="wrap" data-k="textMode"><button class="pill glow" data-v="captions">Full captions</button><button class="pill glow" data-v="titleName">Title + name only</button><button class="pill glow" data-v="none">No text</button></div></div>
+    <div class="cap-only lesson-only">
+      <div class="field"><span class="lbl">Caption font</span><div class="fonts" id="fonts"></div></div>
+      <div class="field"><span class="lbl">Caption animation</span><div class="wrap" data-k="capAnim"><button class="pill glow" data-v="fadeup">Fade up</button><button class="pill glow" data-v="pop">Pop</button><button class="pill glow" data-v="word">Word by word</button><button class="pill glow" data-v="karaoke">Highlight spoken word</button><button class="pill glow" data-v="typewriter">Typewriter</button><button class="pill glow" data-v="slide">Slide in</button><button class="pill glow" data-v="none">None</button></div></div>
+      <div class="field"><span class="lbl">Caption look</span><div class="wrap" data-k="capLook"><button class="pill glow" data-v="plain">Plain</button><button class="pill glow" data-v="shadow">Text + shadow</button><button class="pill glow" data-v="pill">Rounded pill</button><button class="pill glow" data-v="box">Box</button></div></div>
+      <div class="field cap-bg"><span class="lbl">Caption box colour</span><div class="wrap" id="capBgPick"></div></div>
+      <div class="field"><span class="lbl">Caption colour</span><div class="wrap" id="capColourPick"></div></div>
+      <div class="field hl-only"><span class="lbl">Highlight colour (the word being spoken)</span><div class="wrap" id="capHlPick"></div></div>
+      <div class="field wrap" data-k="capSize"><button class="pill glow" data-v="s">Small</button><button class="pill glow" data-v="m">Medium</button><button class="pill glow" data-v="l">Large</button></div>
+    </div>
+  </section>
+
+  <section class="card opt lesson-only cap-only" data-sec="verses">
+    <h2><span class="n">iv.</span>Qur'an verses<span class="sum" id="sum-verses"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+      <div class="field"><span class="lbl">Qur'an verses in the captions (shown in their own font, between ﴿ ﴾)</span><div class="wrap" data-k="quranReading"><button class="pill glow" data-v="hafs">Hafs · Amiri Quran</button><button class="pill glow" data-v="warsh">Warsh · Almaghribi</button></div>
+        <p class="hint qr-hafs">Verses are found automatically and shown in the exact Mushaf wording, not as heard. Check them on the clips page.</p>
+        <p class="hint qr-warsh">Warsh text fills in automatically from <a href="https://app.al-mushaf.com/" target="_blank" rel="noopener">al-mushaf.com</a> on the clips page. Always check it. If a box stays empty, paste the verse yourself, or it shows as a normal caption.</p></div>
+      <div class="field"><span class="lbl">Verse colour</span><div class="wrap" id="verseColourPick"></div></div>
+  </section>
+
+  <section class="card opt lesson-only cap-only" data-sec="english">
+    <h2><span class="n">v.</span>English subtitles<span class="sum" id="sum-english"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+      <div class="field"><span class="lbl">English subtitles (translated by Claude while rendering)</span><div class="wrap" data-k="translate"><button class="pill glow" data-v="off">Off</button><button class="pill glow" data-v="under">Arabic + English</button><button class="pill glow" data-v="only">English only</button></div></div>
+      <div class="field en-pos"><span class="lbl">Where the English goes</span><div class="wrap" data-k="enPos"><button class="pill glow en-u" data-v="under">Under the Arabic</button><button class="pill glow en-c" data-v="captions">Caption height</button><button class="pill glow" data-v="middle">Middle</button><button class="pill glow" data-v="bottom">Bottom</button></div></div>
+      <div class="en-opts">
+        <div class="field"><span class="lbl">English font</span><div class="wrap" data-k="enFont"><button class="pill glow" data-v="Manrope" style="font-family:Manrope">Manrope</button><button class="pill glow" data-v="Montserrat" style="font-family:Montserrat">Montserrat</button><button class="pill glow" data-v="Lora" style="font-family:Lora">Lora</button><button class="pill glow" data-v="Playfair Display" style="font-family:'Playfair Display'">Playfair</button><button class="pill glow" data-v="Merriweather" style="font-family:Merriweather">Merriweather</button></div></div>
+        <div class="field"><span class="lbl">English look</span><div class="wrap" data-k="enLook"><button class="pill glow" data-v="shadow">Text + shadow</button><button class="pill glow" data-v="plain">Plain</button><button class="pill glow" data-v="box">Box</button><button class="pill glow" data-v="italic">Italic</button></div></div>
+        <div class="field"><span class="lbl">English animation</span><div class="wrap" data-k="enAnim"><button class="pill glow" data-v="fade">Fade</button><button class="pill glow" data-v="fadeup">Fade up</button><button class="pill glow" data-v="slide">Slide</button><button class="pill glow" data-v="typewriter">Typewriter</button><button class="pill glow" data-v="word">Word by word</button><button class="pill glow" data-v="none">None</button></div></div>
+        <div class="field en-shadow"><span class="lbl">English shadow strength</span><div class="wrap"><input type="range" min="0" max="100" data-k="enShadow"><span class="val" id="enShadowVal"></span></div></div>
+        <div class="field"><span class="lbl">English colour</span><div class="wrap" id="enColourPick"></div></div>
+        <div class="field"><span class="lbl">English size</span><div class="wrap" data-k="enSize"><button class="pill glow" data-v="s">Small</button><button class="pill glow" data-v="m">Medium</button><button class="pill glow" data-v="l">Large</button></div></div>
+      </div>
+  </section>
+
+  <section class="card opt title-card" data-sec="title">
+    <!-- lesson label lives here too: it is a second, small title -->
+    <h2><span class="n">vi.</span>Title<span class="sum" id="sum-title"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+    <div class="field wrap"><label class="tick"><input type="checkbox" data-k="showTitle"> Show a title</label></div>
+    <div class="title-opts">
+    <div class="field wrap"><label class="tick"><input type="checkbox" data-k="titleAuto"> Let Claude write the title from what's said</label></div>
+    <div class="field" id="titleTextField"><span class="lbl" id="titleHint">Title text: each line becomes its own line on screen</span>
+      <textarea class="ar" data-k="titleText" placeholder="يُبعث العبد على&#10;ما مات عليه"></textarea></div>
+    <div class="field"><span class="lbl">Stretch the letters (madd, e.g. الــعــلـم): drag for longer</span><div class="wrap"><input type="range" min="0" max="12" data-k="titleMadd"><span class="val" id="titleMaddVal"></span></div></div>
+    <div class="field lesson-only"><span class="lbl">Position (always inside the safe zone)</span><div class="wrap" data-k="titlePos"><button class="pill glow" data-v="top">Top</button><button class="pill glow" data-v="upper">Upper third</button><button class="pill glow" data-v="centre">Centre</button><button class="pill glow" data-v="bottom">Bottom</button></div></div>
+    <div class="field lesson-only"><span class="lbl">Look</span><div class="wrap" data-k="titleLook"><button class="pill glow" data-v="pill">Rounded pill</button><button class="pill glow" data-v="banner">Banner per line</button><button class="pill glow" data-v="shadow">Text + shadow</button><button class="pill glow" data-v="outline">Outline</button></div></div>
+    <div class="field look-bg lesson-only"><span class="lbl">Box colour</span><div class="wrap" id="titleBgChips"></div></div>
+    <div class="field lesson-only"><span class="lbl">Text colour</span><div class="wrap" id="titleFgChips"></div></div>
+    <div class="field lesson-only"><span class="lbl">Title font</span><div class="fonts" id="titleFonts"></div></div>
+    <div class="field wrap lesson-only" data-k="titleSize"><button class="pill glow" data-v="s">Small</button><button class="pill glow" data-v="m">Medium</button><button class="pill glow" data-v="l">Large</button></div>
+    </div>
+    <div class="subhead lesson-only">Lesson name, small, top right</div>
+    <div class="field lesson-only"><div class="wrap" data-k="lessonLabel"><button class="pill glow" data-v="">Off</button><button class="pill glow" data-v="auto">From the file name</button><button class="pill glow" data-v="custom">Type it</button></div>
+      <input type="text" class="ll-text" data-k="lessonLabelText" dir="rtl" lang="ar" placeholder="مثال: وقفات مع قصة يوسف" style="margin-top:8px"></div>
+  </section>
+
+  <section class="card opt" data-sec="name">
+    <h2><span class="n">vii.</span>Speaker name<span class="sum" id="sum-name"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+    <div class="field"><span class="lbl">Speaker name (shown at the bottom)</span><input type="text" data-k="speaker" dir="rtl" lang="ar" placeholder="الشيخ …"></div>
+    <div class="field"><span class="lbl">Stretch the letters (madd, e.g. الــعــلـم): drag for longer</span><div class="wrap"><input type="range" min="0" max="12" data-k="nameMadd"><span class="val" id="nameMaddVal"></span></div></div>
+    <div class="field lesson-only"><span class="lbl">Name position</span><div class="wrap" data-k="namePos"><button class="pill glow" data-v="bottom">Bottom</button><button class="pill glow" data-v="top">Top</button></div></div>
+    <div class="field lesson-only"><span class="lbl">Name look</span><div class="wrap" data-k="nameLook"><button class="pill glow" data-v="plain">Plain</button><button class="pill glow" data-v="shadow">Text + shadow</button><button class="pill glow" data-v="pill">Rounded pill</button><button class="pill glow" data-v="banner">Box</button></div></div>
+    <div class="field name-bg lesson-only"><span class="lbl">Name box colour</span><div class="wrap" id="nameBgChips"></div></div>
+    <div class="field lesson-only"><span class="lbl">Name text colour</span><div class="wrap" id="nameFgChips"></div></div>
+    <div class="field lesson-only"><span class="lbl">Name font</span><div class="fonts" id="nameFonts"></div></div>
+    <div class="field wrap lesson-only" data-k="nameSize"><button class="pill glow" data-v="s">Small</button><button class="pill glow" data-v="m">Medium</button><button class="pill glow" data-v="l">Large</button></div>
+  </section>
+
+  <section class="card opt" data-sec="extras">
+    <h2><span class="n">viii.</span>Background &amp; extras<span class="sum" id="sum-extras"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+    <div class="subhead lesson-only">Fade over the video</div>
+    <div class="lesson-only">
+    <div class="field wrap" id="fadechips"></div>
+    <div class="field"><span class="lbl">Direction</span><div class="wrap" data-k="fadeDir"><button class="pill glow" data-v="bottom">From bottom</button><button class="pill glow" data-v="top">From top</button><button class="pill glow" data-v="both">Top and bottom</button></div></div>
+    <div class="field"><span class="lbl">Strength</span><div class="wrap"><input type="range" min="0" max="100" data-k="fadeStrength"><span class="val" data-show="fadeStrength"></span></div></div>
+    <div class="field"><span class="lbl">Darken the video (so text and graphics stand out)</span><div class="wrap"><input type="range" min="0" max="60" data-k="videoDim"><span class="val" id="videoDimVal"></span></div></div>
+    <div class="field"><span class="lbl" id="fadeHLbl">Height</span><div class="wrap"><input type="range" min="10" max="70" data-k="fadeHeight"><span class="val" data-show="fadeHeight"></span></div></div>
+    <div class="fade-top-only">
+      <div class="field"><span class="lbl">Top fade strength (lighter looks subtler)</span><div class="wrap"><input type="range" min="0" max="100" data-k="fadeTopStrength"><span class="val" data-show="fadeTopStrength"></span></div></div>
+      <div class="field"><span class="lbl">Top fade height</span><div class="wrap"><input type="range" min="5" max="70" data-k="fadeTopHeight"><span class="val" data-show="fadeTopHeight"></span></div></div>
+    </div>
+    </div>
+    <div class="subhead lesson-only">Sound wave</div>
+    <div class="lesson-only">
+    <div class="field wrap" data-k="wave"><button class="pill glow" data-v="off">Off</button><button class="pill glow" data-v="bars">Bars</button><button class="pill glow" data-v="line">Thin line</button><button class="pill glow" data-v="dots">Dots</button><button class="pill glow" data-v="eq">Equaliser</button><button class="pill glow" data-v="smooth">Smooth wave</button></div>
+    <div class="wave-only">
+      <div class="field wrap" data-k="wavePos"><button class="pill glow" data-v="top">Top area</button><button class="pill glow" data-v="bottom">Bottom area</button></div>
+      <div class="field wrap"><span class="lbl" style="width:100%">Colour</span><span id="wavePick" class="wrap"></span></div>
+      <div class="field"><span class="lbl">Wave strength (lower = more faded)</span><div class="wrap"><input type="range" min="25" max="100" data-k="waveOpacity"><span class="val" id="waveOpVal"></span></div></div>
+      <div class="field"><label class="tick"><input type="checkbox" data-k="waveSoft"> Soft: fade the ends and add a gentle glow</label></div>
+    </div>
+    </div>
+    <div class="subhead lesson-only">Countdown</div>
+    <div class="field lesson-only"><span class="lbl">Countdown, top left (counts the finished video, after cuts)</span><div class="wrap" data-k="countdown"><button class="pill glow" data-v="">Off</button><button class="pill glow" data-v="on">On</button></div></div>
+    <div class="field lesson-only cd-col"><span class="lbl">Countdown design</span><div class="wrap" data-k="cdStyle"><button class="pill glow" data-v="pill">Pill + ring</button><button class="pill glow" data-v="minimal">Minimal</button><button class="pill glow" data-v="circle">Circle</button><button class="pill glow" data-v="bar">Bar</button></div></div>
+    <div class="field lesson-only cd-col"><span class="lbl">Countdown accent colour</span><div class="wrap" id="cdColourPick"></div></div>
+    <div class="subhead lesson-only">Your handle &amp; platforms</div>
+    <div class="field lesson-only"><span class="lbl">Handle (leave empty for none)</span><input type="text" data-k="socialHandle" dir="ltr" placeholder="@your_handle"></div>
+    <div class="field lesson-only"><span class="lbl">Platform icons</span><div class="wrap" id="socialPick"></div></div>
+    <div class="field lesson-only so-opts"><span class="lbl">Design</span><div class="wrap" data-k="socialStyle"><button class="pill glow" data-v="pill">Glass pill</button><button class="pill glow" data-v="line">Minimal line</button></div></div>
+    <div class="field lesson-only so-opts"><span class="lbl">Where</span><div class="wrap" data-k="socialPos"><button class="pill glow" data-v="bottom">Very bottom</button><button class="pill glow" data-v="top">Very top</button></div></div>
+    <div class="field lesson-only so-opts"><span class="lbl">When</span><div class="wrap" data-k="socialWhen"><button class="pill glow" data-v="always">Whole video</button><button class="pill glow" data-v="end">Last 4 seconds</button></div></div>
+    <div class="field lesson-only so-opts"><span class="lbl">Colour</span><div class="wrap" id="socialColourPick"></div></div>
+    <div class="subhead lesson-only">Intro effect</div>
+    <div class="field lesson-only"><span class="lbl">How the video starts (after the cover)</span><div class="wrap" data-k="introFx"><button class="pill glow" data-v="none">None</button><button class="pill glow" data-v="zoom">Camera snap · blurred zoom + shutter</button><button class="pill glow" data-v="focus">Camera focus · blur hunting + focus beep</button><button class="pill glow" data-v="film">Burned film · warm flare</button></div></div>
+    <div class="subhead">Sound effects</div>
+    <div class="field"><span class="lbl">Sound effects (always quiet)</span><div class="wrap" data-k="sfx"><button class="pill glow" data-v="none">None</button><button class="pill glow" data-v="subtle">Subtle</button></div></div>
+  </section>
+
+  <section class="card opt" data-sec="clips">
+    <h2><span class="n">ix.</span><span id="clipsTitle">Clips</span> &amp; export<span class="sum" id="sum-clips"></span><span class="chev" aria-hidden="true">⌄</span></h2>
+    <div class="field long-only"><span class="lbl">How to choose the clips</span><div class="wrap" data-k="clipMode"><button class="pill glow" data-v="auto">Claude picks the best moments</button><button class="pill glow" data-v="manual">I'll set the times myself</button></div></div>
+    <div class="field long-only manual-only"><span class="lbl">Your clips: from → to (e.g. 43:03 → 46:07, or 1:02:10 for over an hour). Title is optional; Claude suggests one if empty.</span>
+      <div id="manualRows" class="mrows"></div>
+      <button class="ghost glow" id="addRow" style="margin-top:10px">+ Add another</button></div>
+    <div class="field wrap long-only auto-only"><span>Up to</span><input type="text" inputmode="numeric" class="num" data-min="1" data-max="15" data-k="clipCount"><span>clips, each</span><input type="text" inputmode="numeric" class="num" data-min="10" data-max="180" data-k="minLen"><span>to</span><input type="text" inputmode="numeric" class="num" data-min="15" data-max="180" data-k="maxLen"><span>seconds</span></div>
+    <div class="field long-only auto-only"><label class="tick"><input type="checkbox" data-k="hookFirst"> Start each clip with a hook (a strong line from later in the clip, then a "burn" into the clip)</label></div>
+    <div class="field long-only auto-only"><span class="lbl">What to look for (optional)</span><textarea data-k="guidance" placeholder="e.g. the Q&amp;A at the end, or the part about tawheed"></textarea></div>
+    <div class="subhead">Editing</div>
+    <div class="field wrap" id="checkTField"><label class="tick"><input type="checkbox" data-k="checkTranscript"> Let me check the Arabic first (the whole transcript, before clips are chosen)</label></div>
+    <div class="field wrap not-text"><label class="tick"><input type="checkbox" data-k="cutSilences"> Remove silences</label><label class="tick"><input type="checkbox" data-k="cutMistakes"> Remove mistakes</label></div>
+    <div class="field not-text"><span class="lbl">How strict</span><div class="wrap" data-k="strictness"><button class="pill glow" data-v="gentle">Gentle</button><button class="pill glow" data-v="normal">Normal</button><button class="pill glow" data-v="tight">Tight</button></div></div>
+    <div class="subhead">Export</div>
+    <div class="field"><label class="tick"><input type="checkbox" data-k="coverIntro"> Put the cover at the start of each video (1 s, so other apps show it as the thumbnail)</label></div>
+    <div class="field"><span class="lbl">Export</span><div class="wrap" data-k="quality"><button class="pill glow" data-v="1080">1080p</button><button class="pill glow" data-v="720">720p draft</button></div></div>
+  </section>
+
+
+  <section class="go bar">
+    <select id="presetSel" aria-label="Load a saved preset"><option value="">Load preset…</option></select>
+    <button class="ghost glow" id="savePreset">Save as preset</button>
+    <button class="ghost glow hidden" id="restyleCancel">Cancel</button>
+    <button class="btn" id="start" disabled>Find clips →</button>
+  </section>
+</div>
+
+<aside class="side">
+  <section class="card">
+    <h2><span class="n">◦</span>Preview</h2>
+    <div class="phone" id="phone">
+      <video id="pv" class="hidden" playsinline loop preload="auto"></video><iframe id="ytPrev" title="YouTube layout preview" tabindex="-1"></iframe>
+      <div class="lk lk-grade" id="pvGrade"></div><div class="lk lk-leak" id="pvLeak"></div><div class="lk lk-grain" id="pvGrain"></div><div class="lk lk-vig" id="pvVig"></div>
+      <div class="fade" id="fade"></div>
+      <div class="vcard hidden" id="vcard"><div class="vn">١/٥</div><div class="vh">كثرة <b>النوم</b></div><svg viewBox="0 0 800 640"><path d="M400 560 L178 330 A118 118 0 0 1 400 190 A118 118 0 0 1 622 330 Z" fill="#161613"/><rect x="120" y="190" width="560" height="80" fill="#EDE6DC" opacity=".55"/></svg></div>
+      <div class="zone" id="zone"></div>
+      <div class="wave" id="wave"></div>
+      <div class="ov title" id="ovTitle">عنوان المقطع</div>
+      <div class="ov ll" id="ovLesson"></div>
+      <div class="sop hidden" id="ovSocial"></div>
+      <div class="cdp" id="ovCd"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" class="t"/><circle cx="18" cy="18" r="15" class="p"/></svg><span>1:24</span><i class="bar"><b></b></i></div>
+      <div class="ov en" id="ovEn">Knowledge comes before speech and action</div>
+      <div class="ov cap" id="ovCap">العلمُ <em>قبل</em> القول والعمل</div>
+      <div class="ov name" id="ovName"></div>
+      <div class="ov mark" id="ovBrand">نهج الأثر</div>
+    </div>
+    <div class="under">
+      <div class="wrap hidden" id="scrub"><button class="nudge" id="pvPlay" aria-label="Play or pause">▶</button><input type="range" id="t" min="0" max="1000" value="100"><span class="val" id="pvTime" style="min-width:56px">0:00</span><button class="nudge" id="pvMute" aria-label="Sound on or off">🔊</button></div>
+      <div class="wrap"><label class="tick"><input type="checkbox" id="showZones" checked> Show safe zones</label></div>
+    </div>
+    <details class="rules-d"><summary>Placement rules</summary><ul class="rules" id="rules"></ul></details>
+  </section>
+</aside>
+</main>
+
+
+<div id="stepL" class="hidden step2">
+  <section class="card">
+    <h2><span class="n">library</span>Your lessons</h2>
+    <p class="hint" style="margin:0 0 14px">Every lesson you've worked on, newest first. Open one to change its clips or captions without uploading again. Anything you remove goes to the Recycle Bin, so it can be put back. Working files of lessons left for 14 days are cleared automatically.</p>
+    <div id="libList" class="clips"></div>
+  </section>
+  <section class="go"><button class="ghost glow" id="backL">← Back</button></section>
+</div>
+<div id="step4" class="hidden step2">
+  <section class="card">
+    <h2><span class="n">step 4</span>Your videos</h2>
+    <p class="hint" id="renderSub" style="margin:0 0 14px"></p>
+    <div id="renders" class="clips"></div>
+  </section>
+  <section class="go"><button class="ghost glow" id="back3">← Back to clips</button><button class="ghost glow" id="cleanBtn">Delete working files</button></section>
+</div>
+<div id="stepB" class="hidden step2">
+  <section class="card">
+    <h2><span class="n">batch</span>Your videos</h2>
+    <p class="hint" style="margin:0 0 14px">Each video is edited whole, one after another, with the same settings. Finished files go to the Qitaf folder in your user folder.</p>
+    <div id="batchList" class="clips"></div>
+  </section>
+  <section class="go"><button class="ghost glow" id="backB">← Back to options</button></section>
+</div>
+<div id="step3" class="hidden step2">
+  <section class="card">
+    <h2><span class="n">step 3</span><span id="pickTitle">Choose your clips</span></h2>
+    <div id="pickWait" class="prog">
+      <div class="prog-top"><span id="pickLbl">Claude is reading the lesson for its best benefits…</span><span class="pct"><span class="spin"></span></span></div>
+      <div class="track"><i class="indet"></i></div>
+      <div class="hint" id="pickSub"></div>
+    </div>
+    <div id="clipList" class="clips"></div>
+  </section>
+  <section class="go">
+    <button class="ghost glow" id="back2">← Back to transcript</button>
+    <button class="btn" id="makeBtn" disabled>Make videos →</button>
+  </section>
+</div>
+<div id="step2" class="hidden step2">
+  <section class="card">
+    <h2><span class="n">step 2</span>Check the Arabic</h2>
+    <div id="tProg" class="prog">
+      <div class="prog-top"><span id="tLbl">Extracting the audio…</span><span class="pct" id="tPct">0%</span></div>
+      <div class="track"><i id="tBar"></i></div>
+      <div class="hint" id="tSub"></div>
+    </div>
+    <div id="editor" class="hidden">
+      <div class="keys"><span><kbd>▶</kbd> hear a line</span><span><kbd>click</kbd> fix the words</span><span><kbd>Enter</kbd> split into two captions</span><span><kbd>⌫</kbd> at the start: join to the line above</span><span><kbd>0:12.5</kbd> type a time to pin it</span></div>
+      <details class="fixes" id="fixes"><summary></summary><div id="fixList"></div></details>
+      <div class="wrap ed-mode"><button class="pill glow on" data-ed="lines">Line by line</button><button class="pill glow" data-ed="text">Whole transcript as one text</button></div>
+      <div id="bulkBox" class="hidden">
+        <p class="hint" style="margin:6px 0 8px">One caption line per row. Edit anything (⌘A selects everything, paste works): fix words, join or split rows, delete rows. Unchanged rows keep their exact timing; changed parts are re-timed between them.</p>
+        <textarea id="bulk" dir="rtl" lang="ar" spellcheck="false"></textarea>
+        <div class="wrap" style="margin-top:8px"><button class="btn" id="bulkApply">Apply to the transcript</button><span class="hint" id="bulkInfo" style="margin:0"></span></div>
+      </div>
+      <div class="ed-top"><span class="hint" id="segCount" style="margin:0"></span><span class="hint" id="saveState" style="margin:0"></span></div>
+      <div id="segs" class="segs"></div>
+      <audio id="audio" preload="metadata"></audio>
+    </div>
+  </section>
+  <section class="go">
+    <button class="ghost glow" id="back">← Back to options</button>
+    <button class="ghost glow" id="saveT">Save</button>
+    <button class="btn" id="nextT">Continue →</button>
+  </section>
+</div>
+
+<script>
+const FADES={green:'#0f3b2a',black:'#000000',navy:'#0e1a33',maroon:'#3d0f16',brown:'#3b2516',teal:'#0d3236',plum:'#2c1433',slate:'#1e2630',olive:'#2b2f14',amber:'#4a2a05',ink:'#1F1F1D'};
+// madd: add ـ between joined letters (never after a non-joining letter, at a word's end, or inside لا)
+const NOJOIN='اأإآٱدذرزوؤةىءـ';
+function madd(t,n){n=+n||0;if(!n)return t;const ch=[...t];let o='';
+  for(let i=0;i<ch.length;i++){const c=ch[i];o+=c;if(!/[\u0621-\u064A]/.test(c)||NOJOIN.includes(c))continue;
+    while(i+1<ch.length&&/[\u064B-\u0652\u0670]/.test(ch[i+1]))o+=ch[++i];  // keep harakat on their letter
+    const nx=ch[i+1];if(nx&&/[\u0621-\u064A]/.test(nx)&&nx!=='ء'&&!(c==='ل'&&'اأإآ'.includes(nx)))o+='ـ'.repeat(n)}
+  return o}
+const FADE_CURVE=[[0,1],[.35,1],[.6,.75],[.8,.35],[1,0]];  // [fraction of fade height, fraction of strength]
+const WAVES={yellow:'#FDE68A',amber:'#F59E0B',white:'#F8FAFC',cream:'#FFFBEB'};
+const FONTS=[['Thmanyah Sans','Thmanyah ★'],['Thmanyah Serif','Thmanyah Serif ★'],['Basseet','Basseet ★'],['AMoshref Naskh','Moshref ★'],['Noto Naskh Arabic','Naskh'],['Amiri','Amiri'],['Scheherazade New','Scheherazade'],['Lateef','Lateef'],['Markazi Text','Markazi'],
+  ['Cairo','Cairo'],['Tajawal','Tajawal'],['El Messiri','El Messiri'],['Reem Kufi','Kufi'],['Aref Ruqaa','Ruqaa']];
+const DEFAULTS={ytLayout:'band',ytTheme:'ink',ytSubs:true,ytKicker:'',ytHandle:'',ytZoom:0,ytX:0,ytY:0,socialStyle:'pill',socialHandle:'',socialIcons:[],socialPos:'bottom',socialWhen:'always',socialColour:'#FFFBEB',look:'none',lookVignette:false,lookGrain:false,lookLeak:false,waveOpacity:85,waveSoft:true,introFx:'none',cdStyle:'pill',lessonLabel:'',lessonLabelText:'',hookFirst:false,videoDim:0,coverIntro:true,translate:'off',enPos:'under',enFont:'Manrope',enLook:'shadow',enColour:'#FFFFFF',enSize:'m',enShadow:70,countdown:'',enAnim:'fade',cdColour:'#F59E0B',ratio:'9:16',clipMode:'auto',manualClips:[{from:'',to:'',title:''}],capLook:'shadow',capBg:'#1F1F1D',capAnim:'fadeup',capHighlight:'#F59E0B',capColour:'#FFFFFF',brandColour:'#FDE68A',palLight:'#EDE6DC',palMid:'#1E4D3A',palDark:'#161613',palAcc:'#C9A45C',ttsVoice:'Majed',ttsRate:165,voice:'computer',source:'video',sourceText:'',motionPalette:'classic',motionFont:'Thmanyah Sans',motionSize:'m',fadeAuto:'#141414',mode:'long',motionLook:'minimal',style:'idrisi',showTitle:true,checklists:true,script:'',textMode:'captions',capSize:'m',capFont:'Thmanyah Sans',titleText:'',titlePos:'top',titleLook:'pill',titleBg:'#FDE68A',titleFg:'#1F1F1D',titleFont:'Thmanyah Serif',titleSize:'m',namePos:'bottom',nameLook:'plain',nameBg:'#1F1F1D',nameFg:'#F8FAFC',nameFont:'Thmanyah Sans',nameSize:'m',checkTranscript:true,quranReading:'hafs',verseColour:'#FDE68A',titleAuto:false,titleMadd:0,nameMadd:0,fadeTopHeight:20,fadeTopStrength:60,background:'footage',
+  speaker:'',brand:false,outro:false,fade:'green',fadeCustom:'#14302a',fadeStrength:70,fadeHeight:40,fadeDir:'bottom',wave:'off',wavePos:'bottom',waveColour:'#FDE68A',
+  cutSilences:true,cutMistakes:true,strictness:'normal',framing:'face',zoom:'subtle',sfx:'subtle',clipCount:5,minLen:30,maxLen:90,guidance:'',quality:'1080'};
+let voiceBlob=null, S={...DEFAULTS}, R=null, job=null, dur=0, autoColour='#1a1d22', frameUrl='';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+// fonts, fades, wave colours
+$('#fonts').innerHTML=FONTS.map(([f,n])=>`<button class="font glow" data-font="${f}" style="font-family:'${f}'"><b>بسم الله</b><span>${n}</span></button>`).join('');
+$$('[data-font]').forEach(b=>b.onclick=()=>{S.capFont=b.dataset.font;render()});
+const TFONTS=[['Thmanyah Sans','Thmanyah ★'],['Thmanyah Serif','Thmanyah Serif ★'],['Basseet','Basseet ★'],['Lalezar','Lalezar'],['Marhey','Marhey'],['Rakkas','Rakkas'],['Cairo','Cairo'],['Reem Kufi','Kufi'],['Noto Naskh Arabic','Naskh'],['Amiri','Amiri'],['Aref Ruqaa','Ruqaa']];
+$('#titleFonts').innerHTML=TFONTS.map(([f,n])=>`<button class="font glow" data-tfont="${f}" style="font-family:'${f}'"><b>عنوان</b><span>${n}</span></button>`).join('');
+$$('[data-tfont]').forEach(b=>b.onclick=()=>{S.titleFont=b.dataset.tfont;render()});
+const TCOL=['#FDE68A','#F59E0B','#D62828','#0E1A33','#1F1F1D','#FFFBEB','#F8FAFC','#0f3b2a'];
+// a palette from four chosen colours; text is dark on light grounds and light on dark ones (same rule as motion.html)
+function customPalette(){const lum=h=>{const[r,g,b]=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);return .2126*r+.7152*g+.0722*b};
+  const ground=bg=>({bg,ink:lum(bg)>.5?'#161613':'#F3ECE4',acc:lum(bg)>.5?S.palMid:S.palAcc,gold:S.palAcc,soft:lum(bg)>.5?'#BDB5A8':'#55524B'});
+  return {cream:ground(S.palLight),green:ground(S.palMid),black:ground(S.palDark)};}
+// One control for every colour: preset swatches, a colour picker, and a box for any hex code.
+// "Auto" on any colour: made from the video's own colour (sampled with the fade), so text, boxes and accents match the footage.
+// Text stays light, boxes stay dark, accents get the frame's hue at full strength; it follows the frame you're on.
+const ROLE={capColour:'light',nameFg:'light',enColour:'light',palLight:'light',capBg:'dark',nameBg:'dark',palDark:'dark',
+  titleBg:'accent',capHighlight:'accent',verseColour:'accent',waveColour:'accent',palAcc:'accent',palMid:'mid',titleFg:'onTitle'};
+function autoFor(key){const [r,g,b]=[1,3,5].map(i=>parseInt((S.frameAvg||'#806040').slice(i,i+2),16)/255),mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;
+  let h=d?(mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4)*60:40;if(h<0)h+=360;const sat=d/(1-Math.abs(mx+mn-1)||1);
+  if(sat<.1)h=40;  // a grey frame has no real hue: fall back to the channel's amber
+  const hsl=(s,l)=>{const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1)))).toString(16).padStart(2,'0')};return('#'+f(0)+f(8)+f(4)).toUpperCase()};
+  const role=ROLE[key]||'accent';
+  if(role==='onTitle'){const t=S.titleBg||'#FDE68A',lum=[1,3,5].map(i=>parseInt(t.slice(i,i+2),16)/255).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);return lum>.5?hsl(.3,.12):hsl(.3,.94)}
+  return role==='light'?hsl(.45,.93):role==='dark'?hsl(Math.min(sat,.45),.13):role==='mid'?hsl(.5,.32):hsl(Math.max(sat,.6),.66)}
+// English shadow: strength 0–100 sets both how dark and how soft it is (k scales the blur to the frame)
+const enShade=(v,k)=>{v=(v??70)/100;return v?`0 ${3*k}px ${(6+14*v)*k}px rgba(0,0,0,${(.25+.7*v).toFixed(2)}),0 0 ${30*v*k}px rgba(0,0,0,${(.5*v).toFixed(2)})`:'none'};
+// handle + platform icons: logo shapes from /icons.json (Simple Icons, CC0); picking is a toggle per platform
+let ICONS={};const PLAT={instagram:'Instagram',youtube:'YouTube',tiktok:'TikTok',facebook:'Facebook',x:'X',telegram:'Telegram',whatsapp:'WhatsApp',snapchat:'Snapchat',threads:'Threads'};
+fetch('/icons.json').then(r=>r.json()).then(j=>{ICONS=j;
+  $('#socialPick').innerHTML=Object.entries(PLAT).map(([k,l])=>`<button class="pill glow sopk" data-plat="${k}"><svg viewBox="0 0 24 24"><path d="${j[k]}"/></svg>${l}</button>`).join('');
+  $$('[data-plat]').forEach(b=>b.onclick=()=>{const a=new Set(S.socialIcons||[]);a.has(b.dataset.plat)?a.delete(b.dataset.plat):a.add(b.dataset.plat);
+    S.socialIcons=Object.keys(PLAT).filter(k=>a.has(k));render()});render()});
+function drawSocial(){const so=$('#ovSocial'),on=S.style!=='visualy'&&(S.socialHandle||(S.socialIcons||[]).length);
+  so.classList.toggle('hidden',!on);$$('.so-opts').forEach(e=>e.classList.toggle('hidden',!(S.socialHandle||(S.socialIcons||[]).length)));
+  $$('[data-plat]').forEach(b=>b.classList.toggle('on',(S.socialIcons||[]).includes(b.dataset.plat)));
+  if(!on)return;so.style.setProperty('--sc',S.socialColour||'#fff');
+  so.className='sop '+(S.socialStyle||'pill');so.style.setProperty('--sa',S.cdColour||'#F59E0B');
+  const ic=(S.socialIcons||[]).filter(k=>ICONS[k]).map(k=>`<svg viewBox="0 0 24 24"><path d="${ICONS[k]}"/></svg>`).join('');
+  so.innerHTML=`<div class="in">${ic?`<div class="ico">${ic}</div>`:''}${ic&&S.socialHandle?'<i class="dv"></i>':''}${S.socialHandle?`<div class="hd">${esc(S.socialHandle)}</div>`:''}</div>`;
+  so.style.top=(S.socialPos==='top'?4:90)+'%'}
+// the lesson's name from an upload's file name (same rule as render_clip.lesson_from_file)
+let fileName='';
+const lessonFromFile=n=>{n=(n||'').replace(/\.[^.]+$/,'');if(/^(whatsapp|img|vid|video|screen|mov|dsc)[ _-]/i.test(n))return '';
+  const m=n.match(/بعنوان\s*[:：]?\s*(.+)/),t=m?m[1]:n.split(/\s*[｜|]\s*|\s+-\s+/)[0];return t.replace(/[()（）\[\]«»"]/g,'').replace(/^[\s＊*_\-:：]+|[\s＊*_\-:：]+$/g,'')};
+// one palette for every colour choice, so anything can be matched: the fade colours + the light/accent ones
+const PALETTE=()=>[...new Set([...Object.values(FADES),'#FFFFFF','#FFFBEB','#F8FAFC','#FDE68A','#F59E0B','#E3C77F','#C9A45C','#D62828','#9FE2BF','#3FA7D6'].map(c=>c.toUpperCase()))];
+const randomColour=()=>{const h=Math.random()*360,s=.45+Math.random()*.4,l=.3+Math.random()*.45,a=s*Math.min(l,1-l),
+  f=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1)))).toString(16).padStart(2,'0')};return('#'+f(0)+f(8)+f(4)).toUpperCase()};
+function colorPick(id,key,_presets,after){
+  const presets=PALETTE();
+  const el=$(id); el.innerHTML=`<button class="sw sw-auto" data-auto title="Auto: matched to the video">A</button><button class="sw sw-rand" data-rand title="Random colour">⚄</button>`+presets.map(c=>`<button class="sw" data-c="${c}" aria-label="${c}" style="background:${c}"></button>`).join('')
+    +`<input type="color" aria-label="Pick any colour"><input type="text" class="hex" maxlength="7" spellcheck="false" placeholder="#RRGGBB" aria-label="Hex colour code">`;
+  const set=c=>{S.autoKeys=(S.autoKeys||[]).filter(k=>k!==key);S[key]=c;after&&after(c);render()};
+  el.querySelector('[data-rand]').onclick=()=>set(randomColour());
+  el.querySelector('[data-auto]').onclick=()=>{S.autoKeys=[...new Set([...(S.autoKeys||[]),key])];S[key]=autoFor(key);after&&after(S[key]);render()};
+  el.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>set(b.dataset.c));
+  el.querySelector('input[type=color]').oninput=e=>set(e.target.value.toUpperCase());
+  el.querySelector('.hex').oninput=e=>{let v=e.target.value.trim();if(!v.startsWith('#'))v='#'+v;
+    if(/^#[0-9a-fA-F]{6}$/.test(v)){e.target.classList.remove('bad');set(v.toUpperCase())}else e.target.classList.add('bad')};
+  PICKS.push([el,key]);
+}
+const PICKS=[];
+colorPick('#titleBgChips','titleBg',TCOL);colorPick('#titleFgChips','titleFg',TCOL);colorPick('#nameBgChips','nameBg',TCOL);colorPick('#nameFgChips','nameFg',TCOL);
+colorPick('#capBgPick','capBg',['#1F1F1D','#000000','#0E1A33','#1E4D3A','#F59E0B','#FFFBEB']);
+colorPick('#verseColourPick','verseColour',['#FDE68A','#F59E0B','#FFFFFF','#E3C77F','#9FE2BF']);
+colorPick('#capHlPick','capHighlight',['#F59E0B','#FDE68A','#E3C77F','#3FA7D6','#D62828','#FFFFFF']);
+colorPick('#enColourPick','enColour',['#FFFFFF','#FFFBEB','#FDE68A','#F59E0B','#E3C77F','#9FE2BF']);
+colorPick('#cdColourPick','cdColour',['#F59E0B','#FDE68A','#FFFBEB','#9FE2BF','#D62828']);
+colorPick('#socialColourPick','socialColour',[]);
+colorPick('#capColourPick','capColour',['#FFFFFF','#FFFBEB','#FDE68A','#F59E0B','#E3C77F','#161613']);
+colorPick('#wavePick','waveColour',Object.values(WAVES));
+colorPick('#palLightPick','palLight',['#EDE6DC','#F1E7D3','#F3ECE4','#FFFBEB','#F8FAFC']);
+colorPick('#palMidPick','palMid',['#1E4D3A','#14213D','#5A1A24','#0F4A44','#F59E0B']);
+colorPick('#palDarkPick','palDark',['#161613','#0D1117','#1E1A1A','#1F1F1D','#000000']);
+colorPick('#palAccPick','palAcc',['#C9A45C','#E3C77F','#F2C46D','#F59E0B','#D62828']);
+$('#nameFonts').innerHTML=TFONTS.map(([f,n])=>`<button class="font glow" data-nfont="${f}" style="font-family:'${f}'"><b>الشيخ</b><span>${n}</span></button>`).join('');
+$$('[data-nfont]').forEach(b=>b.onclick=()=>{S.nameFont=b.dataset.nfont;render()});
+$('#fadechips').innerHTML=Object.entries(FADES).map(([k,c])=>`<button class="sw" data-fade="${k}" title="${k}" aria-label="${k} fade" style="background:${c}"></button>`).join('')
+ +`<input type="color" id="fadeCustom" title="Pick your own" aria-label="Custom fade colour"><input type="text" class="hex" id="fadeHex" maxlength="7" spellcheck="false" placeholder="#RRGGBB" aria-label="Fade hex colour"><button class="pill glow" data-fade="auto">Auto</button><button class="pill glow" data-fade="blur">Blur</button><button class="pill glow" data-fade="none">None</button>`;
+$$('[data-fade]').forEach(b=>b.onclick=()=>{S.fade=b.dataset.fade;render()});
+$('#fadeCustom').oninput=e=>{S.fadeCustom=e.target.value;S.fade='custom';render()};
+$('#fadeHex').oninput=e=>{let v=e.target.value.trim();if(!v.startsWith('#'))v='#'+v;
+  if(/^#[0-9a-fA-F]{6}$/.test(v)){e.target.classList.remove('bad');S.fadeCustom=v;S.fade='custom';render()}else e.target.classList.add('bad')};
+
+$('#wave').innerHTML=Array.from({length:26},(_,i)=>`<i style="animation-delay:${(i*.13)%1.1}s;height:${30+((i*37)%70)}%"></i>`).join('');
+
+$('#motionFonts').innerHTML=TFONTS.map(([f,n])=>`<button class="font glow" data-mfont="${f}" style="font-family:'${f}'"><b>عنوان</b><span>${n}</span></button>`).join('');
+$$('[data-mfont]').forEach(b=>b.onclick=()=>{S.motionFont=b.dataset.mfont;render()});
+function drawPalettes(){$('#palettes').innerHTML=Object.entries(R.motionPalettes).map(([k,p])=>`<button class="pal glow" data-pal="${k}" title="${p.name}">
+  <i style="background:${p.cream.bg}"></i><i style="background:${p.green.bg}"></i><i style="background:${p.black.bg}"></i><span>${p.name}</span></button>`).join('');
+  $('#palettes').insertAdjacentHTML('beforeend',`<button class="pal glow" data-pal="custom" title="Your own colours"><i style="background:conic-gradient(#EDE6DC,#1E4D3A,#161613,#C9A45C,#EDE6DC)"></i><span>Custom…</span></button>`);
+  $$('[data-pal]').forEach(b=>b.onclick=()=>{S.motionPalette=b.dataset.pal;render()});}
+
+// bind pill groups + inputs
+$$('[data-k]>.pill').forEach(b=>b.onclick=()=>{S[b.parentElement.dataset.k]=b.dataset.v;render()});
+// plain number boxes: type freely, only digits kept; the range is applied when you leave the box
+$$('input.num').forEach(el=>{el.addEventListener('input',()=>{el.value=el.value.replace(/\D/g,'')});
+  el.onchange=()=>{const v=Math.min(+el.dataset.max,Math.max(+el.dataset.min,+el.value||+el.dataset.min));S[el.dataset.k]=v;el.value=v;render()}});
+$$('input[data-k],textarea[data-k],select[data-k]').forEach(el=>el.oninput=()=>{
+  S[el.dataset.k]=el.type==='checkbox'?el.checked:el.type==='number'||el.type==='range'||el.classList.contains('num')?+el.value:el.value;render()});
+
+// Mizan cursor glow
+document.addEventListener('pointermove',e=>{const el=e.target.closest&&e.target.closest('.glow');if(!el)return;
+  const r=el.getBoundingClientRect();el.style.setProperty('--mx',e.clientX-r.left+'px');el.style.setProperty('--my',e.clientY-r.top+'px')});
+
+// YouTube: the real design (pipeline/yt_frame.html) over the real video, scaled into the preview; zoom and move match the render
+let ytKey='';
+function drawYt(){const yt=S.style==='youtube',f=$('#ytPrev'),pv=$('#pv'),L=S.source==='audio'?'sound':S.ytLayout,board=yt&&L==='board';
+  $('#ytLayoutField').classList.toggle('hidden',S.source==='audio');$('.yt-pic').classList.toggle('hidden',L==='sound');
+  Object.assign(pv.style,{left:board?'1.875%':'',top:board?'3.33%':'',width:board?'72.5%':'',height:board?'72.5%':'',
+    transform:yt?`scale(${1+S.ytZoom/100})`:'',transformOrigin:yt?`${50+S.ytX/2}% ${50+S.ytY/2}%`:''});
+  $('#phone').style.clipPath=yt?'inset(0)':'';
+  if(!yt)return;
+  const key=JSON.stringify({mode:'frame',layout:L,theme:S.ytTheme,title:S.titleText||'عنوان الدرس يظهر هنا',name:S.speaker||'اسم الشيخ',kicker:S.ytKicker,handle:S.ytHandle,sample:S.ytSubs?1:0});
+  if(key!==ytKey){ytKey=key;f.src='/yt/frame?'+Date.now()+'#'+encodeURIComponent(key)}
+  f.style.transform=`scale(${$('#phone').clientWidth/1920})`}
+new ResizeObserver(()=>{if(S.style==='youtube')drawYt()}).observe(document.querySelector('#phone'));
+function sync(){
+  $$('[data-k]>.pill').forEach(b=>b.classList.toggle('on',S[b.parentElement.dataset.k]===b.dataset.v));
+  $$('input[data-k],textarea[data-k],select[data-k]').forEach(el=>{if(el.type==='checkbox')el.checked=S[el.dataset.k];else if(document.activeElement!==el)el.value=S[el.dataset.k]});
+  $$('[data-show]').forEach(e=>e.textContent=S[e.dataset.show]+'%');
+  $$('[data-font]').forEach(b=>b.classList.toggle('on',S.capFont===b.dataset.font));
+  $$('[data-tfont]').forEach(b=>b.classList.toggle('on',S.titleFont===b.dataset.tfont));
+  $$('[data-nfont]').forEach(b=>b.classList.toggle('on',S.nameFont===b.dataset.nfont));
+  $$('[data-fade]').forEach(b=>b.classList.toggle('on',S.fade===b.dataset.fade));
+  $('#fadeCustom').classList.toggle('on',S.fade==='custom');$('#fadeCustom').value=S.fadeCustom;
+  // every colour control shows its current value: swatch ring, picker and hex box
+  (S.autoKeys||[]).forEach(k=>S[k]=autoFor(k));  // auto colours follow the current frame
+  PICKS.forEach(([el,key])=>{const au=(S.autoKeys||[]).includes(key),v=(S[key]||'').toUpperCase();el.querySelector('[data-auto]').classList.toggle('on',au);
+    el.querySelectorAll('[data-c]').forEach(b=>b.classList.toggle('on',!au&&b.dataset.c.toUpperCase()===v));
+    const cp=el.querySelector('input[type=color]'),hx=el.querySelector('.hex');if(/^#[0-9A-F]{6}$/.test(v)){cp.value=v.toLowerCase();if(document.activeElement!==hx)hx.value=v}});
+  if(document.activeElement!==$('#fadeHex'))$('#fadeHex').value=S.fade==='custom'?S.fadeCustom.toUpperCase():'';
+  $$('[data-mfont]').forEach(b=>b.classList.toggle('on',S.motionFont===b.dataset.mfont));
+  $$('[data-pal]').forEach(b=>b.classList.toggle('on',S.motionPalette===b.dataset.pal));
+}
+
+// option sections fold away; a closed one shows a one-line summary of its choices
+let batch=[];  // several files picked at once (see takeFiles)
+let OPEN={source:1,look:1};try{const o=JSON.parse(localStorage.qitafOpen||'{}');if(o.style&&!('look'in o))o.look=o.style;localStorage.qitafOpen=JSON.stringify(o)}catch(e){}try{OPEN=JSON.parse(localStorage.qitafOpen)||OPEN}catch(e){}
+$$('.card.opt').forEach(c=>{c.classList.toggle('closed',!OPEN[c.dataset.sec]);c.querySelector('h2').onclick=()=>{
+  c.classList.toggle('closed');OPEN[c.dataset.sec]=!c.classList.contains('closed');try{localStorage.qitafOpen=JSON.stringify(OPEN)}catch(e){}}});
+// which card is which: hovering or working in a card outlines its element on the preview phone
+const SHOWS={captions:['#ovCap'],verses:['#ovCap'],english:['#ovEn'],title:['#ovTitle'],name:['#ovName'],extras:['#fade','#wave','#ovCd'],look:['#phone']};
+$$('.card.opt').forEach(c=>{const els=()=>(SHOWS[c.dataset.sec]||[]).map(q=>$(q)).filter(Boolean);
+  const on=v=>els().forEach(e=>e.classList.toggle('hl',v));
+  c.addEventListener('mouseenter',()=>on(true));c.addEventListener('mouseleave',()=>on(false));
+  c.addEventListener('focusin',()=>on(true));c.addEventListener('focusout',()=>on(false))});
+function summaries(){const L=(k,v)=>{const b=$(`[data-k="${k}"] [data-v="${v}"]`);return b?b.textContent:''};
+  const set=(k,t)=>{const e=$('#sum-'+k);if(e)e.textContent=t}, on=S.style!=='visualy'&&S.textMode==='captions';
+  set('source',{video:'Video',audio:'Audio',text:'Text only'}[S.source]+(S.background==='picture'?' · picture background':'')+(batch&&batch.length>1?` · ${batch.length} files`:''));
+  set('look',S.style==='youtube'?'YouTube · '+L('ytLayout',S.ytLayout):S.style==='visualy'?'Motion graphic · '+L('motionLook',S.motionLook).split(' (')[0]:`Lesson reel · ${S.ratio} · ${S.framing==='face'?'follows the speaker':'centre'}`);
+  set('captions',S.style==='visualy'?'Part of the motion graphic':S.textMode!=='captions'?L('textMode',S.textMode):`${S.capFont} · ${L('capLook',S.capLook)} · ${L('capAnim',S.capAnim)}`);
+  set('verses',on?(S.quranReading==='warsh'?'Warsh':'Hafs')+' · found automatically':'');
+  set('english',S.translate==='off'?'Off':`${L('translate',S.translate)} · ${S.enFont} · ${L('enAnim',S.enAnim)}`);
+  set('title',!S.showTitle?'Off':S.titleAuto?'Written by Claude':(S.titleText.trim().split('\n')[0]||'Empty'));
+  set('name',(S.speaker||'No name')+(S.speaker?' · '+L('namePos',S.namePos):''));
+  set('extras',[S.fade==='none'?'':S.fade==='blur'?'blur fade':'fade',+S.videoDim?`darkened ${S.videoDim}%`:'',S.wave!=='off'?'wave':'',S.countdown?'countdown':'',S.sfx==='subtle'?'sounds':''].filter(Boolean).join(' · ')||'None');
+  // amber dot on a card whose settings differ from the defaults
+  const MORE={captions:['capFont'],title:['titleFont'],name:['nameFont'],extras:['fade']};
+  $$('.card.opt').forEach(c=>{const ks=[...c.querySelectorAll('[data-k]')].map(e=>e.dataset.k).concat(PICKS.filter(([el])=>c.contains(el)).map(p=>p[1]),MORE[c.dataset.sec]||[]);
+    c.classList.toggle('changed',ks.some(k=>JSON.stringify(S[k])!==JSON.stringify(DEFAULTS[k])))});
+  set('clips',(S.mode==='single'?'Whole video':S.clipMode==='manual'?`Your times · ${S.manualClips.length} clip${S.manualClips.length==1?'':'s'}`:`Up to ${S.clipCount} · ${S.minLen}–${S.maxLen}s`)+` · ${S.quality}p`)}
+let keepStyle=null,keepMode=null;
+function render(){
+  if(S.translate==='only'&&S.enPos==='under')S.enPos='captions';if(S.translate==='under'&&S.enPos==='captions')S.enPos='under';
+  S.brand=false;S.outro=false;  // «نهج الأثر» and the outro are off for good
+  for(const k of['titleMadd','nameMadd'])$('#'+k+'Val').textContent=+S[k]?'ـ'.repeat(+S[k]):'off';
+  sync();
+  // audio and text have no picture: always a motion graphic, and text is always one video
+  const pic=S.background==='picture'&&S.source!=='text';
+  // the choices made before a forced switch come back when the source allows them again
+  if(S.source==='text')S.source='video';if(S.style==='visualy')S.style='idrisi';  // text and motion videos aren't in this version; an old preset may still ask for them
+  const forced=false;
+  if(forced){if(keepStyle==null)keepStyle=S.style;S.style='visualy'}else if(keepStyle!=null){if(S.style!=='youtube')S.style=keepStyle;keepStyle=null}
+  if(S.source==='text'||S.style==='youtube'){if(keepMode==null)keepMode=S.mode;S.mode='single'}else if(keepMode!=null){S.mode=keepMode;keepMode=null}
+  sync();
+  const vis=S.style==='visualy', single=S.mode==='single', text=S.source==='text';
+  $$('.long-only').forEach(e=>e.classList.toggle('hidden',single));
+  if(!single){$$('.auto-only').forEach(e=>e.classList.toggle('hidden',S.clipMode==='manual'));$$('.manual-only').forEach(e=>e.classList.toggle('hidden',S.clipMode!=='manual'))}
+  $$('.media-only').forEach(e=>e.classList.toggle('hidden',text));
+  $$('.text-only').forEach(e=>e.classList.toggle('hidden',!text));
+  $$('.not-text').forEach(e=>e.classList.toggle('hidden',text));
+  $('#voiceRec').classList.toggle('hidden',!text||S.voice!=='record');
+  $('#voiceUp').classList.toggle('hidden',!text||S.voice!=='upload');
+  $('#voiceTts').classList.toggle('hidden',!text||S.voice!=='computer');
+  $('#ttsRateVal').textContent=S.ttsRate<150?'slow':S.ttsRate>185?'fast':'normal';
+  $('#voicePlay').classList.toggle('hidden',!text||!['record','upload'].includes(S.voice)||!voiceBlob);
+  $('.no-lesson').classList.toggle('hidden',S.source==='video'||pic);
+  $('#ytPill').disabled=S.source==='text';document.body.classList.toggle('yt',S.style==='youtube');
+  $$('.pic-only').forEach(e=>e.classList.toggle('hidden',!pic));
+  $('#clipsTitle').textContent=single?'Export':'Clips';
+  $('#dropBig').innerHTML=S.source==='audio'?(single?'Drop your audio <em>here</em>':'Drop a long audio lesson <em>here</em>'):(single?'Drop your video <em>here</em>':'Drop a lesson <em>here</em>');
+  if(restyle){$('#start').textContent=`Save style & render ${restyle} video${restyle==1?'':'s'} →`;$('#start').disabled=false}
+  else if(!$('#start').dataset.saved)$('#start').textContent=!single?'Find clips →':vis?'Create video →':'Edit this video →';
+  $$('.visualy-only').forEach(e=>e.classList.toggle('hidden',!vis));
+  $$('.lesson-only').forEach(e=>e.classList.toggle('hidden',vis));
+  $('#framingField').classList.toggle('hidden',vis||pic);
+  $('.en-pos').classList.toggle('hidden',S.translate==='off');$('.en-opts').classList.toggle('hidden',S.translate==='off');$('.en-shadow').classList.toggle('hidden',['plain','box'].includes(S.enLook));$('#enShadowVal').textContent=(+S.enShadow||0)+'%';$('.en-u').classList.toggle('hidden',S.translate!=='under');$('.en-c').classList.toggle('hidden',S.translate!=='only');
+  const yt=S.style==='youtube';
+  $('#phone').style.aspectRatio=yt?'16/9':vis?'':S.ratio.replace(':','/');$('#phone').style.maxWidth=yt||(!vis&&S.ratio==='16:9')?'100%':'';  // motion graphics are always 9:16  // a still picture has no speaker to follow
+  $('.title-opts').classList.toggle('hidden',!S.showTitle);
+  $('.qr-hafs').classList.toggle('hidden',S.quranReading!=='hafs');$('.qr-warsh').classList.toggle('hidden',S.quranReading!=='warsh');
+  $('#titleTextField').classList.toggle('hidden',!!S.titleAuto);  // written after processing; the preview shows a stand-in in your style
+  // number the visible option cards i, ii, iii… so hidden ones leave no gaps
+  $$('main > div:first-child > section.card').filter(e=>!e.classList.contains('hidden')&&e.querySelector('.n')&&!(restyle&&['source','clips'].includes(e.dataset.sec))&&!(S.style==='youtube'&&!['source','look'].includes(e.dataset.sec))).forEach((e,k)=>e.querySelector('.n').textContent=['i','ii','iii','iv','v','vi','vii','viii','ix','x'][k]+'.');
+  $$('.cap-only').forEach(e=>e.classList.toggle('hidden',vis||S.textMode!=='captions'));
+  $('#checkTField').classList.toggle('hidden',!vis&&S.textMode!=='captions');  // nothing to check without captions
+  $$('.hl-only').forEach(e=>e.classList.toggle('hidden',S.capAnim!=='karaoke'));
+  $$('.cap-bg').forEach(e=>e.classList.toggle('hidden',!['pill','box'].includes(S.capLook)));
+  // caption look in the preview: same four looks as the speaker name
+  const oc=$('#ovCap'); oc.classList.remove('lk-plain','lk-shadow','lk-pill','lk-box'); oc.classList.add('lk-'+S.capLook); oc.style.setProperty('--cbg',S.capBg);
+  if(S.capAnim!==lastAnim){lastAnim=S.capAnim;demoCaption()}
+  $$('.wave-only').forEach(e=>e.classList.toggle('hidden',S.wave==='off'));
+  $('#phone').classList.toggle('visualy',vis);
+  const live=!vis&&job&&S.source==='video'&&!(yt&&S.ytLayout==='sound');
+  drawYt();
+  $('#pv').classList.toggle('hidden',!live); if(!live&&!$('#pv').paused)$('#pv').pause();
+  $('#phone').style.backgroundImage=!vis&&pic&&bgUrl?`url(${bgUrl})`:'';
+  // the video's look, same numbers as the render (template.html LOOKS)
+  const LOOKS={cinematic:['contrast(1.12) saturate(.92) brightness(.97)','linear-gradient(180deg,rgba(0,90,110,.22),rgba(0,0,0,0) 45%,rgba(255,140,60,.16))','soft-light'],
+    golden:['sepia(.18) saturate(1.18) brightness(1.05) contrast(1.02)','radial-gradient(ellipse at 70% 20%,rgba(255,190,110,.35),rgba(255,140,60,.08) 60%)','soft-light'],
+    moody:['contrast(1.18) brightness(.86) saturate(.72)','linear-gradient(180deg,rgba(20,40,70,.32),rgba(10,20,30,.18))','multiply'],
+    vintage:['sepia(.32) contrast(.9) saturate(.82) brightness(1.04)','linear-gradient(rgba(60,40,20,.14),rgba(60,40,20,.14))','lighten'],
+    mono:['grayscale(1) contrast(1.18) brightness(1.02)','',''],dreamy:['brightness(1.06) saturate(1.12) contrast(.95)','radial-gradient(ellipse at 50% 40%,rgba(255,240,230,.22),transparent 70%)','screen']};
+  const LK=vis?null:LOOKS[S.look];$('#pv').style.filter=LK?LK[0]:'';
+  $('#pvGrade').style.cssText=LK&&LK[1]?`display:block;background:${LK[1]};mix-blend-mode:${LK[2]}`:'';
+  $('#pvVig').style.display=!vis&&(S.lookVignette||S.look==='moody'||S.look==='vintage')?'block':'';
+  $('#pvGrain').style.display=!vis&&(S.lookGrain||S.look==='vintage'||S.look==='mono')?'block':'';
+  $('#pvLeak').style.display=!vis&&S.lookLeak?'block':'';
+  drawSocial();
+  $('#pv').style.opacity=pic&&bgUrl?0:1-(+S.videoDim||0)/100;$('#phone').style.backgroundColor=S.style==='visualy'?'':'#000';$('#videoDimVal').textContent=(+S.videoDim||0)?S.videoDim+'%':'off';  // picture on: the video still plays its sound under the picture
+  $('#vcard').classList.toggle('hidden',!vis);
+  $('.custom-pal').classList.toggle('hidden',!vis||S.motionPalette!=='custom');
+  if(R&&vis){const p=S.motionPalette==='custom'?customPalette():R.motionPalettes[S.motionPalette]||R.motionPalettes.classic, L=S.motionLook||'minimal';
+    // the dark looks keep a dark ground and take only the accent from the palette
+    const g=L==='lineart'?'#0B0B0A':L==='grid'?'#1B0F13':p.cream.bg, ink=L==='minimal'?p.cream.ink:'#EFE7D6', acc=L==='minimal'?p.cream.acc:p.black.gold;
+    $('#phone').style.setProperty('background',g,'important');
+    $('#phone').style.backgroundImage=L==='grid'?'linear-gradient(rgba(239,231,214,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(239,231,214,.06) 1px,transparent 1px)':'';
+    $('#phone').style.backgroundSize='16px 16px';
+    $('#phone').style.setProperty('--vink',ink);$('#phone').style.setProperty('--vacc',acc);
+    $('#vcard').style.color=ink;$('#vcard .vh').style.fontFamily=`'${S.motionFont}',sans-serif`;$('#vcard .vh b').style.color=acc;
+    const hp=$('#vcard path'),hr=$('#vcard rect');
+    if(L==='lineart'){hp.setAttribute('fill','none');hp.setAttribute('stroke',acc);hp.setAttribute('stroke-width','6');hr.setAttribute('fill','none')}
+    else{hp.setAttribute('fill',L==='grid'?acc:ink);hp.removeAttribute('stroke');hr.setAttribute('fill',g)}
+    $('#vcard svg').style.outline=L==='grid'?'1.5px dashed rgba(239,231,214,.25)':'none';$('#vcard svg').style.borderRadius='10px';
+    $('#palLbl').textContent=L==='minimal'?'Colours':'Accent colour (this look keeps a dark ground)';}
+  else $('#phone').style.removeProperty('background');
+  const col=S.fade==='auto'?autoColour:S.fade==='custom'?S.fadeCustom:FADES[S.fade]||'#000000';  // blur/none have no colour
+  // solid for the first third of its height, then eases out (same curve as the render, pipeline/render_clip.py)
+  const rgb=[1,3,5].map(i=>parseInt(col.slice(i,i+2),16)).join(',');
+  const g=(d,a,h)=>`linear-gradient(${d}, ${FADE_CURVE.map(([p,f])=>`rgba(${rgb},${(a*f).toFixed(3)}) ${(p*h).toFixed(1)}%`).join(', ')})`;
+  const gb=d=>g(d,S.fadeStrength/100,S.fadeHeight);
+  // top and bottom: the top fade has its own (usually lighter, shorter) size, for a subtler look
+  // blur instead of colour (same numbers as render_clip.py): the video softens toward the edge, a light shade keeps text readable
+  let bl='';
+  if(S.fade==='blur'&&!vis){const lay=(side,a,h)=>`content:'';position:absolute;left:0;right:0;${side}:0;height:${h}%;backdrop-filter:blur(${((4+26*a)*$('#phone').clientWidth/1080).toFixed(1)}px);-webkit-backdrop-filter:blur(${((4+26*a)*$('#phone').clientWidth/1080).toFixed(1)}px);mask-image:linear-gradient(to ${side==='bottom'?'top':'bottom'},#000 30%,transparent 100%);-webkit-mask-image:linear-gradient(to ${side==='bottom'?'top':'bottom'},#000 30%,transparent 100%)`;
+    const a=S.fadeStrength/100,h=S.fadeHeight,d=S.fadeDir;
+    if(d==='bottom'||d==='both')bl+=`#fade::before{${lay('bottom',a,h)}}`;
+    if(d==='top')bl+=`#fade::after{${lay('top',a,h)}}`;
+    if(d==='both')bl+=`#fade::after{${lay('top',S.fadeTopStrength/100,S.fadeTopHeight)}}`;}
+  ($('#blurCss')||document.head.appendChild(Object.assign(document.createElement('style'),{id:'blurCss'}))).textContent=bl;
+  const shade=(dr,a,h)=>`linear-gradient(${dr},rgba(0,0,0,${(.28*a).toFixed(2)}) 0%,rgba(0,0,0,0) ${h}%)`;
+  if(S.fade==='blur'&&!vis){$('#fade').style.background={bottom:shade('to top',S.fadeStrength/100,S.fadeHeight),top:shade('to bottom',S.fadeStrength/100,S.fadeHeight),
+    both:shade('to top',S.fadeStrength/100,S.fadeHeight)+','+shade('to bottom',S.fadeTopStrength/100,S.fadeTopHeight)}[S.fadeDir]}else
+  $('#fade').style.background=S.fade==='none'||vis?'none':
+    {bottom:gb('to top'),top:gb('to bottom'),both:gb('to top')+', '+g('to bottom',S.fadeTopStrength/100,S.fadeTopHeight)}[S.fadeDir];
+  $('.fade-top-only').classList.toggle('hidden',S.fadeDir!=='both');
+  $('#fadeHLbl').textContent=S.fadeDir==='both'?'Bottom fade height':'Height';
+  if(!R)return;
+  const txt=vis||S.textMode!=='none';
+  // title: lines, look, colours, font, size, slot
+  const caps=S.textMode==='captions'&&!vis;
+  $('.title-card').classList.toggle('hidden',!vis&&S.textMode==='none');
+  $('.look-bg').classList.toggle('hidden',vis||S.titleLook==='shadow');
+  $('#titleHint').textContent=S.mode==='long'?'Title text: leave empty and Claude suggests one per clip; each line is its own line on screen':'Title text: each line becomes its own line on screen';
+  const lines=((!S.titleAuto&&S.titleText.trim())||'عنوان المقطع').split('\n').filter(Boolean);
+  const t=$('#ovTitle'); t.className='ov title '+S.titleLook;
+  t.innerHTML=lines.map(l=>`<span>${madd(l,S.titleMadd).replace(/[<&]/g,c=>c=='<'?'&lt;':'&amp;')}</span>`).join('');
+  t.style.setProperty('--tbg',S.titleBg); t.style.setProperty('--tfg',S.titleFg);
+  // text scales with the frame: 9:16 as designed; square 80%, wide 75% of that, measured against the video's height
+  const ph=$('#phone'), RHt=vis?1920:{'1:1':1080,'16:9':1080}[S.ratio]||1920, K=vis?1:{'1:1':.8,'16:9':.75}[S.ratio]||1,
+    FZ=v=>parseFloat(v)*K*(ph.clientHeight*1920)/(587*RHt)+'px';
+  t.style.fontFamily=`'${S.titleFont}',serif`; t.style.fontSize=FZ({s:'13px',m:'17px',l:'23px'}[S.titleSize]);
+  $('#ovCap').style.fontFamily=`'${S.capFont}',serif`;
+  $('#ovCap').style.fontSize=FZ({s:'16px',m:'20px',l:'25px'}[S.capSize]);$('#wave').style.height=FZ('16px');
+  const n=$('#ovName'); n.className='ov name '+S.nameLook;
+  n.innerHTML=`<span>${madd(S.speaker||'الشيخ …',S.nameMadd).replace(/[<&]/g,c=>c=='<'?'&lt;':'&amp;')}</span>`;
+  n.style.setProperty('--tbg',S.nameBg); n.style.setProperty('--tfg',S.nameFg);
+  n.style.fontFamily=`'${S.nameFont}',serif`; n.style.fontSize=FZ({s:'11px',m:'13px',l:'16px'}[S.nameSize]);
+  $$('.name-bg').forEach(e=>e.classList.toggle('hidden',vis||S.nameLook==='plain'||S.nameLook==='shadow'));
+  $('#wave').classList.remove('hidden');
+  layout(txt,caps);
+  $('#wave').className='wave '+(S.wave||'bars')+(S.waveSoft!==false?' soft':'')+(S.wave==='off'||S.style==='visualy'?' hidden':'');
+  $('#wave').style.opacity=(S.waveOpacity??100)/100;$('#waveOpVal').textContent=(S.waveOpacity??100)+'%';
+  if(S.wave==='smooth'&&!$('#wave svg'))$('#wave').insertAdjacentHTML('beforeend','<svg viewBox="0 0 230 56" preserveAspectRatio="none"><path d="M0 28 Q20 14 40 22 T80 10 T120 24 T160 8 T200 20 T230 28 Q210 42 190 34 T150 48 T110 32 T70 46 T30 34 T0 28 Z"/></svg>');
+  $('#wave').style.setProperty('--wc',WAVES[S.waveColour]||S.waveColour);
+  $('#ovCap').style.color=S.capColour;$('#ovBrand').style.color=S.brandColour;
+  $('#zone').classList.toggle('hidden',!$('#showZones').checked);
+  const manualOk=S.manualClips.some(r=>{const a=hms(r.from),b=hms(r.to);return a!=null&&b!=null&&b>a});
+  summaries();
+  $('#start').disabled=text?(!S.sourceText.trim()||(['record','upload'].includes(S.voice)&&!voiceBlob)):(!job||(!single&&S.clipMode==='manual'&&!manualOk));
+}
+
+// Stack everything inside the safe zone so nothing overlaps:
+// top stack grows down from the safe top, bottom stack grows up from the safe bottom,
+// captions sit at chest height unless the bottom stack pushes them up.
+// a title or name line wider than the safe zone shrinks the whole block evenly until every line fits
+const fitLines=e=>{const w=e.clientWidth,m=Math.max(0,...[...e.querySelectorAll('span')].map(x=>x.offsetWidth));
+  if(m>w)e.style.fontSize=parseFloat(getComputedStyle(e).fontSize)*w/m*.98+'px'};
+function layout(txt,caps){
+  fitLines($('#ovTitle'));fitLines($('#ovName'));
+  // square and wide videos have no Instagram buttons over them: just a margin (same numbers as render_clip.py)
+  const r9=S.style==='visualy'||S.ratio==='9:16', RR=r9?R:{...R,safe:{top:.07,bottom:.93,left:.06,right:.94},
+    slots:{...R.slots,captions:{y:.8},title_upper:{y:.22},title_centre:{y:.5}}};
+  $('#zone').style.display=r9?'':'none';
+  const H=$('#phone').clientHeight, s=RR.safe, gap=H*.012, items={
+    title:[$('#ovTitle'),txt&&S.showTitle&&S.style!=='visualy',S.titlePos], name:[$('#ovName'),txt,S.namePos], wave:[$('#wave'),S.wave!=='off'&&S.style!=='visualy',S.wavePos],
+    brand:[$('#ovBrand'),S.brand,'bottom'], cap:[$('#ovCap'),caps,'cap']};
+  const place=(el,y)=>{el.style.top=y+'px';el.style.transform='none'};
+  for(const[el,show]of Object.values(items))el.classList.toggle('hidden',!show);
+  const cd=$('#ovCd'),showCd=!!S.countdown&&S.style!=='visualy'; cd.classList.toggle('hidden',!showCd); $('.cd-col').classList.toggle('hidden',!S.countdown);
+  cd.className='cdp cd-'+(S.cdStyle||'pill')+(showCd?'':' hidden');
+  const ll=$('#ovLesson'),lt=S.style==='visualy'?'':S.lessonLabel==='custom'?(S.lessonLabelText||'').trim():S.lessonLabel==='auto'?(lessonFromFile(fileName)||''):'';
+  ll.textContent=lt||(S.lessonLabel==='auto'?'اسم الدرس':'');ll.classList.toggle('hidden',!S.lessonLabel||S.style==='visualy');ll.style.setProperty('--cdc',S.cdColour);
+  $('.ll-text').classList.toggle('hidden',S.lessonLabel!=='custom');
+  let y=s.top*H,corner=0,PW=$('#phone').clientWidth;
+  if(showCd){cd.style.left=s.left*PW+'px';cd.style.top=y+'px';cd.style.setProperty('--cdc',S.cdColour);corner=cd.offsetHeight}
+  if(!ll.classList.contains('hidden')){ll.style.right=(1-s.right)*PW+'px';ll.style.left='auto';ll.style.top=y+'px';ll.style.transform='none';corner=Math.max(corner,ll.offsetHeight)}
+  if(corner)y+=corner+gap;
+  for(const k of['title','name','wave']){const[el,show,p]=items[k];if(show&&p==='top'){place(el,y);y+=el.offsetHeight+gap}}
+  let b=s.bottom*H;
+  for(const k of['brand','name','wave','title']){const[el,show,p]=items[k];if(show&&p==='bottom'){b-=el.offsetHeight;place(el,b);b-=gap}}
+  const[t,ts,tp]=items.title; if(ts&&(tp==='upper'||tp==='centre'))place(t,(tp==='upper'?RR.slots.title_upper.y:RR.slots.title_centre.y)*H-t.offsetHeight/2);
+  const c=items.cap[0], en=$('#ovEn'), tr=caps&&S.style!=='visualy'?S.translate:'off';
+  en.classList.toggle('hidden',tr==='off'); c.classList.toggle('hidden',!caps||tr==='only');
+  en.style.fontSize=parseFloat(c.style.fontSize||20)*(tr==='only'?.8:.58)*{s:.85,m:1,l:1.2}[S.enSize||'m']+'px';
+  en.style.fontFamily=`'${S.enFont||'Manrope'}',sans-serif`;en.style.color=S.enColour||'#fff';en.className='ov en en-'+(S.enLook||'shadow')+(tr==='off'?' hidden':'');
+  en.style.textShadow=['plain','box'].includes(S.enLook)?'':enShade(S.enShadow,.4);
+  if(tr==='under'&&S.enPos==='under'){const base=Math.min(RR.slots.captions.y*H+c.offsetHeight/2,b-en.offsetHeight-gap*3);place(c,base-c.offsetHeight);place(en,base+gap)}
+  else{const bb=tr!=='off'&&S.enPos==='bottom'?b-en.offsetHeight-gap*2:b;  // English at the bottom: the Arabic stacks above it
+    if(caps)place(c,Math.min(RR.slots.captions.y*H-c.offsetHeight/2,bb-c.offsetHeight-gap*2));
+    if(tr!=='off')place(en,S.enPos==='middle'?H*.5-en.offsetHeight/2:S.enPos==='bottom'?b-en.offsetHeight-gap*2:Math.min(RR.slots.captions.y*H-en.offsetHeight/2,b-en.offsetHeight-gap*2))}
+}
+fetch('/rules.json').then(r=>r.json()).then(r=>{R=r;drawPalettes();const s=r.safe,p=v=>v*100+'%';
+  $('#zone').innerHTML=`<i style="left:0;right:0;top:0;height:${p(s.top)}"></i><i style="left:0;right:0;bottom:0;height:${p(1-s.bottom)}"></i>
+   <i style="left:0;width:${p(s.left)};top:${p(s.top)};bottom:${p(1-s.bottom)}"></i><i style="right:0;width:${p(1-s.right)};top:${p(s.top)};bottom:${p(1-s.bottom)}"></i>`;
+  $('#rules').innerHTML=Object.values(r.slots).map(x=>`<li>${x.note}</li>`).join('')+r.never.map(x=>`<li class="no">Never: ${x}</li>`).join('');
+  render();});
+$('#showZones').onchange=render;
+
+// upload with live percentage
+const drop=$('#drop'), mb=b=>(b/1048576).toFixed(b>1e9?0:1);
+drop.onclick=()=>$('#file').click(); drop.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')$('#file').click()};
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')}; drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');takeFiles([...e.dataTransfer.files])};
+$('#file').onchange=e=>takeFiles([...e.target.files]);
+// several files: each is uploaded in turn, then all are edited whole, in the same style, one after another
+async function takeFiles(fs){
+  if(!fs.length)return; batch=[];
+  if(fs.length===1)return upload(fs[0]);
+  S.mode='single'; render();
+  for(let i=0;i<fs.length;i++){const r=await upload(fs[i],`(${i+1} of ${fs.length}) `);if(r&&!r.error)batch.push(r)}
+  $('#fileinfo').innerHTML=batch.map(r=>`<span>${r.name} · ${Math.floor(r.duration/60)}m ${Math.round(r.duration%60)}s</span>`).join('')+`<span>${batch.length} videos · each edited whole</span>`;
+  if(batch.length>1)$('#start').textContent=`Edit all ${batch.length} →`, $('#start').dataset.saved='1';
+}
+function upload(f,pre=''){return new Promise(done=>{
+  const x=new XMLHttpRequest(), t0=Date.now();
+  $('#prog').classList.remove('hidden'); $('#fileinfo').classList.add('hidden'); $('#progLbl').textContent=pre+'Uploading '+f.name;
+  x.upload.onprogress=e=>{const p=e.loaded/e.total, s=(Date.now()-t0)/1000, speed=e.loaded/s;
+    $('#pct').textContent=Math.floor(p*100)+'%'; $('#bar').style.width=p*100+'%';
+    $('#progSub').textContent=`${mb(e.loaded)} of ${mb(e.total)} MB · ${s>1?Math.max(0,Math.round((e.total-e.loaded)/speed))+'s left':'starting…'}`;
+    if(p>=1){$('#progLbl').textContent='Reading the video…';$('#progSub').textContent='Checking length and size'}};
+  x.onload=()=>{const r=JSON.parse(x.responseText);
+    if(r.error){$('#progLbl').textContent='Could not read '+f.name;$('#progSub').textContent=r.error;return done(r)}
+    job=r.job; dur=r.duration; $('#prog').classList.add('hidden');
+    fileName=r.name;  // for the lesson-name label
+    $('#fileinfo').innerHTML=`<span>${r.name}</span><span>${Math.floor(dur/60)}m ${Math.round(dur%60)}s</span><span>${r.width}×${r.height}</span>`;
+    $('#fileinfo').classList.remove('hidden'); $('#scrub').classList.remove('hidden');
+    const v=$('#pv'); v.src='/api/source?job='+job; v.currentTime=dur*.1; $('#t').value=100; loadFrame(); render(); done(r);};
+  x.onerror=()=>{$('#progLbl').textContent='Upload failed — is the server still running?';done({error:'upload failed'})};
+  x.open('POST','/api/upload'); x.setRequestHeader('X-Filename',encodeURIComponent(f.name)); x.send(f);
+})}
+// the page takes on the footage: the frame in view, blurred behind everything, crossfading between two layers
+let ambOn=0;
+function setAmbient(url){const L=$$('#ambient i'),next=L[1-ambOn],im=new Image();
+  im.onload=()=>{next.style.backgroundImage=`url("${url}")`;next.style.opacity=1;L[ambOn].style.opacity=0;ambOn=1-ambOn;document.body.classList.add('amb')};im.src=url}
+function loadFrame(){if(!job)return;
+  const url=`/api/frame?job=${job}&t=${($('#pv').currentTime||dur*.1).toFixed(1)}`;
+  frameUrl=url;setAmbient(url);
+  // Auto fade colour: darkest quarter of the bottom of the frame, darkened
+  const img=new Image(); img.onload=()=>{const c=document.createElement('canvas');c.width=54;c.height=96;const g=c.getContext('2d');g.drawImage(img,0,0,54,96);
+    const d=g.getImageData(0,60,54,36).data,px=[];for(let i=0;i<d.length;i+=4)px.push([d[i],d[i+1],d[i+2]]);
+    px.sort((a,b)=>(a[0]+a[1]+a[2])-(b[0]+b[1]+b[2]));const q=px.slice(0,px.length/4|0);
+    const all=g.getImageData(0,0,54,96).data,av=[0,1,2].map(k=>{let t=0,n=0;for(let i=k;i<all.length;i+=4){t+=all[i];n++}return Math.round(t/n)});
+    S.frameAvg='#'+av.map(v=>v.toString(16).padStart(2,'0')).join('');  // the frame's overall colour, for "Auto" text/box/accent colours
+    // the frame's strongest colour tints the glow (grey footage keeps the amber)
+    let vv=[0,0,0],n=0;for(let i=0;i<all.length;i+=4){const m=Math.max(all[i],all[i+1],all[i+2]);if(m>70&&m-Math.min(all[i],all[i+1],all[i+2])>m*.35){vv[0]+=all[i];vv[1]+=all[i+1];vv[2]+=all[i+2];n++}}
+    document.body.style.setProperty('--ambc',n>40?`rgba(${vv.map(v=>Math.round(v/n)).join(',')},.22)`:'rgba(245,158,11,.1)');
+    S.fadeAuto=autoColour='#'+[0,1,2].map(k=>Math.round(q.reduce((s,p)=>s+p[k],0)/q.length*.6).toString(16).padStart(2,'0')).join('');render();};
+  img.src=url;
+}
+// live preview controls: play/pause, scrub, sound; the Auto fade re-samples when you stop on a frame
+const pv=$('#pv');
+$('#pvPlay').onclick=()=>{if(pv.paused){pv.muted=false;$('#pvMute').textContent='🔊';pv.play()}else pv.pause()};
+pv.onplay=()=>$('#pvPlay').textContent='❚❚'; pv.onpause=()=>{$('#pvPlay').textContent='▶';loadFrame()};
+pv.ontimeupdate=()=>{$('#pvTime').textContent=fmt(pv.currentTime);if(document.activeElement!==$('#t'))$('#t').value=Math.round(pv.currentTime/(dur||1)*1000)};
+$('#t').oninput=()=>{pv.currentTime=dur*$('#t').value/1000};
+$('#t').onchange=loadFrame;
+$('#pvMute').onclick=()=>{pv.muted=!pv.muted;$('#pvMute').textContent=pv.muted?'🔇':'🔊'};
+
+// presets
+function loadPresets(){fetch('/api/presets').then(r=>r.json()).then(p=>{window._p=p;
+  $('#presetSel').innerHTML='<option value="">Load preset…</option>'+Object.keys(p).map(k=>`<option>${k}</option>`).join('')})}
+$('#presetSel').onchange=e=>{const p=window._p[e.target.value];if(p){S={...DEFAULTS,...p};drawRows();render()}};
+$('#savePreset').onclick=()=>{const name=prompt('Preset name');if(!name)return;
+  fetch('/api/presets',{method:'POST',body:JSON.stringify({name,settings:S})}).then(loadPresets)};
+loadPresets();
+
+// ---------- caption animation demo in the preview (the render uses the same styles via GSAP) ----------
+let lastAnim=null, demoT=0;
+function demoCaption(){clearInterval(demoT);const run=()=>{const el=$('#ovCap');if(!el)return;
+  el.getAnimations().forEach(a=>a.cancel());  // drop the previous style's animation (e.g. a typewriter clip)
+  const words=['العلمُ','قبل','القول','والعمل'];el.innerHTML='<span class="cgi">'+words.map(w=>`<span class="dw" style="display:inline-block">${w}</span>`).join(' ')+'</span>';
+  const ws=[...el.querySelectorAll('.dw')],A=S.capAnim,o={duration:280,easing:'cubic-bezier(.22,1,.36,1)',fill:'both'};
+  if(A==='fadeup')el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],o);
+  if(A==='pop')el.animate([{opacity:0,transform:'scale(.6)'},{opacity:1,transform:'scale(1.06)'},{transform:'scale(1)'}],{...o,duration:380});
+  if(A==='slide')el.animate([{opacity:0,transform:'translateX(30px)'},{opacity:1,transform:'none'}],o);
+  if(A==='typewriter')el.animate([{clipPath:'inset(-30% 0 -30% 100%)'},{clipPath:'inset(-30% 0 -30% 0)'}],{duration:700,fill:'both'});
+  if(A==='word')ws.forEach((w,k)=>w.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{...o,delay:k*300}));
+  if(A==='karaoke')ws.forEach((w,k)=>w.animate([{color:S.capHighlight,transform:'scale(1.08)'},{color:S.capHighlight,transform:'scale(1.08)'}],{duration:300,delay:k*300}));
+};run();demoT=setInterval(run,2600)}
+
+// ---------- manual clip times (long lessons) ----------
+const hms=v=>{v=String(v||'').trim();if(!v)return null;const p=v.split(':').map(Number);if(p.some(isNaN)||p.length>3)return null;return p.reduce((a,b)=>a*60+b,0)};
+function drawRows(){
+  $('#manualRows').innerHTML=S.manualClips.map((r,i)=>{const a=hms(r.from),b=hms(r.to),ok=a!=null&&b!=null&&b>a&&(!dur||b<=dur+1);
+    return `<div class="mrow" data-i="${i}"><span class="mn">${i+1}</span>
+      <input class="tin mt" data-f="from" value="${r.from}" placeholder="43:03" aria-label="Clip ${i+1} from"><span>→</span>
+      <input class="tin mt" data-f="to" value="${r.to}" placeholder="46:07" aria-label="Clip ${i+1} to">
+      <input type="text" class="mtitle" data-f="title" dir="rtl" lang="ar" value="${(r.title||'').replace(/"/g,'&quot;')}" placeholder="عنوان (اختياري)" aria-label="Clip ${i+1} title">
+      <span class="mlen ${r.from&&r.to&&!ok?'bad':''}">${ok?fmt(b-a):r.from&&r.to?(b<=a?'end before start':'past the end'):''}</span>
+      ${S.manualClips.length>1?`<button class="nudge" data-del="${i}" aria-label="Remove clip ${i+1}">×</button>`:''}</div>`}).join('');
+  $$('#manualRows input').forEach(inp=>inp.onchange=()=>{S.manualClips[+inp.closest('.mrow').dataset.i][inp.dataset.f]=inp.value.trim();drawRows();render()});
+  $$('[data-del]').forEach(b=>b.onclick=()=>{S.manualClips.splice(+b.dataset.del,1);drawRows();render()});
+}
+$('#addRow').onclick=()=>{const last=S.manualClips.at(-1);S.manualClips.push({from:last&&last.to||'',to:'',title:''});drawRows();render();$$('#manualRows .mrow').at(-1).querySelector('[data-f="to"]').focus()};
+drawRows();
+
+// ---------- voice for text-only videos: record in the page or pick a file ----------
+let rec=null, recT0=0, recTick=0;
+function setVoice(blob,label){voiceBlob=blob;$('#voicePlay').src=URL.createObjectURL(blob);$('#recState').textContent=label||'';render()}
+$('#recBtn').onclick=async()=>{
+  if(rec&&rec.state==='recording'){rec.stop();return}
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}
+  catch(e){$('#recState').textContent='Microphone blocked — allow it in the browser, or upload a recording instead';return}
+  const chunks=[];rec=new MediaRecorder(stream);rec.ondataavailable=e=>chunks.push(e.data);
+  rec.onstop=()=>{stream.getTracks().forEach(t=>t.stop());clearInterval(recTick);$('#recBtn').textContent='● Record again';
+    setVoice(new Blob(chunks,{type:rec.mimeType.split(';')[0]||'audio/webm'}),'Recorded — play it back below')};
+  rec.start();recT0=Date.now();$('#recBtn').textContent='■ Stop';$('#recState').textContent='Recording…';
+  recTick=setInterval(()=>$('#recTime').textContent=fmt((Date.now()-recT0)/1000),250);
+};
+$('#voiceFileBtn').onclick=()=>$('#voiceFile').click();
+// picture background: kept in the page until the job starts, then sent with it
+let bgBlob=null, bgUrl='';
+$('#bgBtn').onclick=()=>$('#bgFile').click();
+$('#bgFile').onchange=e=>{const f=e.target.files[0];if(!f)return;bgBlob=f;setTimeout(()=>bgUrl&&setAmbient(bgUrl),100);$('#bgName').textContent=f.name;
+  bgUrl=URL.createObjectURL(f);render()};
+// computer voice: list the Arabic voices installed on this Mac, and preview one line
+fetch('/api/voices').then(r=>r.json()).then(v=>{$('#ttsVoice').innerHTML=(v.length?v:['Majed']).map(n=>`<option${n===S.ttsVoice?' selected':''}>${n}</option>`).join('')});
+$('#ttsVoice').onchange=e=>{S.ttsVoice=e.target.value};
+$('#ttsPreview').onclick=async()=>{$('#ttsState').textContent='Preparing…';
+  const r=await fetch('/api/ttssample',{method:'POST',body:JSON.stringify({voice:S.ttsVoice,rate:S.ttsRate,text:S.sourceText.split('\n').find(l=>l.trim())})});
+  const a=new Audio(URL.createObjectURL(await r.blob()));a.play();$('#ttsState').textContent='';};
+$('#voiceFile').onchange=e=>{const f=e.target.files[0];if(!f)return;$('#voiceFileName').textContent=f.name;setVoice(f)};
+
+// ---------- step 2: transcribe + check the Arabic ----------
+const fmt=t=>{const m=Math.floor(t/60),s=Math.floor(t%60);return (m>=60?Math.floor(m/60)+':'+String(m%60).padStart(2,'0'):m)+':'+String(s).padStart(2,'0')};
+let T=null, pollT=0, t0=0;
+function showStep(n){if(n!==1)$('#pv').pause();  // the Set up preview never keeps playing behind the other steps
+  $$('.steps [data-st]').forEach(e=>{const k=+e.dataset.st,m=n===5?4:n;e.classList.toggle('on',k===m);e.classList.toggle('done',k<m&&n!==6)});$('main').classList.toggle('hidden',n!==1);$('#step2').classList.toggle('hidden',n!==2);$('#step3').classList.toggle('hidden',n!==3);$('#step4').classList.toggle('hidden',n!==4);$('#stepB').classList.toggle('hidden',n!==5);$('#stepL').classList.toggle('hidden',n!==6);$('#libBtn').classList.toggle('on',n===6);window.scrollTo(0,0)}
+// Change style from the Library: same cuts and captions, new look. Set up without the source and clip cards, then straight to rendering.
+let restyle=0;
+function endRestyle(){restyle=0;document.body.classList.remove('restyling');$('#restyleCancel').classList.add('hidden');$('#start').textContent='Find clips →';render()}
+$('#restyleCancel').onclick=()=>{endRestyle();showStep(6);drawLib()};
+$('#start').onclick=async()=>{
+  if(S.source==='audio'&&S.style!=='youtube'&&S.background!=='picture')return alert('A reel needs a picture: under Source, set Background to A picture, or pick YouTube long video.');
+  if(restyle){const n=restyle;
+    if(!confirm(`Replace ${n==1?'this video':`these ${n} videos`} with the new style?\n\nCaptions, cuts and post text stay as they are.`))return;
+    await fetch('/api/settings',{method:'POST',body:JSON.stringify({job,settings:S})});
+    if(S.background==='picture'&&bgBlob)await fetch('/api/bg?job='+job,{method:'POST',body:bgBlob});
+    await fetch('/api/render',{method:'POST',body:JSON.stringify({job,rebuild:true,restyle:true})});
+    endRestyle();$('#renders').innerHTML='';showStep(4);pollRender();return}
+  if(batch.length>1&&S.source!=='text'){  // several videos: same settings for each, then the server works through them
+    $('#start').textContent='Starting…';
+    for(const r of batch){await fetch('/api/settings',{method:'POST',body:JSON.stringify({job:r.job,settings:{...S,mode:'single',checkTranscript:false}})});
+      if(S.background==='picture'&&bgBlob)await fetch('/api/bg?job='+r.job,{method:'POST',body:bgBlob})}
+    await fetch('/api/batch',{method:'POST',body:JSON.stringify({jobs:batch.map(r=>r.job)})});
+    showStep(5); pollBatch(); return}
+  if(S.source==='text'){  // no upload: the server times the lines itself, nothing to transcribe
+    const r=await (await fetch('/api/textjob',{method:'POST',body:JSON.stringify({text:S.sourceText,name:(S.titleText||S.sourceText).split('\n')[0].slice(0,40)})})).json();
+    if(r.error)return alert(r.error); job=r.job;
+    if(S.voice==='computer'){$('#start').textContent='Reading your text aloud…';
+      const v=await (await fetch('/api/tts',{method:'POST',body:JSON.stringify({job,voice:S.ttsVoice,rate:S.ttsRate})})).json();
+      if(v.error){$('#start').textContent='Create video →';return alert(v.error)}}
+    if(['record','upload'].includes(S.voice)&&voiceBlob){$('#start').textContent='Uploading your voice…';
+      const v=await (await fetch('/api/voice?job='+job,{method:'POST',headers:{'Content-Type':voiceBlob.type||'audio/webm'},body:voiceBlob})).json();
+      if(v.error){$('#start').textContent='Create video →';return alert(v.error)}}
+  }
+  await fetch('/api/settings',{method:'POST',body:JSON.stringify({job,settings:S})});
+  if(S.background==='picture'&&bgBlob&&S.source!=='text')await fetch('/api/bg?job='+job,{method:'POST',body:bgBlob});
+  if(S.source!=='text')await fetch('/api/transcribe',{method:'POST',body:JSON.stringify({job})});
+  showStep(2); $('#tProg').classList.remove('hidden'); $('#editor').classList.add('hidden'); t0=Date.now(); poll();
+};
+async function poll(){
+  const s=await (await fetch('/api/status?job='+job)).json();
+  if(s.stage==='error'){$('#tLbl').textContent='Transcription failed';$('#tSub').textContent=s.error;return}
+  if(s.stage==='done')return loadTranscript();
+  const pct=s.stage==='audio'?0:s.pct||0, el=(Date.now()-t0)/1000;
+  $('#tPct').textContent=pct+'%'; $('#tBar').style.width=pct+'%';
+  $('#tLbl').textContent=s.stage==='audio'?'Extracting the audio…':'Listening to the Arabic…';
+  $('#tSub').textContent=pct>3?`about ${fmt(Math.max(0,el/pct*(100-pct)))} left`:'Starting up the model (first minute is slowest)';
+  pollT=setTimeout(poll,1500);
+}
+// every ▶ button plays its stretch of the lesson; while it plays it reads ■ Stop, and a second click stops it
+let playBtn=null;
+function playRange(btn,from,to){const a=$('#audio');
+  if(playBtn===btn&&!a.paused){a.pause();return}
+  a.currentTime=from;a.dataset.stop=to;a.play();
+  if(playBtn&&playBtn!==btn)playBtn.innerHTML=playBtn.dataset.lbl;
+  playBtn=btn;btn.dataset.lbl=btn.dataset.lbl||btn.innerHTML;btn.innerHTML='■ Stop'}
+$('#audio').addEventListener('pause',()=>{if(playBtn){playBtn.innerHTML=playBtn.dataset.lbl;playBtn=null}});
+// ---- transcript editor rows: text, ▶ play, from–to times; Enter splits a line, Backspace at its start joins it upward ----
+const t2s=t=>{const m=Math.floor(t/60);return m+':'+(t%60).toFixed(1).padStart(4,'0')};          // 75.3 → "1:15.3"
+const s2t=v=>{v=String(v).trim();const m=v.match(/^(?:(\d+):)?(\d+(?:\.\d+)?)$/);return m?(+(m[1]||0))*60+ +m[2]:null};
+function caretOffset(el){const sel=getSelection();if(!sel.rangeCount)return 0;const r=sel.getRangeAt(0).cloneRange();r.selectNodeContents(el);r.setEnd(sel.focusNode,sel.focusOffset);return r.toString().length}
+function placeCaret(el,pos){const tn=el.firstChild||el;const r=document.createRange();r.setStart(tn,Math.min(pos,(tn.textContent||'').length));r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r);el.focus()}
+function dirty(){$('#saveState').textContent='Unsaved changes';$('#segCount').textContent=`${T.segments.length} lines · ${fmt(T.segments.at(-1)?.end||0)}`}
+function drawSegs(focus){
+  const text=S.source==='text', E=t=>t.replace(/[<&]/g,c=>c=='<'?'&lt;':'&amp;');
+  $('#segs').innerHTML=T.segments.map((s,i)=>`<div class="seg-row" data-i="${i}"><div class="seg-side">
+      ${text?`<span class="ts">${i+1}</span>`:`<button class="ts glow" data-i="${i}" aria-label="Play from ${fmt(s.start)}">▶ ${fmt(s.start)}</button>`}
+      <div class="seg-times ${s.pinned?'pinned':''}" title="${s.pinned?'Shown exactly between these times':'Timed to the voice automatically. Change a time to fix it.'}">
+        <input class="tin" data-i="${i}" data-tk="start" value="${t2s(s.start)}" aria-label="Show from"><span>→</span><input class="tin" data-i="${i}" data-tk="end" value="${t2s(s.end)}" aria-label="Show until">
+        ${s.pinned?`<button class="unpin" data-i="${i}" title="Back to automatic timing">auto</button>`:''}</div></div>
+    <div class="seg-text" contenteditable="plaintext-only" dir="rtl" lang="ar" data-i="${i}">${E(s.text)}</div></div>`).join('');
+  dirty(); $('#saveState').textContent=focus?'Unsaved changes':$('#saveState').textContent;
+  $$('.ts[data-i]').forEach(b=>b.onclick=()=>{const s=T.segments[b.dataset.i];playRange(b,s.start,s.end)});
+  $$('.seg-text').forEach(d=>{const i=+d.dataset.i;
+    d.oninput=()=>{T.segments[i].text=d.textContent.trim();T.segments[i].edited=true;dirty()};
+    d.onkeydown=e=>{const seg=T.segments[i],pos=caretOffset(d),full=d.textContent;
+      if(e.key==='Enter'){e.preventDefault();const A=full.slice(0,pos).trim(),B=full.slice(pos).trim();if(!A||!B)return;
+        const cut=seg.start+(seg.end-seg.start)*(pos/full.length);  // split the time by where the break falls
+        T.segments.splice(i,1,{start:seg.start,end:+cut.toFixed(2),text:A,edited:true,pinned:seg.pinned},{start:+cut.toFixed(2),end:seg.end,text:B,edited:true,pinned:seg.pinned});
+        drawSegs(true);placeCaret($(`.seg-text[data-i="${i+1}"]`),0)}
+      if(e.key==='Backspace'&&pos===0&&i>0&&!getSelection().toString()){e.preventDefault();const P=T.segments[i-1],at=P.text.length+1;
+        T.segments.splice(i-1,2,{start:P.start,end:seg.end,text:(P.text+' '+seg.text).trim(),edited:true,pinned:P.pinned||seg.pinned});
+        drawSegs(true);placeCaret($(`.seg-text[data-i="${i-1}"]`),at)}};});
+  $$('.tin').forEach(inp=>inp.onchange=()=>{const i=+inp.dataset.i,v=s2t(inp.value),seg=T.segments[i];
+    if(v==null){inp.classList.add('bad');return}inp.classList.remove('bad');
+    seg[inp.dataset.tk]=v;if(seg.end<=seg.start)seg.end=+(seg.start+.5).toFixed(2);seg.pinned=true;drawSegs(true)});
+  $$('.unpin').forEach(b=>b.onclick=()=>{T.segments[+b.dataset.i].pinned=false;drawSegs(true)});
+}
+async function loadTranscript(){
+  T=await (await fetch('/api/transcript?job='+job)).json();
+  $('#tProg').classList.add('hidden'); $('#editor').classList.remove('hidden');
+  const text=S.source==='text'; if(!text)$('#audio').src='/api/audio?job='+job;
+  drawSegs(); drawFixes();
+  if(!S.checkTranscript||(S.style!=='visualy'&&S.textMode!=='captions'))$('#nextT').click();  // "check the Arabic first" is off: go straight on
+}
+$('#audio').ontimeupdate=e=>{const a=e.target,t=a.currentTime;
+  if(a.dataset.stop&&t>=+a.dataset.stop){a.pause();a.dataset.stop=''}
+  $$('.seg-row').forEach(r=>{const s=T.segments[r.dataset.i];r.classList.toggle('playing',!a.paused&&t>=s.start&&t<s.end)})};
+// words you corrected before are fixed automatically in new lessons (learned on Save; see server learn_fixes)
+async function drawFixes(){
+  const [F,st]=await Promise.all([fetch('/api/fixes').then(r=>r.json()),fetch('/api/status?job='+job).then(r=>r.json())]);
+  const items=[...Object.entries(F.words).map(([w,r])=>({w,r,k:'word',v:w})),...F.drop.map(d=>({w:d,r:'تُحذف',k:'drop',v:d}))];
+  $('#fixes').classList.toggle('hidden',!items.length);
+  $('#fixes summary').innerHTML=`${st.fixed?`<b>${st.fixed} word${st.fixed==1?'':'s'} fixed for you</b> · `:''}${items.length} remembered fix${items.length==1?'':'es'}`;
+  $('#fixList').innerHTML=items.map(x=>`<div class="fx"><span dir="rtl" lang="ar"><s>${esc(x.w)}</s> ← ${esc(x.r)}</span><button class="pill glow" data-k="${x.k}" data-v="${esc(x.v)}">Forget</button></div>`).join('');
+  $$('#fixList button').forEach(b=>b.onclick=async()=>{await fetch('/api/fixes',{method:'POST',body:JSON.stringify({[b.dataset.k]:b.dataset.v})});drawFixes()});
+}
+// ---- whole transcript as one text: edit freely, then map the rows back onto timed lines ----
+$$('[data-ed]').forEach(b=>b.onclick=()=>{const t=b.dataset.ed==='text';$$('[data-ed]').forEach(x=>x.classList.toggle('on',x===b));
+  $('#bulkBox').classList.toggle('hidden',!t);$('#segs').classList.toggle('hidden',t);if(t){$('#bulk').value=T.segments.map(s=>s.text).join('\n');$('#bulkInfo').textContent=''}});
+function applyBulk(text){
+  const O=T.segments, N=text.replace(/\n+$/,'').split('\n').map(x=>x.trim()), n=O.length, m=N.length;  // empty rows stay (e.g. a verse line whose plain words you cleared)
+  // rows that didn't change anchor the timing (longest common run of identical rows)
+  const L=Array.from({length:n+1},()=>new Uint16Array(m+1));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=O[i].text===N[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const out=[];let i=0,j=0,kept=0;
+  const fill=(i0,i1,j0,j1)=>{  // a changed stretch: each new row takes the time of the original words it still contains
+    if(j0===j1)return;
+    const P=w=>w.replace(/[.,!?؟،:؛…«»"'()ـ]/g,'');  // punctuation doesn't make a different word
+    const ow=[];for(let k=i0;k<i1;k++){const o=O[k],ws=o.text.split(' ').filter(Boolean),d=(o.end-o.start)/(ws.length||1);ws.forEach((w,x)=>ow.push({w:P(w),s:o.start+d*x,e:o.start+d*(x+1)}))}
+    const nw=[];for(let k=j0;k<j1;k++)N[k].split(' ').filter(Boolean).forEach(w=>nw.push({w:P(w),r:k}));
+    const A=ow.length,B=nw.length,M=Array.from({length:A+1},()=>new Uint16Array(B+1));
+    for(let x=A-1;x>=0;x--)for(let y=B-1;y>=0;y--)M[x][y]=ow[x].w===nw[y].w?M[x+1][y+1]+1:Math.max(M[x+1][y],M[x][y+1]);
+    const span={};for(let x=0,y=0;x<A&&y<B;){if(ow[x].w===nw[y].w){const r=nw[y].r,sp=span[r]||(span[r]={s:ow[x].s,e:ow[x].e});sp.s=Math.min(sp.s,ow[x].s);sp.e=Math.max(sp.e,ow[x].e);x++;y++}
+      else if(M[x+1][y]>=M[x][y+1])x++;else y++}
+    const lo=i0<i1?O[i0].start:(out.length?out[out.length-1].end:0), hi=i0<i1?O[i1-1].end:(i1<n?O[i1].start:lo+2);
+    for(let k=j0;k<j1;k++){const prev=out.length?out[out.length-1].end:lo;let sp=span[k];
+      if(!sp){const nx=Object.keys(span).map(Number).filter(r=>r>k).sort((a,b)=>a-b)[0];const until=nx!==undefined?span[nx].s:hi;sp={s:prev,e:Math.max(prev+1,until)}}  // no original words: fills the gap
+      const st=Math.max(sp.s,prev),en=Math.max(sp.e,st+.3),o=i1-i0===j1-j0?O[i0+k-j0]:null;
+      // same number of rows here: row k is the old row with its words fixed, so it keeps its verse, pinned times, added flag
+      if(o)out.push({...o,start:o.pinned?o.start:+st.toFixed(2),end:o.pinned?o.end:+en.toFixed(2),text:N[k],edited:true,words:undefined});
+      else out.push({start:+st.toFixed(2),end:+en.toFixed(2),text:N[k],edited:true})}};
+  let i0=0,j0=0;
+  while(i<n&&j<m){if(O[i].text===N[j]){fill(i0,i,j0,j);out.push(O[i]);kept++;i++;j++;i0=i;j0=j}else if(L[i+1][j]>=L[i][j+1])i++;else j++}
+  fill(i0,n,j0,m);
+  T.segments=out;return {kept,changed:out.length-kept,removed:n-kept-(out.length-kept>0?0:0)}}
+$('#bulkApply').onclick=()=>{const r=applyBulk($('#bulk').value);drawSegs(true);
+  $('#bulkInfo').textContent=`Done: ${r.kept} rows unchanged, ${r.changed} edited or new. Click Save or Continue to keep it.`};
+async function saveT(){await fetch('/api/transcript',{method:'POST',body:JSON.stringify({job,transcript:T})});$('#saveState').textContent='Saved'}
+$('#saveT').onclick=saveT;
+$('#back').onclick=()=>{clearTimeout(pollT);$('#audio').pause();showStep(1)};
+// ---------- batch: one row per video ----------
+async function pollBatch(){
+  const st=await Promise.all(batch.map(r=>fetch('/api/status?job='+r.job).then(x=>x.json())));
+  const L={audio:'Extracting the audio',transcribe:'Listening to the Arabic',done:'Waiting',picked:'Waiting',rendering:'Editing',rendered:'Done',error:'Failed'};
+  $('#batchList').innerHTML=batch.map((r,i)=>{const s=st[i],c=Object.values(s.clips||{})[0]||{},
+      lbl=s.stage==='rendering'?c.label||'Editing':s.stage==='transcribe'?`${L.transcribe} ${s.pct||0}%`:L[s.stage]||'Queued',
+      pct=s.stage==='rendering'?c.pct||0:s.stage==='rendered'?100:0, out=c.output, err=s.error||c.error;
+    return `<div class="prog"><div class="prog-top"><span>${r.name.replace(/[<&]/g,'')} · ${err?'Failed':lbl}</span><span class="pct">${pct}%</span></div>
+      <div class="track"><i style="width:${pct}%"></i></div><div class="hint">${err?err.replace(/[<&]/g,''):out?`Saved: ${out.replace(/[<&]/g,'')} <button class="ghost glow" data-reveal="${encodeURIComponent(out)}">Show file</button>`:''}</div></div>`}).join('');
+  $$('[data-reveal]').forEach(b=>b.onclick=()=>fetch('/api/reveal',{method:'POST',body:JSON.stringify({path:decodeURIComponent(b.dataset.reveal)})}));
+  if(st.some(s=>!['rendered','error'].includes(s.stage)))pollT=setTimeout(pollBatch,2000);
+}
+$('#backB').onclick=()=>{clearTimeout(pollT);showStep(1)};
+// ---------- step 3: Claude picks clips, user approves / trims ----------
+let C=null;
+$('#nextT').onclick=async()=>{
+  await saveT();
+  await fetch('/api/pick',{method:'POST',body:JSON.stringify({job})});
+  showStep(3); $('#pickWait').classList.remove('hidden'); $('#clipList').innerHTML=''; t0=Date.now(); pollPick();
+};
+async function pollPick(){
+  const s=await (await fetch('/api/status?job='+job)).json();
+  if(s.stage==='error'){$('#pickLbl').textContent='Clip picking failed';$('#pickSub').innerHTML=`${esc(s.error)} <button class="pill glow" id="pickRetry" style="margin-left:8px">Try again</button>`;$('#pickRetry').onclick=()=>$('#nextT').click();return}
+  if(s.stage==='picked'){$('#pickWait').classList.add('hidden');C=(await (await fetch('/api/clips?job='+job)).json()).clips;
+    qFound=await (await fetch('/api/quran?job='+job)).json();
+    T.segments.forEach((sg,k)=>{if(sg.quran===undefined&&qFound[k]){sg.quran=qFound[k];wordsDirty=true}});
+    if(S.style==='youtube'){C.forEach(c=>c.keep=true);return $('#makeBtn').click()}  // one whole video: no clips to choose
+    return drawClips()}
+  $('#pickSub').textContent=`${Math.round((Date.now()-t0)/1000)}s · usually under a minute, longer for long lessons`;
+  pollT=setTimeout(pollPick,1500);
+}
+const esc=t=>String(t??'').replace(/[<&"]/g,c=>({'<':'&lt;','&':'&amp;','"':'&quot;'})[c]);
+const linesIn=(a,b)=>T.segments.filter(s=>s.end>a+.05&&s.start<b-.05);  // same lines the video gets (render_clip.lines_in)
+let wordsDirty=false;
+// Qur'an on the clips page: found automatically (Hafs wording from Tanzil); tick or untick; Warsh text is pasted
+let qFound=null;
+function qRow(s,k){const q=s.quran,w=S.quranReading==='warsh';if(!q)return '';
+  // the verse box is the caption: write or fix it exactly as it should appear
+  return `<div class="qrow"><textarea class="ar qbox ${w?'qw':'qh'}" dir="rtl" lang="ar" rows="1" data-qt="${k}" placeholder="${w?'الصق نص ورش من al-mushaf.com':'اكتب نص الآية'}">${esc((w?q.warsh:q.text)||'')}</textarea>${q.ref?`<span class="qref">${q.ref}</span>`:''}</div>`}
+function drawClips(){
+  const single=S.mode==='single';
+  $('#pickTitle').textContent=single?'Check your video':'Choose your clips';
+  const L=dur||T.segments.at(-1)?.end||1, kept=C.filter(c=>c.keep);
+  if(!C.length){$('#clipList').innerHTML=`<div class="empty"><b>No clips found</b>Nothing in this lesson fit the length you set. Go back to Set up and widen the clip length, or choose your own times.</div>`;return countKept()}
+  $('#clipList').innerHTML=(single?'':`<div class="clip-sum"><span><b>${kept.length}</b> of ${C.length} kept</span><span><b>${fmt(kept.reduce((a,c)=>a+c.end-c.start,0))}</b> in total</span></div>`)+C.map((c,i)=>`<article class="clip has-p ${c.keep?'':'off'}" data-i="${i}">
+    <div class="poster"><img loading="lazy" alt="" src="${c.pic?`/api/bgimg?job=${job}&clip=${c.id}&v=${c.pic}`:`/api/frame?job=${job}&t=${(c.start+1).toFixed(1)}`}" onerror="this.parentNode.classList.add('none')"><div class="where" title="Where this clip sits in the lesson"><i style="left:${c.start/L*100}%;width:${(c.end-c.start)/L*100}%"></i></div></div>
+    <div class="cbody">
+    <div class="clip-head">
+      ${single?'':`<label class="tick"><input type="checkbox" data-f="keep" ${c.keep?'checked':''}> Keep</label>`}
+      <span class="clip-n">${single?'':'#'+(i+1)}</span>
+      ${c.score?`<span class="score">${c.score}/10</span>`:''}
+      <span class="dur">${fmt(c.end-c.start)}</span>
+    </div>
+    <input type="text" dir="rtl" lang="ar" class="clip-title" data-f="title" value="${esc(c.title)}" placeholder="عنوان المقطع">
+    <label class="spk"><span class="lbl">Speaker in this clip</span><input type="text" dir="rtl" lang="ar" data-f="speaker" value="${esc(c.speaker||'')}" placeholder="${esc(S.speaker||'اسم المتحدث')}"></label>
+    ${S.style!=='visualy'&&!c.pic?`<div class="field fo"><span class="lbl">Frame on</span><div class="wrap">${[['auto','Auto (who is speaking)'],['left','Left'],['centre','Centre'],['right','Right']].map(([v,l])=>`<button class="pill glow${(c.frameOn||'auto')===v?' on':''}" data-fo="${v}">${l}</button>`).join('')}</div></div>`:''}
+    ${c.reason&&!single?`<p class="hint">${esc(c.reason)}</p>`:''}
+    <div class="trim">
+      <span class="lbl">Start</span><button class="nudge" data-n="start,-1" aria-label="Start one line earlier">−</button><span class="tval">${fmt(c.start)}</span><button class="nudge" data-n="start,1" aria-label="Start one line later">+</button>
+      <span class="lbl">End</span><button class="nudge" data-n="end,-1" aria-label="End one line earlier">−</button><span class="tval">${fmt(c.end)}</span><button class="nudge" data-n="end,1" aria-label="End one line later">+</button>
+    </div>
+    <div class="wrap">
+      <button class="pill glow" data-play="clip">▶ Play clip</button>
+      <label class="pill glow pic-btn">${c.pic?'Change picture':'Picture instead of video'}<input type="file" accept="image/*" data-pic hidden></label>${c.pic?`<button class="pill glow" data-unpic>Back to the video</button>`:''}
+      ${c.hook?`<button class="pill glow" data-play="hook">▶ Play hook</button><label class="tick"><input type="checkbox" data-f="moveHook" ${c.moveHook?'checked':''}> Play hook first (then burn into the clip)</label>`:''}
+    </div>
+    <details${c.open?' open':''} data-words><summary class="wsum">✎ Edit the captions <span>${linesIn(c.start,c.end).length} lines · fix anything misheard</span></summary>
+      <div class="cwords">${linesIn(c.start,c.end).map(s=>{const k=T.segments.indexOf(s);return `<div class="cwrow"><div class="cwl"><button class="ts glow" data-k2="${k}" aria-label="Play this line">▶ ${fmt(s.start)}</button><button class="qchip${s.quran?' on':''}" data-q="${k}" title="Show this line as a Qur'an verse">﴿ ﴾</button></div>
+        <div class="seg-times cwt ${s.pinned?'pinned':''}" title="${s.pinned?'Shown exactly between these times':'Timed to the voice automatically. Type a time to set it yourself.'}"><input class="tin" data-k2="${k}" data-tk="start" value="${t2s(s.start)}" aria-label="Show from"><span>→</span><input class="tin" data-k2="${k}" data-tk="end" value="${t2s(s.end)}" aria-label="Show until">${s.pinned?`<button class="unpin" data-k2="${k}" title="Back to automatic timing">auto</button>`:''}<button class="rowadd" data-add="${k}" aria-label="Add a caption line after this one" title="Add a line after this one">+</button><button class="rowdel" data-del="${k}" aria-label="Delete this caption line" title="Delete this caption (the voice stays in the video)">×</button></div><div>${s.quran&&s.quran.a===0&&s.quran.b>=s.text.split(' ').length-1?'':`<div class="seg-text" contenteditable="plaintext-only" dir="rtl" lang="ar" data-k2="${k}">${esc(s.text)}</div>`}${qRow(s,k)}</div></div>`}).join('')}</div></details>
+    </div>
+  </article>`).join('');
+  if(C[0]&&S.source!=='text')setAmbient(`/api/frame?job=${job}&t=${(C[0].start+1).toFixed(1)}`);
+  $$('.clip').forEach(el=>{const c=C[el.dataset.i];
+    el.onmouseenter=()=>{if(S.source!=='text')setAmbient(el.querySelector('.poster img')?.src||frameUrl)};
+    el.querySelectorAll('[data-f]').forEach(inp=>inp.oninput=()=>{c[inp.dataset.f]=inp.type==='checkbox'?inp.checked:inp.value;if(inp.dataset.f==='keep')el.classList.toggle('off',!c.keep);countKept()});
+    el.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{const[k,d]=b.dataset.n.split(','),edges=T.segments.map(s=>k==='start'?s.start:s.end);
+      // next sentence edge in that direction (works for your exact times too, which sit between sentences)
+      const n=+d>0?edges.find(t=>t>c[k]+.5):[...edges].reverse().find(t=>t<c[k]-.5);  // a whole line, never a fraction of a secondif(n==null)return;
+      if(k==='start'&&n<c.end||k==='end'&&n>c.start){c[k]=n;drawClips()}});
+    el.querySelector('[data-words]').ontoggle=e=>{c.open=e.target.open};
+    el.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{const sg=T.segments[+b.dataset.q];wordsDirty=true;
+      // ticked by hand: the whole line is the verse; its wording is what's written (edit it to the Mushaf text)
+      sg.quran=!sg.quran?(qFound&&qFound[b.dataset.q])||{a:0,b:sg.text.split(' ').length-1,ref:'',text:sg.text}:false;drawClips()});
+    el.querySelectorAll('[data-qt]').forEach(t=>{const fit=()=>{t.style.height='auto';t.style.height=t.scrollHeight+'px'};fit();
+      const wq=T.segments[+t.dataset.qt].quran;  // Warsh fills itself in; the box stays empty if no confident match, for pasting by hand
+      if(S.quranReading==='warsh'&&!t.value&&wq&&wq.ref&&wq.text)fetch(`/api/warsh?ref=${encodeURIComponent(wq.ref)}&text=${encodeURIComponent(wq.text)}`).then(r=>r.json()).then(r=>{if(r.warsh&&!t.value){t.value=r.warsh;wq.warsh=r.warsh;wordsDirty=true;fit()}});
+      t.oninput=()=>{fit();T.segments[+t.dataset.qt].quran[S.quranReading==='warsh'?'warsh':'text']=t.value.trim();wordsDirty=true}});
+    el.querySelectorAll('.cwrow .seg-text').forEach(d=>d.oninput=()=>{const sg=T.segments[+d.dataset.k2];sg.text=d.textContent.trim();sg.edited=true;wordsDirty=true});
+    // your own times for a caption line (pinned): the video shows it exactly then; "auto" gives it back to the voice
+    el.querySelectorAll('.cwt .tin').forEach(inp=>inp.onchange=()=>{const sg=T.segments[+inp.dataset.k2],v=s2t(inp.value);
+      if(v==null){inp.classList.add('bad');return}sg[inp.dataset.tk]=v;if(sg.end<=sg.start)sg.end=+(sg.start+.5).toFixed(2);sg.pinned=true;wordsDirty=true;drawClips()});
+    // a new line of your own after this one: it fills the pause before the next line (or 2 s), shown exactly then
+    el.querySelectorAll('.cwt .rowadd').forEach(b=>b.onclick=()=>{const k=+b.dataset.add,sg=T.segments[k],nx=T.segments[k+1];
+      const a=sg.end,e=nx&&nx.start-a>.3?nx.start:+(a+2).toFixed(2);
+      T.segments.splice(k+1,0,{start:a,end:e,text:'',added:true,pinned:true});if(a>=c.end-.05)c.end=e;  // added after the clip's last line: the clip grows to show it
+      wordsDirty=true;drawClips();
+      $(`.cwrow .seg-text[data-k2="${k+1}"]`)?.focus()});
+    el.querySelectorAll('.cwt .rowdel').forEach(b=>b.onclick=()=>{if(!confirm('Delete this caption line? The voice stays in the video.'))return;T.segments.splice(+b.dataset.del,1);wordsDirty=true;drawClips()});
+    el.querySelectorAll('.cwt .unpin').forEach(b=>b.onclick=()=>{T.segments[+b.dataset.k2].pinned=false;wordsDirty=true;drawClips()});
+    el.querySelectorAll('.cwrow .ts').forEach(b=>b.onclick=()=>{const sg=T.segments[+b.dataset.k2];playRange(b,sg.start,sg.end)});
+    // this clip only: a picture fills the frame instead of the speaker (the voice stays); "back to the video" removes it
+    el.querySelector('[data-pic]').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+      const r=await (await fetch(`/api/bg?job=${job}&clip=${c.id}`,{method:'POST',body:f})).json();if(r.error)return alert(r.error);c.pic=Date.now();drawClips()};
+    el.querySelector('[data-unpic]')?.addEventListener('click',async()=>{await fetch(`/api/bg?job=${job}&clip=${c.id}&remove=1`,{method:'POST'});c.pic=0;drawClips()});
+    el.querySelectorAll('[data-fo]').forEach(b=>b.onclick=()=>{c.frameOn=b.dataset.fo;drawClips()});  // used at the next full render
+    el.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{const h=b.dataset.play==='hook'?c.hook:c;playRange(b,h.start,h.end)});
+  });
+  countKept();
+}
+function countKept(){const n=C.filter(c=>c.keep).length;$('#makeBtn').textContent=S.mode==='single'?'Make the video →':`Make ${n} video${n==1?'':'s'} →`;$('#makeBtn').disabled=!n}
+$('#back2').onclick=()=>{clearTimeout(pollT);$('#audio').pause();showStep(2)};
+// ---------- step 4: render, watch progress, preview, open in Finder ----------
+$('#makeBtn').onclick=async()=>{$('#renders').innerHTML='';
+  if(wordsDirty){await saveT();wordsDirty=false}  // word fixes made on this page go into the captions
+  await fetch('/api/clips',{method:'POST',body:JSON.stringify({job,clips:{clips:C}})});
+  await fetch('/api/render',{method:'POST',body:JSON.stringify({job})});
+  showStep(4); $('#renders').innerHTML=''; pollRender();
+};
+async function pollRender(){
+  const s=await (await fetch('/api/status?job='+job)).json(), st=s.clips||{};
+  // redraw a card only when its own status changes, so an open caption editor or playing video is left alone
+  const box=$('#renders'), kept=C.filter(c=>c.keep);
+  if(box.children.length!==kept.length)box.innerHTML=kept.map(c=>`<div id="rc${c.id}"></div>`).join('');
+  kept.forEach(c=>{const r=st[c.id]||{pct:0,label:'Waiting'}, sig=JSON.stringify([r.output,r.error,r.pct,r.label,r.removed,r.post]), el=$('#rc'+c.id);
+    if(el.dataset.sig===sig)return; el.dataset.sig=sig;
+    const poster=S.style!=='youtube'?`/api/frame?job=${job}&t=${(c.start+1).toFixed(1)}`:r.output?'/api/video?path='+encodeURIComponent(r.output.replace(/\.mp4$/,' thumbnail 1.jpg')):'';
+    el.innerHTML=`<article class="vt${S.style==='youtube'?' yt':''}"><div class="vt-h"><span class="clip-n">#${c.id}</span><span dir="rtl" lang="ar">${esc(c.title||'')}</span><span class="dur">${fmt(c.end-c.start)}</span></div>
+      <div class="vt-f" style="background-image:url('${poster}')">
+      ${r.output?`<video controls playsinline preload="metadata" poster="${poster}" src="/api/video?path=${encodeURIComponent(r.output)}"></video>`
+      :r.error?`<div class="vt-o err"><p>${esc(r.error)}</p></div>`
+      :`<div class="vt-o"><span class="big">${r.label==='Queued'?'Queued':r.pct+'%'}</span><span class="lab">${esc(r.label)}</span><div class="track"><i style="width:${r.pct}%"></i></div></div>`}</div>
+      ${r.output&&!['visualy','youtube'].includes(S.style)?`<div class="spk spk-v"><input type="text" dir="rtl" lang="ar" data-spk="${c.id}" value="${esc(c.speaker||'')}" placeholder="${esc(S.speaker||'اسم المتحدث')}" aria-label="Speaker name in this video"><button class="pill glow" data-spkgo="${c.id}">Change name</button></div>`:''}
+      ${r.output&&r.removed&&r.removed.length?`<p class="hint" dir="auto">Removed as slips: ${r.removed.map(x=>`«${esc(x)}»`).join('، ')}</p>`:''}
+      ${r.output&&S.style==='youtube'?`<div class="ytth">${[1,2,3].map(n=>{const p=r.output.replace(/\.mp4$/,` thumbnail ${n}.jpg`);return `<img src="/api/video?path=${encodeURIComponent(p)}" alt="Thumbnail ${n}" data-reveal="${esc(p)}" title="Show file">`}).join('')}</div>`:''}
+      ${r.output?`<div class="wrap">${['visualy','youtube'].includes(S.style)?'':`<button class="pill glow" data-edit="${c.id}">Edit captions</button>`}<button class="pill glow" data-rerender="${c.id}">Re-render</button>${S.translate&&S.translate!=='off'?`<button class="pill glow" data-en="${c.id}">Edit English</button>`:''}<button class="pill glow" data-reveal="${esc(r.output)}">Show file</button>${r.post?`<button class="pill glow" data-copy>Copy caption</button>`:r.post===null?`<span class="hint" style="margin:0">Writing the caption…</span>`:''}</div>
+        ${r.post?`<details class="post"><summary>${S.style==='youtube'?'Titles, description &amp; chapters':'Caption, hashtags &amp; cover'}</summary><pre dir="rtl" lang="ar">${esc(r.post)}</pre><span class="hint">${S.style==='youtube'?'Saved beside the video, with the thumbnails and the .srt subtitles.':'Saved beside the video, with a cover image (Instagram: Edit cover → Add from camera roll).'}</span></details>`:''}
+        <div class="capedit hidden" id="ce${c.id}"></div>`:r.error?`<div class="wrap"><button class="pill glow" data-rerender="${c.id}">Try again</button></div>`:''}</article>`;
+    el.querySelectorAll('[data-reveal]').forEach(b=>b.onclick=()=>fetch('/api/reveal',{method:'POST',body:JSON.stringify({path:b.dataset.reveal})}));
+    el.querySelectorAll('[data-rerender]').forEach(b=>b.onclick=()=>renderIds([+b.dataset.rerender],false));
+    // another speaker's name on this one video: saved with the clips, then a quick rebuild of just this clip (same cut)
+    el.querySelectorAll('[data-spkgo]').forEach(b=>b.onclick=async()=>{const cc=C.find(x=>x.id===+b.dataset.spkgo);cc.speaker=el.querySelector('[data-spk]').value.trim();
+      await fetch('/api/clips',{method:'POST',body:JSON.stringify({job,clips:{clips:C}})});renderIds([cc.id],true)});
+    // correct the English by hand: each Arabic line with its translation; Save rebuilds just this video (same cut)
+    el.querySelectorAll('[data-en]').forEach(b=>b.onclick=async()=>{const id=+b.dataset.en,box=el.querySelector('.capedit');
+      if(!box.classList.contains('hidden')&&box.dataset.mode==='en'){box.classList.add('hidden');return}
+      const E=await (await fetch(`/api/en?job=${job}&clip=${id}`)).json(),keys=Object.keys(E);box.dataset.mode='en';box.classList.remove('hidden');
+      box.innerHTML=keys.length?`<div class="enrows">${keys.map((k,i)=>`<div class="enrow"><div dir="rtl" lang="ar">${esc(k)}</div><textarea rows="2" data-ek="${i}">${esc(E[k])}</textarea></div>`).join('')}</div>
+        <div class="wrap"><button class="btn" data-ensave>Save &amp; update the video</button></div>`:'<p class="hint">No English yet: render this video with English subtitles on first.</p>';
+      box.querySelector('[data-ensave]')?.addEventListener('click',async()=>{box.querySelectorAll('[data-ek]').forEach(t=>E[keys[+t.dataset.ek]]=t.value.trim());
+        await fetch('/api/en',{method:'POST',body:JSON.stringify({job,clip:id,en:E})});box.classList.add('hidden');renderIds([id],true)})});
+    el.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{await navigator.clipboard.writeText(r.post);b.textContent='Copied ✓';setTimeout(()=>b.textContent='Copy caption',1500)});
+    el.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openCaps(+b.dataset.edit));});
+  const done=Object.values(st).filter(r=>r.output||r.error).length, n=Object.keys(st).length;
+  $('#renderSub').textContent=s.stage==='rendered'?`All done: ${done} of ${n} · saved in your Qitaf folder`:`Rendering ${Math.min(done+1,n)} of ${n} · ${S.style==='youtube'?'about 15 minutes per hour of video':'about 4 minutes per minute of video'}`;
+  // keep watching after the last render while its caption is still being written
+  if(s.stage!=='rendered'||Object.values(st).some(r=>(r.output&&r.post===null)||r.label==='Queued'))pollT=setTimeout(pollRender,2000);
+}
+$('#back3').onclick=()=>{clearTimeout(pollT);showStep(3)};
+async function renderIds(ids,rebuild){await fetch('/api/render',{method:'POST',body:JSON.stringify({job,ids,rebuild})});clearTimeout(pollT);pollRender()}
+// caption editor: fix words or nudge timing, then re-render just this clip (reuses the cut, so it's quicker)
+async function openCaps(id){
+  const box=$('#ce'+id), vid=box.parentElement.querySelector('video');
+  if(!box.classList.contains('hidden')){box.classList.add('hidden');return}
+  const caps=await (await fetch(`/api/caps?job=${job}&id=${id}`)).json();
+  const draw=()=>{box.innerHTML=`<p class="hint" style="margin:0 0 8px">Click a time to jump there in the video. − / + moves a caption 0.1 s.</p><div class="segs">`+caps.map((c,i)=>`<div class="seg-row cap-row">
+      <div class="cap-t"><button class="ts" data-seek="${c.s}">${c.s.toFixed(1)}s</button>
+        <span><button class="nudge sm" data-cn="${i},s,-1" aria-label="Earlier">−</button><button class="nudge sm" data-cn="${i},s,1" aria-label="Later">+</button></span></div>
+      <div class="seg-text" contenteditable="plaintext-only" dir="rtl" lang="ar" data-ci="${i}">${esc(c.t)}</div></div>`).join('')
+    +`</div><div class="go" style="margin-top:12px"><button class="btn" data-save>Save and re-render</button></div>`;
+    box.querySelectorAll('[data-seek]').forEach(b=>b.onclick=()=>{vid.currentTime=+b.dataset.seek;vid.play()});
+    box.querySelectorAll('[data-ci]').forEach(d=>d.oninput=()=>caps[d.dataset.ci].t=d.textContent.trim());
+    box.querySelectorAll('[data-cn]').forEach(b=>b.onclick=()=>{const[i,k,d]=b.dataset.cn.split(','),c=caps[i],dt=.1*d;
+      c.s=Math.max(0,+(c.s+dt).toFixed(2));c.e=+(c.e+dt).toFixed(2);if(c.w)c.w=c.w.map(x=>+(x+dt).toFixed(2));draw()});
+    box.querySelector('[data-save]').onclick=async()=>{await fetch('/api/caps',{method:'POST',body:JSON.stringify({job,id,caps})});box.classList.add('hidden');renderIds([id],true)};
+  };
+  draw(); box.classList.remove('hidden');
+}
+$('#cleanBtn').onclick=async()=>{const {mb}=await (await fetch('/api/size?job='+job)).json();
+  if(!confirm(`Delete about ${mb} MB of working files for this lesson?\n\nYour finished videos stay. Captions can't be edited after this without a full re-render.`))return;
+  const r=await (await fetch('/api/cleanup',{method:'POST',body:JSON.stringify({job})})).json();$('#cleanBtn').textContent=`Freed ${r.freed_mb} MB`;$('#cleanBtn').disabled=true};
+render();
+
+// ---------- library: past lessons, their finished videos, reopen without uploading again ----------
+let libFrom=1;
+$('#libBtn').onclick=()=>{if(restyle)endRestyle();const cur=[1,2,3,4,5,6].find(n=>!$(['main','#step2','#step3','#step4','#stepB','#stepL'][n-1]).classList.contains('hidden'));
+  if(cur===6)return $('#backL').click();libFrom=cur||1;clearTimeout(pollT);$('#audio').pause();showStep(6);drawLib()};
+$('#backL').onclick=()=>showStep(libFrom);
+async function drawLib(){
+  $('#libList').innerHTML='<div class="prog-top"><span>Loading your lessons…</span><span class="pct"><span class="spin"></span></span></div>';
+  let L;try{L=await (await fetch('/api/library')).json()}catch(e){$('#libList').innerHTML=`<div class="empty"><b>Couldn't load the library</b>Is the Qitaf server still running? <button class="pill glow" id="libRetry">Try again</button></div>`;$('#libRetry').onclick=drawLib;return}
+  // the same lesson uploaded more than once is one entry: newest upload opens, sizes add up, cleaning covers them all
+  const G={};L.forEach(r=>{const g=G[r.name]||(G[r.name]={...r,jobs:[],mb:0,picked:false});g.jobs.push(r.job);g.mb+=r.mb;if(r.picked&&!g.picked){g.picked=true;g.job=r.job;g.stage=r.stage}});L=Object.values(G);
+  if(!L.length){$('#libList').innerHTML='<div class="empty"><b>No lessons yet</b>Start one in Set up and it will appear here.</div>';return}
+  const when=t=>new Date(t*1000).toLocaleDateString(undefined,{day:'numeric',month:'short'}),
+    state=r=>r.videos.length?`${r.videos.length} video${r.videos.length==1?'':'s'}`:r.picked?'Clips chosen':r.stage==='error'?'Stopped with an error':'Not finished';
+  $('#libList').innerHTML=L.map((r,i)=>`<article class="lesson" data-i="${i}">
+    <div class="lesson-h"><span dir="auto" class="lesson-n">${esc(r.name)}</span><span class="lesson-m">${when(r.time)} · ${state(r)}${r.jobs.length>1?` · uploaded ${r.jobs.length}×`:''}${r.mb>20?` · ${r.mb} MB`:''}</span></div>
+    ${r.videos.length?`<div class="lesson-v">${r.videos.map(v=>`<div class="lv"><button class="lv-x" data-del="${esc(v)}" aria-label="Move this video to the Recycle Bin" title="Move to Recycle Bin">×</button><video controls playsinline preload="metadata" src="/api/video?path=${encodeURIComponent(v)}#t=1"></video><span dir="auto">${esc(v.split('/').pop().replace(/\.mp4$/,''))}</span></div>`).join('')}</div>`:''}
+    <div class="wrap">${r.videos.length&&r.picked?`<button class="pill glow" data-videos>Open videos</button><button class="pill glow" data-restyle>Change style</button>`:''}${r.picked?`<button class="pill glow" data-open>Open clips</button>`:''}${r.videos.length?`<button class="pill glow" data-reveal="${esc(r.videos[0])}">Show file</button>`:''}<button class="pill glow" data-clean>Delete working files</button><button class="pill glow danger" data-remove>Remove lesson</button></div></article>`).join('');
+  $$('.lesson').forEach(el=>{const r=L[el.dataset.i];
+    el.querySelector('[data-open]')?.addEventListener('click',()=>openJob(r.job));
+    // straight to the finished videos: edit one video's captions or re-render it, without redoing the others
+    el.querySelector('[data-videos]')?.addEventListener('click',async()=>{await openJob(r.job);showStep(4);$('#renders').innerHTML='';pollRender()});
+    el.querySelector('[data-restyle]')?.addEventListener('click',async()=>{await openJob(r.job);restyle=C.filter(c=>c.keep).length;document.body.classList.add('restyling');$('#restyleCancel').classList.remove('hidden');showStep(1);render();scrollTo(0,0)});
+    el.querySelector('[data-reveal]')?.addEventListener('click',e=>fetch('/api/reveal',{method:'POST',body:JSON.stringify({path:e.target.dataset.reveal})}));
+    el.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(!confirm('Move this video to the Recycle Bin?'))return;
+      await fetch('/api/trash',{method:'POST',body:JSON.stringify({videos:[b.dataset.del]})});drawLib()});
+    el.querySelector('[data-remove]').onclick=async()=>{if(!confirm(`Move “${r.name}” to the Recycle Bin? Its upload, transcript and clip choices go with it.`))return;
+      const vids=r.videos.length&&confirm(`Also move its ${r.videos.length} finished video${r.videos.length==1?'':'s'} to the Recycle Bin?\n\nOK = remove them too · Cancel = keep them`)?r.videos:[];
+      await fetch('/api/trash',{method:'POST',body:JSON.stringify({jobs:r.jobs,videos:vids})});drawLib()};
+    el.querySelector('[data-clean]')?.addEventListener('click',async e=>{e.target.disabled=true;let mb=0;for(const j of r.jobs)mb+=(await (await fetch('/api/cleanup',{method:'POST',body:JSON.stringify({job:j})})).json()).freed_mb;e.target.textContent=`Freed ${mb} MB`})});
+}
+async function openJob(j){job=j;
+  const st=await (await fetch('/api/settings?job='+j)).json();S={...DEFAULTS,...st};drawRows();render();
+  T=await (await fetch('/api/transcript?job='+j)).json();dur=T.segments.at(-1)?.end||0;
+  if(S.source!=='text')$('#audio').src='/api/audio?job='+j;
+  if(S.source==='video')$('#pv').src='/api/source?job='+j;
+  C=(await (await fetch('/api/clips?job='+j)).json()).clips;qFound=await (await fetch('/api/quran?job='+j)).json();wordsDirty=false;
+  showStep(3);$('#pickWait').classList.add('hidden');drawClips()}
+</script>
+</body>
+</html>

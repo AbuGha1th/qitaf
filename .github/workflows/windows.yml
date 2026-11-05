@@ -1,0 +1,30 @@
+name: Windows install test
+# run by hand from the Actions tab: each Windows run uses free-tier minutes
+on:
+  workflow_dispatch:
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - name: ffmpeg and Claude Code command
+        run: |
+          choco install ffmpeg -y --no-progress
+          npm install -g @anthropic-ai/claude-code
+      - name: Run the real installer
+        shell: powershell
+        run: powershell -ExecutionPolicy Bypass -File setup.ps1
+      - name: End-to-end test
+        shell: powershell
+        env: { QITAF_WHISPER: small, PYTHONIOENCODING: utf-8 }
+        run: |
+          .venv\Scripts\python.exe -X utf8 test_plat.py
+          .venv\Scripts\python.exe -X utf8 test_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: shots, path: smoke-shots, if-no-files-found: ignore }

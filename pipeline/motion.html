@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ar"><head><meta charset="utf-8"><title>Qitaf motion</title>
+<script src="assets/gsap.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Marhey:wght@700&family=Rakkas&family=Cairo:wght@700;900&family=Reem+Kufi:wght@700&family=Amiri:wght@700&family=Aref+Ruqaa:wght@700&family=El+Messiri:wght@700&display=block" rel="stylesheet">
+<style>
+@font-face{font-family:'Thmanyah Sans';src:url(assets/fonts/thmanyahsans-Medium.woff2) format('woff2');font-weight:400 600}
+@font-face{font-family:'Thmanyah Sans';src:url(assets/fonts/thmanyahsans-Black.woff2) format('woff2');font-weight:700 900}
+@font-face{font-family:'Thmanyah Serif';src:url(assets/fonts/thmanyahserifdisplay-Bold.woff2) format('woff2')}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden}
+#m{position:relative;width:1080px;height:1920px;overflow:hidden;background:#EDE6DC;font-family:'Thmanyah Sans',sans-serif;direction:rtl}
+#bg{position:absolute;inset:0;background:#EDE6DC}
+.txt{position:absolute;left:140px;right:140px;text-align:center;z-index:5}
+#num{font:500 38px 'Thmanyah Sans';letter-spacing:4px;opacity:.75}
+.head{font:700 96px/1.2 'Thmanyah Sans';opacity:0;white-space:nowrap}
+.head b{font-weight:700;color:var(--acc)}
+.sub{font:500 46px/1.45 'Thmanyah Sans';opacity:0}
+#stage{position:absolute;left:140px;top:620px;width:800px;height:640px;z-index:4}
+.prop{position:absolute;inset:0;opacity:0}
+.prop svg{width:100%;height:100%;overflow:visible}
+#tracker{position:absolute;left:440px;top:1290px;width:200px;height:170px;z-index:4;opacity:0}
+#name,#brand{position:absolute;left:140px;right:140px;text-align:center;z-index:6}
+#name{font:600 40px 'Thmanyah Sans'}#brand{font:600 32px 'Thmanyah Sans';opacity:.8}
+.list{display:flex;flex-direction:column;gap:26px;align-items:flex-start;justify-content:center;height:100%;padding:0 60px}
+.li{display:flex;gap:22px;align-items:center;font:600 54px 'Thmanyah Sans';opacity:0}
+.li i{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font:700 32px 'Thmanyah Sans';font-style:normal}
+.word{display:grid;place-items:center;height:100%;font:900 150px/1.15 'Thmanyah Sans';text-align:center}
+.ayah{display:grid;place-items:center;height:100%;font:700 64px/1.9 'Thmanyah Serif',serif;text-align:center;padding:0 20px}
+#outro{position:absolute;inset:0;z-index:30;background:#1E4D3A;opacity:0;display:grid;place-items:center}
+#oc{width:640px;height:640px;border-radius:50%;background:#EDE6DC;border:10px solid #C9A45C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#1E4D3A;text-align:center}
+#oc .a{font:500 52px 'Thmanyah Sans'}#oc .b{font:900 104px/1.1 'Thmanyah Sans'}#oc .h{margin-top:22px;font:600 36px 'Thmanyah Sans';color:#C9A45C;direction:ltr}
+/* ---- premium polish ---- */
+#wipe{position:absolute;inset:0;z-index:1;clip-path:circle(0% at 50% 42%)}
+#bg{z-index:0}
+#grain{position:absolute;inset:-50%;z-index:25;pointer-events:none;opacity:.09;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.2 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")}
+#vig{position:absolute;inset:0;z-index:24;pointer-events:none;background:radial-gradient(ellipse 85% 70% at 50% 45%,transparent 55%,rgba(0,0,0,.22) 100%)}
+.prop svg{filter:drop-shadow(0 22px 26px rgba(0,0,0,.16)) drop-shadow(0 4px 6px rgba(0,0,0,.10))}
+.word{text-shadow:0 18px 40px rgba(0,0,0,.18)}
+.head b{position:relative;display:inline-block}
+.head b svg{position:absolute;left:-4%;right:-4%;width:108%;bottom:-.18em;height:.32em;overflow:visible}
+#motes{position:absolute;inset:0;z-index:2;pointer-events:none}
+#motes i,.spark{position:absolute;border-radius:50%}
+.spark{z-index:6;width:12px;height:12px;opacity:0}
+/* ---- look: gold line-art (example 2) — black ground, everything drawn in thin gold lines ---- */
+.look-lineart .prop svg *{fill:none!important;stroke:var(--line)!important;stroke-width:2.6px!important}
+.lo{display:none}.look-lineart .lo{display:inline;stroke-width:4px!important}
+.look-lineart .prop svg text{fill:var(--line)!important;stroke:none!important}
+.look-lineart .prop svg{filter:drop-shadow(0 0 10px var(--glow))}
+.look-lineart .word,.look-lineart .li{text-shadow:0 0 22px var(--glow)}
+.look-lineart #grain{mix-blend-mode:screen;opacity:.05}
+.look-lineart .head{font-weight:600}
+.look-lineart .rule{position:absolute;left:470px;width:140px;height:2px;z-index:5;background:var(--line);opacity:.6;transform-origin:50% 50%}
+/* ---- look: dark grid (example 3) — fine grid, framed cards, corner brackets, small numbered tags ---- */
+#gridbg{position:absolute;inset:-200px;z-index:1;pointer-events:none;display:none;
+  background-image:linear-gradient(var(--gl) 1px,transparent 1px),linear-gradient(90deg,var(--gl) 1px,transparent 1px);background-size:54px 54px}
+.look-grid #gridbg{display:block}
+#card{position:absolute;z-index:3;display:none;border:1.5px dashed var(--cardline);border-radius:22px;background:var(--cardbg)}
+.look-grid #card{display:block}
+#card .tag{position:absolute;top:22px;right:28px;font:600 28px 'Thmanyah Sans';letter-spacing:3px;color:var(--acc);direction:rtl}
+.corner{position:absolute;width:46px;height:46px;z-index:5;display:none;border-color:var(--cardline);border-style:solid;border-width:0}
+.look-grid .corner{display:block}
+.look-grid .prop svg{filter:drop-shadow(0 0 14px var(--glow))}
+</style></head>
+<body>
+<div id="m" data-composition-id="qitaf" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920">
+<audio id="voice" src="assets/voice.wav" data-start="0" data-duration="__D__" data-track-index="1" data-volume="1"></audio>
+<div id="bg"></div><div id="gridbg"></div><div id="wipe"></div><div id="motes"></div><div id="vig"></div><div id="grain"></div>
+<div id="heads"></div>
+<div id="card"><div class="tag" id="cardTag"></div></div><div id="stage"></div><i class="corner" id="c1"></i><i class="corner" id="c2"></i><i class="corner" id="c3"></i><i class="corner" id="c4"></i>
+<div id="tracker"></div>
+<div id="name"></div><div id="brand">نهج الأثر</div>
+<div id="outro"><div id="oc"><div class="a">قناة</div><div class="b">نهج الأثر</div><div class="a">الدعوية</div><div class="h">@nahj_al.athar</div><div class="a" style="font-size:34px">تابعونا على إنستغرام</div></div></div>
+<div id="sfx">__SFX__</div>
+</div>
+<script>
+const {S,R,D,TOTAL,PLAN}=__DATA__;
+const QA=s=>document.querySelectorAll(s), $=s=>document.querySelector(s), esc=t=>String(t??'').replace(/[<&]/g,c=>c=='<'?'&lt;':'&amp;');
+const H=1920, NS='http://www.w3.org/2000/svg';
+// minimal look (example 4): three flat grounds; ink / accent per ground
+// grounds from the chosen palette (rules.json motionPalettes); planner uses the slot names cream / green / black
+// custom palette: four chosen colours; text dark on light grounds, light on dark ones (same rule as the site preview)
+function customPalette(){const lum=h=>{const[r,g,b]=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);return .2126*r+.7152*g+.0722*b};
+  const ground=bg=>({bg,ink:lum(bg)>.5?'#161613':'#F3ECE4',acc:lum(bg)>.5?S.palMid:S.palAcc,gold:S.palAcc,soft:lum(bg)>.5?'#BDB5A8':'#55524B'});
+  return {cream:ground(S.palLight||'#EDE6DC'),green:ground(S.palMid||'#1E4D3A'),black:ground(S.palDark||'#161613')};}
+let BG=S.motionPalette==='custom'?customPalette():(R.motionPalettes[S.motionPalette||'classic']||R.motionPalettes.classic);
+const LOOK=S.motionLook||'minimal';
+if(LOOK!=='minimal'){const P0=BG.black;  // the palette's dark slot gives the accent; grounds stay dark in these looks
+  const tone=LOOK==='lineart'?['#0B0B0A','#0F0E0C','#070706']:['#1B0F13','#170C10','#21131A'];
+  const mk=bg=>({bg,ink:'#EFE7D6',acc:P0.gold,gold:P0.gold,soft:LOOK==='lineart'?'#2E2B24':'#5A3A42'});
+  BG={cream:mk(tone[0]),green:mk(tone[1]),black:mk(tone[2])};}
+document.getElementById('m').classList.add('look-'+LOOK);
+const LC=BG.cream; document.getElementById('m').style.cssText+=`;--line:${LC.gold};--glow:${LC.gold}55;--gl:rgba(239,231,214,.055);--cardline:rgba(239,231,214,.22);--cardbg:rgba(255,255,255,.025);--acc:${LC.gold}`;
+const HFONT=S.motionFont||'Thmanyah Sans', HSIZE={s:.8,m:1,l:1.2}[S.motionSize||'m'];
+const tl=gsap.timeline({paused:true});
+let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;  // seeded: every render is identical
+// ground change: a soft circular wipe from the visual's centre, then the base takes the new colour
+function wipeTo(col,t){tl.set('#wipe',{backgroundColor:col,clipPath:'circle(0% at 50% 42%)'},t);
+  tl.to('#wipe',{clipPath:'circle(150% at 50% 42%)',duration:.7,ease:'power3.inOut'},t);
+  tl.set('#bg',{backgroundColor:col},t+.7);tl.set('#wipe',{clipPath:'circle(0% at 50% 42%)'},t+.71);}
+// sparks bursting from the visual when it changes (step), in the ground's gold
+function burst(t,col,n=10){for(let k=0;k<n;k++){const id='sp'+Math.round(t*1000)+'_'+k;
+  $('#stage').insertAdjacentHTML('beforeend',`<i class="spark" id="${id}" style="left:${400-6}px;top:${300-6}px;background:${col}"></i>`);
+  const a=rnd()*Math.PI*2,r=140+rnd()*170;
+  tl.fromTo('#'+id,{opacity:0,x:0,y:0,scale:.4},{opacity:.95,x:Math.cos(a)*r*.35,y:Math.sin(a)*r*.35,scale:1,duration:.18,ease:'power2.out'},t);
+  tl.to('#'+id,{opacity:0,x:Math.cos(a)*r,y:Math.sin(a)*r+40,scale:.3,duration:.75,ease:'power2.out'},t+.18);}}
+// floating dust motes across the whole video (slow drift up, gently swaying)
+for(let k=0;k<22;k++){const id='mt'+k,sz=4+rnd()*8;
+  $('#motes').insertAdjacentHTML('beforeend',`<i id="${id}" style="left:${rnd()*1080}px;top:${300+rnd()*1500}px;width:${sz}px;height:${sz}px;opacity:${.12+rnd()*.22}"></i>`);
+  tl.to('#'+id,{y:-(260+rnd()*380),x:(rnd()-.5)*120,duration:D+4,ease:'none'},0);}
+
+const scenes=PLAN.scenes;
+scenes.forEach((s,i)=>s.end=i+1<scenes.length?scenes[i+1].t:D);
+
+// ---------- layout from rules.json: num + head + sub at the top of the safe zone, visual in the middle ----------
+const safeTop=R.safe.top*H;
+const headY=safeTop+70;
+
+// ---------- props: each builds an SVG (viewBox 800x640) and exposes steps it can play at spoken times ----------
+const P={};
+const svg=(inner)=>`<svg viewBox="0 0 800 640">${inner}</svg>`;
+const dr=(sel,t,d=.9)=>tl.fromTo(sel,{strokeDashoffset:1},{strokeDashoffset:0,duration:d,ease:'power2.inOut'},t);
+const pop=(sel,t,o={})=>tl.fromTo(sel,{opacity:0,scale:.6,transformOrigin:'50% 50%',...o},{opacity:1,scale:1,y:0,x:0,duration:.45,ease:'back.out(1.8)'},t);
+function pathStyle(c,w=10){return `fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" class="dr"`}
+
+// heart that loses layers (one per point)
+P.heart={build(p,c,id,small){const n=p.layers||5,y0=150,y1=560,h=(y1-y0)/n;
+  let bands='';for(let k=0;k<n;k++)bands+=`<rect id="${id}b${k}" x="120" y="${y0+k*h+3}" width="560" height="${h-6}" fill="${k%2?c.ink:c.soft}"/>`;
+  return svg(`<defs><clipPath id="${id}c"><path d="M400 560 L178 330 A118 118 0 0 1 400 190 A118 118 0 0 1 622 330 Z"/></clipPath></defs><g clip-path="url(#${id}c)">${bands}</g><path class="lo" d="M400 560 L178 330 A118 118 0 0 1 400 190 A118 118 0 0 1 622 330 Z"/>`);},
+  enter(id,t){pop(`#${id}`,t,{y:30})},
+  step(id,a,t){const k=a.layer??0;tl.to(`#${id}b${k}`,{x:k%2?-90:90,rotation:k%2?-6:6,opacity:0,duration:.6,ease:'power2.in',transformOrigin:'50% 50%'},t)}};
+
+// seed → stem → spikes → grains (growth / reward multiplied)
+P.plant={build(p,c,id){const n=p.spikes||7;let sp='',gr='';
+  for(let k=0;k<n;k++){const a=(-60+120*k/(n-1))*Math.PI/180,x=400+Math.sin(a)*300,y=470-Math.cos(a)*330;
+    sp+=`<path id="${id}s${k}" d="M400 520 Q${400+Math.sin(a)*120} ${380} ${x} ${y}" ${pathStyle(c.acc,5)}/><ellipse id="${id}h${k}" cx="${x}" cy="${y}" rx="16" ry="42" transform="rotate(${a*180/Math.PI} ${x} ${y})" fill="${c.gold}"/>`;
+    for(let g=0;g<6;g++)gr+=`<circle class="${id}g" cx="${x+Math.cos(g)*44}" cy="${y+Math.sin(g*1.7)*44}" r="9" fill="${c.gold}" opacity="0"/>`;}
+  return svg(`<ellipse id="${id}seed" cx="400" cy="560" rx="38" ry="56" fill="none" stroke="${c.ink}" stroke-width="6"/><path id="${id}stem" d="M400 560 L400 520" ${pathStyle(c.acc,7)}/>${sp}${gr}`);},
+  enter(id,t){pop(`#${id}`,t)},
+  step(id,a,t){const n=QA("#"+id+" [id^=\""+id+"s\"]").length;
+    if(a.do==='sprout')dr(`#${id}stem`,t,.6);
+    if(a.do==='spikes')for(let k=0;k<n;k++){dr(`#${id}s${k}`,t+k*.12,.7);pop(`#${id}h${k}`,t+.5+k*.12)}
+    if(a.do==='grains')tl.to(`.${id}g`,{opacity:1,duration:.4,stagger:.02},t)}};
+
+// scales: two labelled pans that tip
+P.scale={build(p,c,id){return svg(`<path d="M400 140 L400 560 M300 560 L500 560" fill="none" stroke="${c.ink}" stroke-width="10" stroke-linecap="round"/>
+  <g id="${id}beam"><path d="M150 180 L650 180" stroke="${c.ink}" stroke-width="10" stroke-linecap="round"/>
+  <g id="${id}pa"><path d="M150 180 L100 330 M150 180 L200 330 M80 330 Q150 380 220 330 Z" stroke="${c.ink}" stroke-width="6" fill="${c.soft}"/></g>
+  <g id="${id}pb"><path d="M650 180 L600 330 M650 180 L700 330 M580 330 Q650 380 720 330 Z" stroke="${c.ink}" stroke-width="6" fill="${c.soft}"/></g></g>
+  <circle cx="400" cy="180" r="18" fill="${c.gold}"/>
+  <text x="650" y="430" text-anchor="middle" font-size="46" font-weight="700" fill="${c.acc}" id="${id}la">${esc(p.a)}</text>
+  <text x="150" y="430" text-anchor="middle" font-size="46" font-weight="700" fill="${c.ink}" id="${id}lb">${esc(p.b)}</text>`);},
+  enter(id,t){pop(`#${id}`,t);tl.from(`#${id}la,#${id}lb`,{opacity:0,y:20,duration:.4},t+.4)},
+  step(id,a,t){const r={a:8,b:-8,level:0}[a.tilt||'level'];tl.to(`#${id}beam`,{rotation:r,svgOrigin:'400 180',duration:.8,ease:'back.out(1.4)'},t);
+    tl.to(`#${id}pa`,{rotation:-r,svgOrigin:'150 180',duration:.8,ease:'back.out(1.4)'},t);tl.to(`#${id}pb`,{rotation:-r,svgOrigin:'650 180',duration:.8,ease:'back.out(1.4)'},t)}};
+
+// a heart tied to many things (attachment); links can be cut
+P.links={build(p,c,id){const n=(p.items||[]).length||4;let s='';
+  for(let k=0;k<n;k++){const x=160+480*k/(n-1),y=140+(k%2)*50;
+    s+=`<path id="${id}l${k}" d="M400 470 L${x} ${y+30}" ${pathStyle(c.ink,4)}/><g id="${id}n${k}"><rect x="${x-34}" y="${y-34}" width="68" height="68" rx="${k%2?34:10}" fill="${c.ink}"/>`+
+       (p.items?.[k]?`<text x="${x}" y="${y-56}" text-anchor="middle" font-size="34" font-weight="600" fill="${c.ink}">${esc(p.items[k])}</text>`:'')+`</g>`;}
+  return svg(s+`<path id="${id}h" d="M400 560 L330 486 A42 42 0 0 1 400 440 A42 42 0 0 1 470 486 Z" fill="${c.gold}"/>`);},
+  enter(id,t){pop(`#${id}h`,t);QA("#"+id+" [id^=\""+id+"l\"]").forEach((e,k)=>{dr(e,t+.3+k*.15,.5);pop(`#${id}n${k}`,t+.5+k*.15)});tl.set(`#${id}`,{opacity:1},t)},
+  step(id,a,t){if(a.do==='cut')tl.to(`#${id} [id^="${id}l"]`,{opacity:0,y:40,duration:.5,stagger:.08},t)}};
+
+// faceless sitting figure (example 4) with thought bubbles; no face ever
+P.figure={build(p,c,id){return svg(`<circle id="${id}sun" cx="400" cy="330" r="190" fill="${c.gold}" opacity=".35"/>
+  <path d="M120 560 L680 560" stroke="${c.ink}" stroke-width="6"/>
+  <circle cx="330" cy="290" r="46" fill="${c.ink}"/>
+  <path d="M330 340 Q300 430 340 548 L520 548 Q540 500 470 470 L400 470 Q440 420 430 360 Q400 420 360 410" fill="${c.ink}"/>
+  <circle class="${id}bb" cx="430" cy="210" r="18" fill="none" stroke="${c.acc}" stroke-width="6"/><circle class="${id}bb" cx="480" cy="150" r="28" fill="none" stroke="${c.acc}" stroke-width="6"/><circle class="${id}bb" cx="560" cy="90" r="40" fill="none" stroke="${c.acc}" stroke-width="6"/>`);},
+  enter(id,t){pop(`#${id}`,t,{y:30});tl.set(`.${id}bb`,{opacity:0},t)},
+  step(id,a,t){if(a.do==='think')tl.fromTo(`.${id}bb`,{opacity:0,scale:.3,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:.4,stagger:.25,ease:'back.out(2)'},t);
+    if(a.do==='glow')tl.fromTo(`#${id}sun`,{attr:{r:0}},{attr:{r:230},duration:1,ease:'power2.out'},t)}};
+
+// a person in the middle; faceless dots gather around (in public) or leave (in private)
+P.crowd={build(p,c,id){let d='';for(let k=0;k<14;k++){const a=k/14*Math.PI*2,r=230+(k%3)*40;
+    d+=`<g class="${id}d"><circle cx="${400+Math.cos(a)*r}" cy="${330+Math.sin(a)*r*.62}" r="22" fill="${c.soft}"/><path d="M${400+Math.cos(a)*r-26} ${330+Math.sin(a)*r*.62+58} Q${400+Math.cos(a)*r} ${330+Math.sin(a)*r*.62+20} ${400+Math.cos(a)*r+26} ${330+Math.sin(a)*r*.62+58}" fill="${c.soft}"/></g>`}
+  return svg(`${d}<g id="${id}me"><circle cx="400" cy="300" r="40" fill="${c.ink}"/><path d="M340 420 Q400 330 460 420 Z" fill="${c.ink}"/></g><circle id="${id}glow" cx="400" cy="340" r="0" fill="${c.gold}" opacity=".3"/>`);},
+  enter(id,t){pop(`#${id}me`,t);tl.set(`#${id}`,{opacity:1},t);tl.set(`.${id}d`,{opacity:0},t)},
+  step(id,a,t){if(a.do==='gather')tl.fromTo(`.${id}d`,{opacity:0,scale:.3,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:.35,stagger:.05,ease:'back.out(2)'},t);
+    if(a.do==='leave')tl.to(`.${id}d`,{opacity:0,y:-40,duration:.4,stagger:.04},t);
+    if(a.do==='shrink')tl.to(`#${id}me`,{scale:.7,svgOrigin:'400 420',duration:.5,ease:'power2.inOut'},t);
+    if(a.do==='glow')tl.to(`#${id}glow`,{attr:{r:150},duration:.8,ease:'power2.out'},t)}};
+
+// clock (time wasted / sleep / waiting)
+P.clock={build(p,c,id){let ticks='';for(let k=0;k<12;k++){const a=k*Math.PI/6;ticks+=`<path d="M${400+Math.sin(a)*190} ${320-Math.cos(a)*190} L${400+Math.sin(a)*170} ${320-Math.cos(a)*170}" stroke="${c.ink}" stroke-width="7"/>`}
+  return svg(`<circle cx="400" cy="320" r="225" fill="none" stroke="${c.ink}" stroke-width="14"/>${ticks}
+  <path id="${id}hh" d="M400 320 L470 360" stroke="${c.acc}" stroke-width="12" stroke-linecap="round"/><path id="${id}mh" d="M400 320 L420 150" stroke="${c.acc}" stroke-width="8" stroke-linecap="round"/><circle cx="400" cy="320" r="16" fill="${c.acc}"/>`);},
+  enter(id,t,s){pop(`#${id}`,t);tl.to(`#${id}mh`,{rotation:360*2,svgOrigin:'400 320',duration:s.end-t,ease:'none'},t);tl.to(`#${id}hh`,{rotation:60,svgOrigin:'400 320',duration:s.end-t,ease:'none'},t)},
+  step(id,a,t){tl.to(`#${id}mh`,{rotation:'+=720',svgOrigin:'400 320',duration:1.2,ease:'power2.inOut'},t)}};
+
+// number counter (e.g. 1 → 700)
+P.counter={build(p,c,id){return `<div class="word" style="color:${c.acc}"><span id="${id}v">${p.from??0}</span>${p.suffix?`<span style="font-size:70px;color:${c.ink}">${esc(p.suffix)}</span>`:''}</div>`},
+  enter(id,t){pop(`#${id}`,t)},
+  step(id,a,t){const o={v:+$(`#${id}v`).textContent||0};tl.to(o,{v:a.to,duration:1.3,ease:'power2.out',onUpdate(){$(`#${id}v`).textContent=Math.round(o.v).toLocaleString('ar-EG')}},t)}};
+
+// checklist: items appear and tick as they are said
+P.list={build(p,c,id){return `<div class="list">${(p.items||[]).map((x,k)=>`<div class="li" id="${id}i${k}" style="color:${c.ink}"><i style="background:${c.gold};color:${c.bg}">${(k+1).toLocaleString('ar-EG')}</i>${esc(x)}</div>`).join('')}</div>`},
+  enter(id,t){tl.set(`#${id}`,{opacity:1},t)},
+  step(id,a,t){tl.fromTo(`#${id}i${a.item}`,{opacity:0,x:-40},{opacity:1,x:0,duration:.4,ease:'power3.out'},t)}};
+
+// one big kinetic word
+P.word={build(p,c,id){return `<div class="word" style="color:${p.accent?c.acc:c.ink}">${esc(p.text)}</div>`},
+  enter(id,t){tl.fromTo(`#${id}`,{opacity:0,scale:1.4},{opacity:1,scale:1,duration:.5,ease:'power3.out'},t);tl.to(`#${id}`,{x:6,duration:.05,yoyo:true,repeat:5},t+.5)},step(){}};
+
+// ayah card, lit word by word
+P.ayah={build(p,c,id){return `<div class="ayah" style="color:${c.ink}"><div>﴿${(p.text||'').split(' ').map((w,k)=>`<span id="${id}w${k}" style="opacity:.2">${esc(w)}</span>`).join(' ')}﴾${p.ref?`<div style="font:500 34px 'Thmanyah Sans';color:${c.acc};margin-top:20px">${esc(p.ref)}</div>`:''}</div></div>`},
+  enter(id,t,s){tl.set(`#${id}`,{opacity:1},t);const n=(s.prop.text||'').split(' ').length,span=Math.max(.2,(s.end-t-.5)/n);for(let k=0;k<n;k++)tl.to(`#${id}w${k}`,{opacity:1,duration:.25},t+.2+k*span)},step(){}};
+
+// ---------- scenes ----------
+let prevBg=null,prevProp=null;
+$('#bg').style.backgroundColor=(BG[scenes[0].bg]||BG.cream).bg;
+scenes.forEach((s,i)=>{
+  const c=BG[s.bg]||BG.cream, t=s.t;
+  if(s.bg!==prevBg){if(prevBg===null)tl.set('#bg',{backgroundColor:c.bg},0);else wipeTo(c.bg,Math.max(0,t-.35));
+    tl.to('#motes i',{backgroundColor:c.gold,duration:.5},Math.max(0,t-.2));
+    tl.to('#name,#brand',{color:c.ink,duration:.3},Math.max(0,t-.2));prevBg=s.bg;}
+  if(s.num){$('#heads').insertAdjacentHTML('beforeend',`<div class="txt" id="n${i}" style="top:${safeTop}px;font:500 38px 'Thmanyah Sans';letter-spacing:4px;opacity:0;color:${c.ink}">${esc(s.num)}</div>`);
+    tl.to('#n'+i,{opacity:.75,duration:.3},t);if(i+1<scenes.length)tl.to('#n'+i,{opacity:0,duration:.2},s.end-.2);}
+  // heading + sub in the top of the safe zone
+  const hid='h'+i;
+  $('#heads').insertAdjacentHTML('beforeend',`<div class="txt head" id="${hid}" style="top:${headY}px;color:${c.ink};--acc:${c.acc}">${esc(s.head||'').replace(/\*(.+?)\*/g,'<b>$1</b>')}</div>`+
+    (s.sub?`<div class="txt sub" id="${hid}s" style="top:${headY+150}px;color:${c.ink}">${esc(s.sub)}</div>`:''));
+  // one line only: shrink the heading until it fits, then put the sub just under it
+  // size by length (fonts may not be loaded yet when this runs): ~800px of line, Arabic glyph ≈ 0.52em
+  const he=$('#'+hid),len=(s.head||'').replace(/\*/g,'').length,fs=Math.max(52,Math.min(96*HSIZE,Math.floor(800/(len*.52))));he.style.fontSize=fs+'px';he.style.fontFamily=`'${HFONT}',sans-serif`;
+  if(s.sub)$('#'+hid+'s').style.top=(headY+he.offsetHeight+18)+'px';
+  const ht=s.head_t??t+.1;
+  if(s.head){tl.fromTo('#'+hid,{opacity:1,y:14,clipPath:'inset(-20% 0% -20% 100%)'},{y:0,clipPath:'inset(-20% 0% -20% 0%)',duration:.8,ease:'power2.out'},ht);
+    const acc=he.querySelector('b');if(acc){acc.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M98 6 C70 2 35 9 2 5" fill="none" stroke="${c.gold}" stroke-width="3" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" vector-effect="non-scaling-stroke"/></svg>`);
+      tl.to(acc.querySelector('path'),{strokeDashoffset:0,duration:.5,ease:'power2.inOut'},ht+.7);}}
+  if(s.sub)tl.fromTo('#'+hid+'s',{opacity:0,y:16,filter:'blur(8px)'},{opacity:.92,y:0,filter:'blur(0px)',duration:.6,ease:'power2.out'},s.sub_t??t+.6);
+  if(i+1<scenes.length){tl.to('#'+hid,{opacity:0,y:-20,duration:.25},s.end-.25);if(s.sub)tl.to('#'+hid+'s',{opacity:0,duration:.2},s.end-.25);}
+  // the visual: a new prop, or keep growing the previous one
+  if(s.prop&&!s.prop.same){
+    const id='p'+i,def=P[s.prop.type]||P.word;
+    $('#stage').insertAdjacentHTML('beforeend',`<div class="prop" id="${id}">${def.build(s.prop,c,id)}</div>`);
+    if(prevProp)tl.to('#'+prevProp.id,{opacity:0,scale:.9,duration:.3},t-.05);
+    tl.set('#'+id,{opacity:1},t);def.enter(id,t+.1,s);prevProp={id,def};
+    if(LOOK==='lineart'){  // everything draws itself in, line by line
+      const shapes=[...QA('#'+id+' svg path, #'+id+' svg circle, #'+id+' svg ellipse, #'+id+' svg rect')];
+      shapes.forEach(e=>e.setAttribute('pathLength','1'));
+      if(shapes.length)tl.fromTo(shapes,{strokeDasharray:1,strokeDashoffset:1},{strokeDashoffset:0,duration:1.3,stagger:Math.min(.06,1.2/shapes.length),ease:'power2.inOut'},t+.1);}
+  }
+  if(LOOK==='grid'){  // the camera glides across the grid; the card re-frames; a numbered tag names the point
+    tl.to('#gridbg',{x:-((i*2)%5)*54,y:-((i*3)%4)*54,duration:.9,ease:'power2.inOut'},Math.max(0,t-.3));
+    if(i)tl.fromTo('#card',{scale:.965,opacity:.5},{scale:1,opacity:1,duration:.55,ease:'power3.out'},t);
+    const tg=String(i+1).padStart(2,'0').replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d])+(s.num?'':'')+'  ·  '+esc((s.head||'').replace(/\*/g,'').split(' ').slice(0,2).join(' '));
+    $('#card').insertAdjacentHTML('beforeend',`<div class="tag" id="tg${i}" style="opacity:0">${tg}</div>`);
+    tl.to('#tg'+i,{opacity:1,duration:.3},t+.2);if(i+1<scenes.length)tl.to('#tg'+i,{opacity:0,duration:.2},s.end-.2);
+  }
+  if(LOOK==='lineart'&&s.sub){  // a short gold rule above the second line (example 2)
+    $('#heads').insertAdjacentHTML('beforeend',`<i class="rule" id="r${i}" style="top:${parseFloat($('#'+hid+'s').style.top)-26}px"></i>`);
+    tl.fromTo('#r'+i,{scaleX:0},{scaleX:1,duration:.5,ease:'power2.out'},(s.sub_t??t+.6)-.15);if(i+1<scenes.length)tl.to('#r'+i,{opacity:0,duration:.2},s.end-.25);}
+  tl.fromTo('#stage',{scale:1,y:0},{scale:1.045,y:-14,duration:Math.max(.5,s.end-t),ease:'sine.inOut'},t);
+  (s.steps||[]).forEach(st=>{if(prevProp){prevProp.def.step(prevProp.id,st,st.t);burst(st.t,c.gold,8)}});
+  // tracker (persistent small visual, e.g. the heart losing a layer per point)
+  if(s.track!=null&&PLAN.tracker)P[PLAN.tracker.type].step('tk',{layer:s.track,...(PLAN.tracker.stepArgs||{})},s.track_t??t+.6);
+});
+if(prevProp)tl.to('#'+prevProp.id,{opacity:0,duration:.3},D-.3);
+
+// tracker build (same ground colours as the first scene; it sits under the visual)
+if(PLAN.tracker){const c=BG[scenes[0].bg]||BG.cream;$('#tracker').innerHTML=`<div class="prop" id="tk" style="opacity:1">${P[PLAN.tracker.type].build(PLAN.tracker,c,'tk',true)}</div>`;
+  tl.fromTo('#tracker',{opacity:0},{opacity:1,duration:.4},PLAN.tracker.t??scenes[Math.min(1,scenes.length-1)].t);tl.to('#tracker',{opacity:0,duration:.3},D-.3);}
+
+// grid look: dashed card around the visual and corner brackets at the safe zone
+if(LOOK==='grid'){const cd=$('#card');Object.assign(cd.style,{left:'110px',top:'585px',width:'860px',height:'720px'});
+  const T0=safeTop-10,B0=R.safe.bottom*H-36,L0=R.safe.left*1080-20,R0=R.safe.right*1080-26;
+  [['c1',L0,T0,'2px 0 0 2px'],['c2',R0,T0,'2px 2px 0 0'],['c3',L0,B0,'0 0 2px 2px'],['c4',R0,B0,'0 2px 2px 0']].forEach(([id,x,y,w])=>Object.assign($('#'+id).style,{left:x+'px',top:y+'px',borderWidth:w}));
+  tl.from('.corner',{opacity:0,scale:1.4,duration:.6,stagger:.08,ease:'power3.out'},.1);}
+
+// name + brand stacked up from the bottom of the safe zone
+const nm=$('#name');nm.textContent=S.speaker||'';let b=R.safe.bottom*H;
+if(S.brand){b-=$('#brand').offsetHeight;$('#brand').style.top=b+'px';b-=14}else $('#brand').style.display='none';
+if(S.speaker){b-=nm.offsetHeight;nm.style.top=b+'px';tl.from('#name',{opacity:0,duration:.5},.6)}
+$('#tracker').style.top=Math.min(1290,b-190)+'px';
+
+// outro in the chosen colours (mid ground, light circle, gold rim)
+$('#outro').style.background=BG.green.bg;$('#oc').style.background=BG.cream.bg;$('#oc').style.borderColor=BG.cream.gold;$('#oc').style.color=BG.cream.acc;$('#oc .h').style.color=BG.cream.gold;
+if(S.outro){tl.set('#outro',{opacity:1},D);tl.from('#oc',{scale:0,duration:.55,ease:'back.out(1.6)'},D+.1);tl.from('#oc > div',{opacity:0,y:16,stagger:.1,duration:.35},D+.4);tl.to('#oc',{scale:0,duration:.45,ease:'power2.in'},TOTAL-.55)}
+tl.set({},{},TOTAL);tl.seek(0);
+window.__timelines=window.__timelines||{};window.__timelines['qitaf']=tl;
+</script></body></html>

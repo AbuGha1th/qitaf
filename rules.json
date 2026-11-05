@@ -1,0 +1,153 @@
+{
+  "_source": "rules.mp4 — safe zones for 1080x1920. All values are fractions of width/height.",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "safe": {
+    "top": 0.14,
+    "bottom": 0.85,
+    "left": 0.13,
+    "right": 0.87
+  },
+  "slots": {
+    "title": {
+      "y": 0.155,
+      "note": "hook/title, just above the head, top of safe zone"
+    },
+    "title_upper": {
+      "y": 0.3,
+      "note": "title, upper third (optional position)"
+    },
+    "title_centre": {
+      "y": 0.45,
+      "note": "title, centre (optional position, only if it does not cover the face)"
+    },
+    "wave_top": {
+      "y": 0.215,
+      "note": "sound wave (optional), just under the title"
+    },
+    "captions": {
+      "y": 0.7,
+      "note": "chest height, 1-2 words or one short line, never over eyes/face"
+    },
+    "wave_bottom": {
+      "y": 0.752,
+      "note": "sound wave (optional), between captions and name"
+    },
+    "speaker": {
+      "y": 0.785,
+      "note": "lower-third name, above bottom red band"
+    },
+    "brand": {
+      "y": 0.825,
+      "note": "نهج الأثر, small, below speaker name, still inside safe zone"
+    }
+  },
+  "never": [
+    "text in the top 14%, bottom 15%, or outer 13% sides (Instagram UI)",
+    "captions over the eyes or face",
+    "two text items in the same slot at once",
+    "music of any kind"
+  ],
+  "zoom": "punch-in on key moments (subtle 1.08x, punchy 1.18x)",
+  "stacking": "Items set to top stack downward from safe.top (title, name, wave). Items set to bottom stack upward from safe.bottom (brand, name, wave, title). Captions sit at chest height but move up if the bottom stack reaches them. Nothing overlaps.",
+  "motionPalettes": {
+    "classic": {
+      "name": "Cream · Green · Black",
+      "cream": {
+        "bg": "#EDE6DC",
+        "ink": "#161613",
+        "acc": "#1E4D3A",
+        "gold": "#C9A45C",
+        "soft": "#BDB5A8"
+      },
+      "green": {
+        "bg": "#1E4D3A",
+        "ink": "#EDE6DC",
+        "acc": "#E3C77F",
+        "gold": "#E3C77F",
+        "soft": "#5E8571"
+      },
+      "black": {
+        "bg": "#161613",
+        "ink": "#EDE6DC",
+        "acc": "#D9BC79",
+        "gold": "#D9BC79",
+        "soft": "#55524B"
+      }
+    },
+    "sand": {
+      "name": "Sand · Navy · Ink",
+      "cream": {
+        "bg": "#F1E7D3",
+        "ink": "#14213D",
+        "acc": "#1D3A6E",
+        "gold": "#C08A3E",
+        "soft": "#C9BCA3"
+      },
+      "green": {
+        "bg": "#14213D",
+        "ink": "#F1E7D3",
+        "acc": "#F2C46D",
+        "gold": "#F2C46D",
+        "soft": "#3F5175"
+      },
+      "black": {
+        "bg": "#0D1117",
+        "ink": "#F1E7D3",
+        "acc": "#F2C46D",
+        "gold": "#F2C46D",
+        "soft": "#3A3F47"
+      }
+    },
+    "rose": {
+      "name": "Paper · Maroon · Charcoal",
+      "cream": {
+        "bg": "#F3ECE4",
+        "ink": "#1E1A1A",
+        "acc": "#6E1F2B",
+        "gold": "#B98545",
+        "soft": "#CBBFB3"
+      },
+      "green": {
+        "bg": "#5A1A24",
+        "ink": "#F3ECE4",
+        "acc": "#F0C987",
+        "gold": "#F0C987",
+        "soft": "#8A4A52"
+      },
+      "black": {
+        "bg": "#1E1A1A",
+        "ink": "#F3ECE4",
+        "acc": "#E7B97A",
+        "gold": "#E7B97A",
+        "soft": "#4C4545"
+      }
+    },
+    "amber": {
+      "name": "Qitaf (Amber · Black · Cream)",
+      "cream": {
+        "bg": "#FFFBEB",
+        "ink": "#1F1F1D",
+        "acc": "#B45309",
+        "gold": "#F59E0B",
+        "soft": "#E9DFC0"
+      },
+      "green": {
+        "bg": "#F59E0B",
+        "ink": "#1F1F1D",
+        "acc": "#FFFBEB",
+        "gold": "#1F1F1D",
+        "soft": "#C97F08"
+      },
+      "black": {
+        "bg": "#1F1F1D",
+        "ink": "#FFFBEB",
+        "acc": "#FDE68A",
+        "gold": "#F59E0B",
+        "soft": "#4A4A44"
+      }
+    }
+  }
+}

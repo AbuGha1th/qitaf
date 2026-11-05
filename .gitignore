@@ -1,0 +1,17 @@
+jobs/
+node_modules/
+.venv/
+__pycache__/
+.DS_Store
+qitaf.log
+# his own copies; updates only replace the .default files
+presets.json
+presets.prev.json
+fixes.json
+channel.json
+# fonts are each user's own: licences don't allow hosting them here
+fonts/*
+!fonts/README.md
+.omc/
+smoke-shots/
+quran/warsh/

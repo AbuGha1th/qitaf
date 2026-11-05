@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Qitaf Help</title>
+<style>
+@font-face{font-family:Sans;src:url(/fonts/thmanyahsans-Medium.woff2),local("Segoe UI"),local("Geeza Pro");font-weight:500}
+@font-face{font-family:Sans;src:url(/fonts/thmanyahsans-Black.woff2),local("Segoe UI Bold"),local("Geeza Pro Bold");font-weight:900}
+:root{--bg:#1F1F1D;--c:#2A2A26;--tx:#F4EFE4;--dim:#B9B3A6;--acc:#F2C14E;--ln:#3A3934;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:500 17px/1.85 Sans,system-ui,sans-serif}
+main{max-width:760px;margin:auto;padding:32px 20px 80px}
+h1{font:900 34px/1.3 Sans,sans-serif;margin:0 0 6px}h2{font:900 23px/1.4 Sans,sans-serif;color:var(--acc);margin:38px 0 8px;padding-top:16px;border-top:1px solid var(--ln)}
+h3{font-size:18px;margin:20px 0 2px}p{margin:8px 0}ul,ol{margin:8px 0;padding-inline-start:24px}li{margin:4px 0}
+code{direction:ltr;unicode-bidi:isolate;background:var(--c);padding:1px 7px;border-radius:6px;font:15px ui-monospace,Consolas,monospace}
+.say{background:var(--c);border-inline-start:3px solid var(--acc);padding:8px 14px;border-radius:8px;margin:8px 0}
+.lang{float:inline-end;background:var(--c);color:var(--tx);border:1px solid var(--ln);border-radius:99px;padding:6px 16px;font:inherit;cursor:pointer}
+nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin:16px 0}nav a{color:var(--acc);font-size:15px}
+[lang=en]{display:none}body.en [lang=ar]:not(html){display:none}body.en [lang=en]{display:block}
+</style></head><body>
+<main>
+<button class="lang" id="sw">English</button>
+
+<!-- ============ العربية ============ -->
+<section lang="ar">
+<h1>دليل قِطاف</h1>
+<p>قِطاف يحوّل الدروس العربية إلى مقاطع قصيرة ومقاطع طويلة لليوتيوب، على جهازك أنت.</p>
+<nav><a href="#a1">التشغيل</a><a href="#a2">مقاطع قصيرة</a><a href="#a3">يوتيوب</a><a href="#a4">التعديل بعد الانتهاء</a><a href="#a5">الأنماط</a><a href="#a6">أين تُحفظ الملفات</a><a href="#a7">ما لا يفعله</a><a href="#a8">عند حدوث مشكلة</a><a href="#a9">الاستعانة بـ Claude</a></nav>
+
+<h2 id="a1">التشغيل</h2>
+<ol><li>افتح <b>Qitaf</b> من سطح المكتب، فتفتح الصفحة في المتصفح.</li><li>أبقِ النافذة السوداء الصغيرة مفتوحة طوال العمل.</li><li>للإيقاف، أغلق تلك النافذة. لا تغلقها أثناء إنتاج فيديو.</li></ol>
+<p>يمرّ العمل بأربع خطوات تظهر في أعلى الصفحة: <b>الإعداد</b>، ثم <b>النص</b>، ثم <b>المقاطع</b>، ثم <b>الفيديوهات</b>.</p><p>الزر <b>English</b> في الأعلى يغيّر لغة الواجهة.</p>
+
+<h2 id="a2">صناعة مقاطع قصيرة</h2>
+<h3>من درس طويل</h3>
+<ol><li>في <b>المصدر</b> اختر <b>فيديو</b>، ثم <b>درس طويل ← قصّه إلى مقاطع</b>، وأسقط الملف.</li>
+<li>من <b>تحميل نمط</b> اختر نمطًا، أو عدّل الخيارات بنفسك. المعاينة بجانب الخيارات تُظهر النتيجة.</li>
+<li>فعّل <b>أظهر المناطق الآمنة</b> لترى المنطقة التي تغطيها أزرار إنستغرام. أبقِ كل نص خارجها.</li>
+<li>اضغط <b>ابحث عن المقاطع</b>. يكتب البرنامج نص الدرس. قد يستغرق هذا وقتًا، خصوصًا دون بطاقة NVIDIA.</li>
+<li>إن فعّلت <b>دعني أراجع النص العربي أولًا</b> تظهر صفحة <b>النص</b>: صحّح الكلمات الخاطئة. يتعلّم البرنامج تصحيحاتك ويطبّقها في الدروس القادمة.</li>
+<li>في <b>المقاطع</b> يقترح Claude أفضل المقاطع. أبقِ ما تريد، وعدّل العناوين والبداية والنهاية، وراجع الآيات.</li>
+<li>اضغط <b>أنتج الفيديوهات</b> وانتظر.</li></ol>
+<h3>من فيديو واحد قصير</h3>
+<p>اختر <b>استخدمه كاملًا</b> بدل التقطيع، والباقي كما هو.</p>
+<h3>من ملف صوتي</h3>
+<p>اختر <b>صوت</b>. المقطع القصير يحتاج صورة: في <b>المصدر</b> اجعل <b>الخلفية</b> على <b>صورة</b>.</p>
+<h3>الآيات</h3>
+<p>يتعرف البرنامج على الآيات ويعرضها برسم المصحف بين ﴿ ﴾. راجعها في <b>المقاطع</b> دائمًا. في رواية ورش يُملأ نص الآية تلقائيًا من <a href="https://app.al-mushaf.com/" style="color:var(--acc)">al-mushaf.com</a> (يحتاج إنترنت). راجعه دائمًا، وإن بقي المربع فارغًا فانسخ الآية من الموقع والصقها.</p>
+
+<h2 id="a3">فيديو يوتيوب طويل</h2>
+<ol><li>أسقط الملف، وفي <b>الشكل</b> اختر <b>فيديو يوتيوب طويل</b>.</li>
+<li>اختر التصميم: <b>فيديو مع شريط عنوان</b>، أو <b>فيديو على لوحة</b>، أو <b>صوت فقط</b>.</li>
+<li>اختر الألوان، واكتب العنوان أو اتركه ليكتبه Claude، واكتب اسم الشيخ.</li>
+<li>إن كان للمصدر إطار أو شعار أو شريط عنوان، استخدم <b>التقريب</b> و<b>تحريك الصورة</b> حتى يختفي من المعاينة.</li>
+<li>فعّل <b>دعني أراجع النص العربي أولًا</b>، ثم اضغط <b>حرّر هذا الفيديو</b>. صحّح النص وراجع الآيات، فلا توجد صفحة <b>المقاطع</b> هنا. ثم انتظر.</li></ol>
+<p>تحصل على الفيديو، و٣ صور مصغرة، وملف نصي فيه العناوين والوصف والفصول، وملف ترجمة <code>.srt</code>. راجع الوصف قبل النشر، وخاصة أي حديث أو نسبة قول.</p>
+
+<h2 id="a4">التعديل بعد الانتهاء</h2>
+<ul><li><b>عدّل النص</b>: تعديل كلمات مقطع قصير وتوقيتها، ثم <b>احفظ وأعد الإنتاج</b>.</li>
+<li><b>أعد الإنتاج</b>: إعادة إنتاج فيديو واحد.</li>
+<li><b>في الانتظار</b> تعني أن الفيديو ينتظر دوره. لا تضغط مرة أخرى.</li>
+<li><b>المكتبة</b>: كل دروسك السابقة. <b>افتح الفيديوهات</b> للفيديوهات، و<b>افتح المقاطع</b> للمقاطع.</li>
+<li><b>غيّر النمط</b>: تغيير نمط كل فيديوهات الدرس مع الإبقاء على النص والقص. هذا يستبدل الفيديوهات القديمة.</li></ul>
+
+<h2 id="a5">الأنماط</h2>
+<p>النمط يحفظ كل إعداداتك: الألوان، الخطوط، الموجة الصوتية، حساباتك، واسم الشيخ. اضبط ما تريد ثم اضغط <b>حفظ كنمط</b>، واختره لاحقًا من <b>تحميل نمط</b>.</p>
+<p>لإضافة خط: ضع الملف في مجلد <code>fonts</code> داخل مجلد قِطاف، ثم اطلب من Claude إضافته.</p>
+
+<h2 id="a6">أين تُحفظ الملفات</h2>
+<ul><li>الفيديوهات: مجلد <code>Qitaf/clips</code> داخل مجلد المستخدم، ثم مجلد باسم الدرس. وزر <b>أظهر الملف</b> يفتح المكان مباشرة.</li>
+<li>بجانب كل فيديو: نص المنشور في ملف <code>.txt</code>. والنسخة الخام في مجلد <code>raw</code>.</li>
+<li>ملفات العمل في مجلد <code>jobs</code>، وتُحذف تلقائيًا بعد ١٤ يومًا دون استخدام. فيديوهاتك النهائية لا تُحذف.</li></ul>
+
+<h2 id="a7">ما لا يفعله قِطاف</h2>
+<ul><li>لا ينشر على يوتيوب أو إنستغرام. النشر عليك.</li><li>لا يضيف موسيقى، ولا وجوهًا مولّدة بالذكاء الاصطناعي، ولا نساء في الصورة.</li>
+<li>لا يصنع فيديو من نص فقط في هذه النسخة.</li><li>لا يقطع الكلام في فيديو يوتيوب الطويل.</li><li>لا يعمل والنافذة السوداء مغلقة.</li><li>النص الآلي قد يخطئ، فراجعه دائمًا قبل الإنتاج.</li></ul>
+
+<h2 id="a8">عند حدوث مشكلة</h2>
+<ul><li><b>الصفحة لا تفتح:</b> أعد فتح Qitaf من سطح المكتب وانتظر ثوانيَ.</li>
+<li><b>ظهرت رسالة خطأ على الفيديو:</b> اضغط <b>أعد المحاولة</b>. إن تكررت، انسخها إلى Claude.</li>
+<li><b>النسخ النصي بطيء:</b> هذا طبيعي دون بطاقة NVIDIA. اتركه يعمل.</li>
+<li><b>العناوين أو النصوص لا تُكتب:</b> تأكد أن Claude Code مسجّل الدخول ولم يبلغ حد الاستخدام.</li>
+<li><b>الصوت خافت:</b> هذا من التسجيل الأصلي. اطلب من Claude رفع الصوت.</li>
+<li><b>الخط لا يظهر:</b> تأكد أن الملف في <code>fonts</code> مباشرة، لا في مجلد فرعي.</li></ul>
+
+<h2 id="a9">الاستعانة بـ Claude</h2>
+<p>افتح Claude Code داخل مجلد قِطاف واكتب ما تريد بكلماتك. يعرف Claude طريقة عمل البرنامج. أمثلة:</p>
+<div class="say">Qitaf أعطاني هذا الخطأ: (الصق الرسالة). أصلحه.</div>
+<div class="say">غيّر تصميم الصورة المصغرة ليكون العنوان أكبر.</div>
+<div class="say">أضفت خطًا جديدًا في مجلد fonts، أضفه إلى قائمة الخطوط.</div>
+<div class="say">أريد تغيير ألواني وشعاري. اسألني ما أريد.</div>
+<p>للحصول على آخر نسخة، افتح <b>Update Qitaf</b> من مجلد قِطاف. أنماطك ودروسك وفيديوهاتك تبقى كما هي.</p>
+<p style="color:var(--dim);font-size:14px">نص القرآن الكريم: رواية حفص من <a href="https://tanzil.net" style="color:var(--acc)">Tanzil.net</a>، ورواية ورش من المصحف المحمدي الرقمي، مؤسسة محمد السادس لنشر المصحف الشريف.</p>
+</section>
+
+<!-- ============ English ============ -->
+<section lang="en" dir="ltr">
+<h1>Qitaf guide</h1>
+<p>Qitaf turns Arabic lessons into reels and long YouTube videos, on your own computer.</p>
+<nav><a href="#e1">Starting</a><a href="#e2">Reels</a><a href="#e3">YouTube</a><a href="#e4">Editing afterwards</a><a href="#e5">Presets</a><a href="#e6">Where files go</a><a href="#e7">What it doesn't do</a><a href="#e8">If something goes wrong</a><a href="#e9">Asking Claude</a></nav>
+
+<h2 id="e1">Starting</h2>
+<ol><li>Open <b>Qitaf</b> from your Desktop. The page opens in your browser.</li><li>Keep the small black window open while you work.</li><li>To stop, close that window. Don't close it while a video is rendering.</li></ol>
+<p>Work moves through four steps at the top of the page: <b>Set up</b>, <b>Words</b>, <b>Clips</b>, <b>Videos</b>.</p>
+
+<h2 id="e2">Making reels</h2>
+<h3>From a long lesson</h3>
+<ol><li>In <b>Source</b>, choose <b>Video</b>, then <b>Long lesson → cut into clips</b>, and drop the file in.</li>
+<li>Pick a style from <b>Load preset</b>, or set the options yourself. The preview shows the result.</li>
+<li>Tick <b>Show safe zones</b> to see the area Instagram's buttons cover. Keep all text out of it.</li>
+<li>Press <b>Find clips</b>. Qitaf transcribes the lesson. This can take a while, especially without an NVIDIA card.</li>
+<li>If <b>Let me check the Arabic first</b> is ticked, <b>Words</b> opens: fix wrong words. Qitaf learns your fixes and applies them to future lessons.</li>
+<li>In <b>Clips</b>, Claude suggests the best moments. Keep what you want, edit titles and start and end times, and check the verses.</li>
+<li>Press <b>Make videos</b> and wait.</li></ol>
+<h3>From one short video</h3>
+<p>Choose <b>Use the whole thing</b> instead of cutting. Everything else is the same.</p>
+<h3>From audio</h3>
+<p>Choose <b>Audio</b>. A reel needs a picture: under <b>Source</b>, set <b>Background</b> to <b>A picture</b>.</p>
+<h3>Qur'an verses</h3>
+<p>Qitaf finds verses and shows them in Mushaf text between ﴿ ﴾. Always check them on <b>Clips</b>. For Warsh, the verse fills in automatically from <a href="https://app.al-mushaf.com/" style="color:var(--acc)">al-mushaf.com</a> (this needs internet). Always check it. If the box stays empty, copy the verse from the site and paste it in.</p>
+
+<h2 id="e3">A long YouTube video</h2>
+<ol><li>Drop the file in, and under <b>Look</b> choose <b>YouTube long video</b>.</li>
+<li>Choose a layout: <b>Video with a title band</b>, <b>Video on a board</b>, or <b>Sound only</b>.</li>
+<li>Choose colours, write the title or leave it for Claude, and write the shaykh's name.</li>
+<li>If the source has its own border, logo or title strip, use <b>Zoom in</b> and <b>Move the picture</b> until it's gone from the preview.</li>
+<li>Tick <b>Let me check the Arabic first</b>, then press <b>Edit this video</b>. Fix the words and check the verses, because there is no <b>Clips</b> page here. Then wait.</li></ol>
+<p>You get the video, 3 thumbnails, a text file with titles, description and chapters, and a <code>.srt</code> subtitle file. Read the description before publishing, especially any hadith or attribution.</p>
+
+<h2 id="e4">Editing afterwards</h2>
+<ul><li><b>Edit captions:</b> change a reel's words and timing, then <b>Save and re-render</b>.</li>
+<li><b>Re-render:</b> make one video again.</li>
+<li><b>Queued</b> means the video is waiting its turn. Don't press again.</li>
+<li><b>Library:</b> all your past lessons. <b>Open videos</b> for the videos, <b>Open clips</b> for the clips.</li>
+<li><b>Change style:</b> restyle all of a lesson's videos, keeping the words and cuts. This replaces the old videos.</li></ul>
+
+<h2 id="e5">Presets</h2>
+<p>A preset saves all your settings: colours, fonts, sound wave, handles and the shaykh's name. Set things up, press <b>Save as preset</b>, and pick it later from <b>Load preset</b>.</p>
+<p>To add a font: put the file in the <code>fonts</code> folder inside Qitaf, then ask Claude to add it.</p>
+
+<h2 id="e6">Where files go</h2>
+<ul><li>Videos: the <code>Qitaf/clips</code> folder in your user folder, then a folder named after the lesson. The <b>Show file</b> button opens the place directly.</li>
+<li>Beside each video: the post text in a <code>.txt</code> file. The raw version is in a <code>raw</code> folder.</li>
+<li>Working files are in <code>jobs</code>, and are removed after 14 days unused. Your finished videos are never removed.</li></ul>
+
+<h2 id="e7">What it doesn't do</h2>
+<ul><li>It doesn't publish to YouTube or Instagram. Publishing is up to you.</li><li>No music, no AI-generated faces, no women on screen.</li>
+<li>It doesn't make videos from text alone in this version.</li><li>It doesn't cut speech in long YouTube videos.</li><li>It doesn't work with the black window closed.</li><li>Automatic transcription makes mistakes, so always check it first.</li></ul>
+
+<h2 id="e8">If something goes wrong</h2>
+<ul><li><b>The page won't open:</b> open Qitaf from the Desktop again and wait a few seconds.</li>
+<li><b>An error appears on a video:</b> press <b>Try again</b>. If it repeats, copy it to Claude.</li>
+<li><b>Transcription is slow:</b> that's normal without an NVIDIA card. Leave it running.</li>
+<li><b>Titles or text aren't written:</b> check Claude Code is signed in and hasn't reached its usage limit.</li>
+<li><b>The sound is quiet:</b> that comes from the recording. Ask Claude to raise it.</li>
+<li><b>A font doesn't show:</b> check the file is directly in <code>fonts</code>, not in a subfolder.</li></ul>
+
+<h2 id="e9">Asking Claude</h2>
+<p>Open Claude Code inside the Qitaf folder and say what you want in your own words. Claude knows how Qitaf works. For example:</p>
+<div class="say">Qitaf gave me this error: (paste it). Fix it.</div>
+<div class="say">Change the thumbnail design so the title is bigger.</div>
+<div class="say">I added a new font to the fonts folder. Add it to the font lists.</div>
+<div class="say">I want to change my colours and logo. Ask me what I want.</div>
+<p>For the latest version, open <b>Update Qitaf</b> in the Qitaf folder. Your presets, lessons and videos stay as they are.</p>
+<p style="color:var(--dim);font-size:14px">Qur'an text: Hafs from <a href="https://tanzil.net" style="color:var(--acc)">Tanzil.net</a>, Warsh from the Mohammed VI Foundation's digital Mushaf.</p>
+</section>
+</main>
+<script>
+const b=document.getElementById('sw'),show=e=>{document.body.classList.toggle('en',e);b.textContent=e?'العربية':'English';document.documentElement.dir=e?'ltr':'rtl'};
+b.onclick=()=>show(!document.body.classList.contains('en'));
+try{show(localStorage.getItem('lang')==='en')}catch(e){}
+</script>
+</body></html>

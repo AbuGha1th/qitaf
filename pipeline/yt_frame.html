@@ -1,0 +1,143 @@
+<!doctype html>
+<!-- The YouTube designs, one file for the set-up preview and the renderer (pipeline/youtube.py).
+     Everything comes in through location.hash as JSON: {mode, layout, theme, title, name, kicker, handle, ...}.
+     mode: frame = 1920x1080 overlay (transparent where the video shows) · thumb = 1280x720 thumbnail · subs = subtitle strips as PNG data -->
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=block" rel="stylesheet">
+<style>
+@font-face{font-family:Sans;src:url('__FONTS__/thmanyahsans-Medium.woff2'),local('Segoe UI'),local('Geeza Pro');font-weight:500}
+@font-face{font-family:Sans;src:url('__FONTS__/thmanyahsans-Bold.woff2'),local('Segoe UI Semibold'),local('Geeza Pro Bold');font-weight:700}
+@font-face{font-family:Sans;src:url('__FONTS__/thmanyahsans-Black.woff2'),local('Segoe UI Bold'),local('Geeza Pro Bold');font-weight:900}
+@font-face{font-family:QSerif;src:url('__FONTS__/thmanyahserifdisplay-Bold.woff2'),local('Sakkal Majalla Bold'),local('Baghdad');font-weight:700}
+@font-face{font-family:QSerif;src:url('__FONTS__/thmanyahserifdisplay-Black.woff2'),local('Sakkal Majalla Bold'),local('Baghdad');font-weight:900}
+@font-face{font-family:Warsh;src:url('__FONTS__/Almaghribi%20Warsh-Quran.otf')}
+*{box-sizing:border-box;margin:0}
+html,body{background:transparent;overflow:hidden}
+#s{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;direction:rtl;color:var(--tx);font-family:Sans}
+.logo{display:block;object-fit:contain}
+.fit{white-space:nowrap}
+/* ---- band: the video fills the frame, one plain band across the bottom carries title and name ---- */
+.band{position:absolute;left:0;right:0;bottom:0;height:164px;background:var(--bg);display:flex;align-items:center;gap:30px;padding:0 44px}
+.band::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--acc)}
+.band .logo{width:92px;height:104px;flex:none}
+.band .who{flex:none;max-width:620px;padding-inline-start:28px;border-inline-start:2px solid color-mix(in srgb,var(--acc) 45%,transparent)}
+.band .who b{display:block;font:700 38px/1.25 Sans;color:var(--acc)}
+.band .who i{display:block;font:500 25px/1.3 Sans;font-style:normal;color:var(--tx);opacity:.72}
+.band .ti{flex:1;min-width:0;font:900 60px/1.2 QSerif;text-align:left;color:var(--tx)}
+.band.t2 .ti{text-align:center}
+/* ---- board: video on a plain board, subtitles under it, title and name in a column of their own ---- */
+#s.board{background:var(--bg)}
+.hole{position:absolute;left:36px;top:36px;width:1392px;height:783px;border-radius:20px}
+.ground{position:absolute;left:0;top:0;fill:var(--bg)}
+.hole::after{content:'';position:absolute;inset:0;border-radius:20px;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--acc) 35%,transparent)}
+.subpanel{position:absolute;left:36px;top:843px;width:1392px;height:201px;border-radius:20px;background:var(--pn)}
+.col{position:absolute;right:36px;top:36px;bottom:36px;width:420px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.col .logo{width:150px;height:170px;margin-top:14px}
+.col .kick{margin-top:30px;font:700 27px/1.35 Sans;color:var(--acc)}
+.col .ti{margin:18px 0 auto;font:900 66px/1.28 QSerif;text-wrap:balance;color:var(--tx);flex:1;display:flex;align-items:center}
+.col .rule{width:64px;height:3px;background:var(--acc);margin:20px 0}
+.col .nm{font:700 34px/1.4 Sans;color:var(--acc);text-wrap:balance}
+.col .hd{margin-top:14px;font:500 22px Sans;direction:ltr;opacity:.6}
+/* ---- sound: no picture at all: a quiet ground, the title, the voice as a line of sound ---- */
+#s.sound{background:radial-gradient(1100px 620px at 78% 8%,color-mix(in srgb,var(--acc) 15%,transparent),transparent 70%),radial-gradient(900px 560px at 10% 96%,color-mix(in srgb,var(--tx) 7%,transparent),transparent 70%),var(--bg)}
+.sd{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:118px}
+.sd .logo{position:absolute;right:60px;top:52px;width:84px;height:96px}
+.sd .kick{font:700 34px/1.4 Sans;color:var(--acc);min-height:48px}
+.sd .ti{margin-top:14px;max-width:1560px;font:900 112px/1.3 QSerif;color:var(--tx);text-wrap:balance}
+.sd .nm{margin-top:20px;font:700 40px/1.4 Sans;color:var(--tx);opacity:.82}
+.sd .wv{position:absolute;left:400px;top:600px;width:1120px;height:152px;border-radius:40px;background:var(--wv)}
+.sd .hd{position:absolute;left:0;right:0;bottom:44px;font:500 26px Sans;direction:ltr;letter-spacing:.14em;opacity:.55}
+/* the sample line in the set-up preview */
+#sample{position:absolute;left:0;right:0;display:none;text-align:center;font:700 46px/1.5 Sans}
+#sample span{padding:8px 30px;border-radius:16px}
+/* ---- thumbnails ---- */
+#s.th{width:1280px;height:720px;background:var(--bg)}
+.ph{position:absolute;inset:0;background-repeat:no-repeat}
+.th .tt{position:absolute;display:flex;flex-direction:column;font-family:Sans;font-weight:900;line-height:1.26;color:#fff}
+.th .tt span{white-space:nowrap;width:max-content}
+.th .tt .hi{color:var(--hi)}
+.th .lg{position:absolute;width:74px;height:84px;object-fit:contain}
+.th .by{position:absolute;font:700 34px/1.3 Sans}
+/* no picture (audio): the theme's own ground, words only */
+.nophoto .ph{filter:none!important;inset:0!important}.nophoto .sh{background:radial-gradient(900px 500px at 50% 44%,color-mix(in srgb,var(--acc) 14%,transparent),transparent 75%)!important}
+.nophoto .tt{color:var(--tx)!important}.nophoto .tt .hi{color:var(--acc)!important}.nophoto .by{color:var(--tx)!important;opacity:.8}
+/* A · portrait: black-and-white speaker on the brand colour, heavy two-tone headline */
+.tA .ph{filter:grayscale(1) contrast(1.12) brightness(1.04)}
+.tA .sh{position:absolute;inset:0;background:linear-gradient(to left,var(--bg) 40%,color-mix(in srgb,var(--bg) 82%,transparent) 54%,transparent 76%)}
+.tA .tt{right:44px;top:0;bottom:0;width:760px;justify-content:center;text-align:right;text-shadow:0 5px 0 rgba(0,0,0,.34)}
+.tA .by{right:46px;bottom:34px;color:var(--hi)}.tA .lg{left:30px;top:26px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+/* B · cinema: the speaker in colour in a dark room, serif headline with a thin rule */
+.tB .ph{filter:saturate(.9) contrast(1.06) brightness(.92)}
+.tB .sh{position:absolute;inset:0;background:linear-gradient(to left,#0d0c0a 34%,rgba(13,12,10,.86) 52%,transparent 74%),linear-gradient(to top,rgba(13,12,10,.75),transparent 34%)}
+.tB .tt{right:50px;top:0;bottom:92px;width:740px;justify-content:center;text-align:right;font-family:QSerif;line-height:1.3}
+.tB .rl{position:absolute;right:52px;bottom:112px;width:96px;height:4px;background:var(--hi)}
+.tB .by{right:52px;bottom:44px;color:#FBF7EA}.tB .lg{left:30px;top:26px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+/* C · title: no person: words only on a dark softened picture */
+.tC .ph{filter:blur(26px) brightness(.42) saturate(.7);inset:-60px}
+.tC .sh{position:absolute;inset:0;background:radial-gradient(900px 520px at 50% 42%,transparent,rgba(0,0,0,.55))}
+.tC .tt{left:50px;right:50px;top:0;bottom:96px;justify-content:center;align-items:center;text-align:center}
+.tC .by{left:0;right:0;bottom:42px;text-align:center;color:var(--hi)}.tC .lg{right:34px;top:26px}
+</style>
+<div id="s"></div>
+<pre id="out"></pre>
+<script>
+const H=window.QS||JSON.parse(decodeURIComponent(location.hash.slice(1)||'{}')), LOGO='__LOGO__';
+const THEMES={ink:{bg:'#131311',pn:'#1F1E1B',tx:'#FBF7EA',acc:'#E8C15A',wv:'#000000',hi:'#FFD84D'},
+  forest:{bg:'#0E3327',pn:'#164436',tx:'#F7F2E4',acc:'#E9CB7E',wv:'#08231A',hi:'#FFE066'},
+  navy:{bg:'#0F1C38',pn:'#182A50',tx:'#F5F3EC',acc:'#E9CB7E',wv:'#091327',hi:'#FFE066'},
+  maroon:{bg:'#3A1017',pn:'#4C1A22',tx:'#FBF3E6',acc:'#EBCB84',wv:'#260A0F',hi:'#FFE066'},
+  paper:{bg:'#F4EFE4',pn:'#E9E2D3',tx:'#1B1A17',acc:'#8A6414',wv:'#141412',hi:'#FFD84D'}};
+const T=THEMES[H.theme]||THEMES.ink, s=document.getElementById('s'), esc=t=>String(t||'').replace(/[<&]/g,c=>c=='<'?'&lt;':'&amp;');
+for(const k in T)document.documentElement.style.setProperty('--'+k,T[k]);
+const logoImg=c=>`<img class="${c}" src="${LOGO}" onerror="this.remove()">`;
+// shrink a line until it fits its box
+function fit(el,min){let f=parseFloat(getComputedStyle(el).fontSize);while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+2)&&f>min){f-=2;el.style.fontSize=f+'px'}}
+// mode=subs: each subtitle drawn to a transparent strip the renderer lays over the video
+async function subs(){
+  const W=H.w,Ht=H.h,dpr=1,lay=H.layout;const QF=H.reading==='warsh'?'Warsh':'"Amiri Quran"';await Promise.all([document.fonts.load('700 50px Sans'),document.fonts.load('50px '+QF,'قُلْ إِن تُخْفُوا۟')]);
+  const cv=document.createElement('canvas');cv.width=W;cv.height=Ht;const c=cv.getContext('2d');c.direction='rtl';c.textAlign='center';c.textBaseline='middle';
+  const out=[];
+  for(const it of H.items){
+    c.clearRect(0,0,W,Ht);const q=it.q,size=q?H.size*.92:H.size,fam=q?QF:'Sans';c.font=`${q?400:700} ${size}px ${fam}`;
+    // balance into at most two lines
+    const words=it.t.split(/\s+/);let lines=[it.t];
+    if(c.measureText(it.t).width>W-H.pad*2-20||words.length>9){let best=1,bd=1e9;for(let k=1;k<words.length;k++){const a=c.measureText(words.slice(0,k).join(' ')).width,b=c.measureText(words.slice(k).join(' ')).width,d=Math.abs(a-b);if(d<bd){bd=d;best=k}}
+      lines=[words.slice(0,best).join(' '),words.slice(best).join(' ')]}
+    let sz=size;const widest=()=>Math.max(...lines.map(l=>c.measureText(l).width));while(widest()>W-H.pad*2&&sz>24){sz-=2;c.font=`${q?400:700} ${sz}px ${fam}`}
+    const lh=sz*(q?1.85:1.5),bh=lh*lines.length,y0=Ht/2-bh/2;
+    if(H.pill){const bw=widest()+64;c.fillStyle=H.pill;c.beginPath();c.roundRect(W/2-bw/2,y0-8,bw,bh+16,18);c.fill()}
+    c.fillStyle=q?T.acc:(H.ink||T.tx);lines.forEach((l,i)=>c.fillText(l,W/2,y0+lh*(i+.5)));
+    out.push(cv.toDataURL('image/png').slice(22));
+  }
+  document.getElementById('out').textContent=JSON.stringify(out);document.title='done'
+}
+function frame(){
+  const ti=esc(H.title).replace(/\n/g,' '),nm=esc(H.name),kk=esc(H.kicker),hd=esc(H.handle),L=H.layout||'band';
+  if(L==='board'){s.className='board';s.style.background='transparent';
+    s.innerHTML=`<svg class="ground" width="1920" height="1080"><path fill-rule="evenodd" d="M0 0H1920V1080H0ZM56 36H1408a20 20 0 0 1 20 20V799a20 20 0 0 1-20 20H56a20 20 0 0 1-20-20V56a20 20 0 0 1 20-20Z"/></svg><div class="hole"></div><div class="subpanel"></div><div class="col">${logoImg('logo')}${kk?`<div class="kick">${kk}</div>`:''}<div class="ti" id="t"><span>${ti}</span></div><div class="rule"></div><div class="nm">${nm}</div><div class="hd">${hd}</div></div>`;
+    const t=document.getElementById('t');let f=66;while(t.scrollHeight>t.clientHeight+2&&f>34){f-=2;t.style.fontSize=f+'px'}
+  }else if(L==='sound'){s.className='sound';
+    s.innerHTML=`<div class="sd">${logoImg('logo')}<div class="kick">${kk}</div><div class="ti" id="t">${ti}</div><div class="nm">${nm}</div><div class="wv"></div><div class="hd">${hd}</div></div>`;
+    const t=document.getElementById('t');let f=112;while(t.offsetHeight>300&&f>56){f-=4;t.style.fontSize=f+'px'}
+  }else{s.className='';
+    s.innerHTML=`<div class="band">${logoImg('logo')}<div class="who"><b class="fit" id="n">${nm}</b>${kk?`<i class="fit">${kk}</i>`:''}</div><div class="ti fit" id="t">${ti}</div></div>`;
+    const t=document.getElementById('t');t.style.overflow='hidden';fit(t,34);t.style.overflow='';
+  }
+  if(H.sample){const y={band:802,board:900,sound:806}[L]||802,e=document.createElement('div');e.id='sample';e.style.cssText=`display:block;top:${y}px;${L==='board'?'left:36px;right:492px;':''}color:${L==='band'?'#fff':T.tx}`;
+    e.innerHTML=`<span style="${L==='band'?`background:${T.bg}D9`:''}">والله رؤوف بالعباد، فهذا من رحمته بهم</span>`;s.append(e)}
+}
+function thumb(){
+  const v=H.variant||'A',lines=(H.lines||[]).filter(Boolean),hi=H.hi??0;s.className='th t'+v+(H.photo?'':' nophoto');
+  s.innerHTML=`<div class="ph" style="${H.photo?`background-image:url('${H.photo}');background-size:${H.bw}px auto;background-position:${H.bx}px ${H.by}px`:'background:'+T.bg}"></div><div class="sh"></div>
+    ${logoImg('lg')}<div class="tt" id="t">${lines.map((l,i)=>`<span class="${i===hi?'hi':''}">${esc(l)}</span>`).join('')}</div>${v==='B'?'<div class="rl"></div>':''}<div class="by">${esc(H.name)}</div>`;
+  // the headline as large as its box allows: thumbnails are read at phone size
+  const t=document.getElementById('t'),sp=[...t.children],maxW=v==='C'?1160:680,maxH=v==='C'?500:520;let f=170;
+  do{f-=2;t.style.fontSize=f+'px'}while(f>50&&(Math.max(...sp.map(e=>e.getBoundingClientRect().width))>maxW||sp.length*f*1.28>maxH));
+}
+document.fonts.ready.then(async()=>{
+  if(H.mode==='subs')return subs();
+  await Promise.all(['900 60px Sans','700 40px Sans','900 60px QSerif'].map(f=>document.fonts.load(f)));
+  H.mode==='thumb'?thumb():frame();
+  document.title='done';
+});
+</script>

@@ -1,0 +1,7 @@
+numpy
+opencv-python-headless==4.14.0.94
+torch==2.11.0
+torchaudio==2.11.0
+mlx-whisper; sys_platform == "darwin"
+faster-whisper; sys_platform != "darwin"
+send2trash; sys_platform == "win32"
