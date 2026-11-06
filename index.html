@@ -386,7 +386,8 @@ body.amb{background:var(--bg)}body.amb .card{background:linear-gradient(180deg,r
     <div class="field wrap" data-k="style" id="styleRow"><button class="pill glow" data-v="idrisi">Lesson reel</button><button class="pill glow" data-v="youtube" id="ytPill">YouTube long video</button></div>
     <p class="hint no-lesson" style="margin:-6px 0 14px">Audio has no picture: choose YouTube long video, or set Background to A picture above to make a reel.</p>
     <div class="yt-only">
-      <div class="field" id="ytLayoutField"><span class="lbl">Layout</span><div class="wrap" data-k="ytLayout"><button class="pill glow" data-v="band">Video with a title band</button><button class="pill glow" data-v="board">Video on a board</button><button class="pill glow" data-v="sound">Sound only</button></div></div>
+      <div class="field" id="ytLayoutField"><span class="lbl">Layout</span><div class="wrap" data-k="ytLayout"><button class="pill glow" data-v="band">Video with a title band</button><button class="pill glow" data-v="board">Video on a board</button><button class="pill glow" data-v="sound">Sound only</button><button class="pill glow" data-v="read">Reading page</button></div></div>
+      <div class="field yt-align"><span class="lbl">Text on the reading page</span><div class="wrap" data-k="ytReadAlign"><button class="pill glow" data-v="center">Centred</button><button class="pill glow" data-v="right">Right aligned</button></div></div>
       <div class="field"><span class="lbl">Colours</span><div class="wrap" data-k="ytTheme"><button class="pill glow" data-v="ink">Ink</button><button class="pill glow" data-v="forest">Forest</button><button class="pill glow" data-v="navy">Navy</button><button class="pill glow" data-v="maroon">Maroon</button><button class="pill glow" data-v="paper">Paper</button></div></div>
       <div class="field"><span class="lbl">Title on the video (leave empty and Claude writes one)</span><input type="text" dir="rtl" lang="ar" data-k="titleText" placeholder="عنوان الدرس"></div>
       <div class="field"><span class="lbl">Shaykh's name</span><input type="text" dir="rtl" lang="ar" data-k="speaker" placeholder="الشيخ …"></div>
@@ -396,10 +397,18 @@ body.amb{background:var(--bg)}body.amb .card{background:linear-gradient(180deg,r
       <div class="yt-pic"><div class="field"><span class="lbl">Zoom in: hides the source's own border, logos and title strip</span><div class="wrap"><input type="range" min="0" max="60" data-k="ytZoom"><span class="val" data-show="ytZoom"></span></div></div>
       <div class="field"><span class="lbl">Move the picture: left and right</span><div class="wrap"><input type="range" min="-100" max="100" data-k="ytX"></div></div>
       <div class="field"><span class="lbl">Move the picture: up and down</span><div class="wrap"><input type="range" min="-100" max="100" data-k="ytY"></div></div></div>
+      <div class="subhead">Background</div>
+      <div class="field"><span class="lbl">Style</span><div class="wrap" data-k="ytBg"><button class="pill glow" data-v="soft">Soft</button><button class="pill glow" data-v="solid">Solid</button><button class="pill glow" data-v="linear">Gradient</button><button class="pill glow" data-v="radial">Radial</button><button class="pill glow" data-v="aurora">Aurora</button><button class="pill glow" data-v="pattern">Pattern</button></div></div>
+      <div class="field"><span class="lbl">Colour 1</span><div class="wrap" id="ytBgAPick"></div></div>
+      <div class="field"><span class="lbl">Colour 2</span><div class="wrap" id="ytBgBPick"></div></div>
+      <div class="field"><span class="lbl">Gradient angle</span><div class="wrap"><input type="range" min="0" max="360" data-k="ytBgAngle"></div></div>
+      <div class="field"><span class="lbl">Darken a background picture (choose the picture under Source)</span><div class="wrap"><input type="range" min="0" max="90" data-k="ytBgDim"><span class="val" data-show="ytBgDim"></span></div></div>
+      <div class="field"><span class="lbl">Panels behind the title and name</span><div class="wrap" data-k="ytPanel"><button class="pill glow" data-v="plain">None</button><button class="pill glow" data-v="glass">Glass</button><button class="pill glow" data-v="outline">Outline</button><button class="pill glow" data-v="ribbon">Ribbon</button></div></div>
       <div class="subhead">Subtitles</div>
-      <div class="field"><span class="lbl">Subtitle font</span><select data-k="ytSubFont" class="ytfont"></select></div>
+      <div class="field"><span class="lbl">Subtitle font</span><div class="fonts" data-ytf="ytSubFont"></div></div>
       <div class="field"><span class="lbl">Subtitle size</span><div class="wrap"><input type="range" min="60" max="160" data-k="ytSubSize"><span class="val" data-show="ytSubSize"></span></div></div>
       <div class="field"><span class="lbl">Subtitle colour</span><div class="wrap" id="ytSubColourPick"></div></div>
+      <div class="field"><span class="lbl">How the subtitles appear</span><div class="wrap" data-k="ytSubAnim"><button class="pill glow" data-v="none">None</button><button class="pill glow" data-v="fade">Fade</button><button class="pill glow" data-v="rise">Slide up</button><button class="pill glow" data-v="pop">Pop</button><button class="pill glow" data-v="wipe">Reveal</button></div></div>
       <div class="field"><span class="lbl">Background behind the subtitles</span><div class="wrap" data-k="ytSubBox"><button class="pill glow" data-v="auto">Auto</button><button class="pill glow" data-v="box">Box</button><button class="pill glow" data-v="none">No box</button></div></div>
       <div class="field"><span class="lbl">Box colour</span><div class="wrap" id="ytSubBgPick"></div></div>
       <div class="field yt-suby"><span class="lbl">Subtitle height (drag left to move up)</span><div class="wrap"><input type="range" min="-300" max="60" data-k="ytSubY"></div></div>
@@ -407,11 +416,14 @@ body.amb{background:var(--bg)}body.amb .card{background:linear-gradient(180deg,r
       <div class="field wrap"><label class="tick"><input type="checkbox" data-k="ytEnglish"> English under the Arabic (translated by Claude, adds time)</label></div>
       <div class="field yt-en"><span class="lbl">English colour</span><div class="wrap" id="ytEnPick"></div></div>
       <div class="subhead">Title</div>
-      <div class="field"><span class="lbl">Title font</span><select data-k="ytTitleFont" class="ytfont"></select></div>
+      <div class="field"><span class="lbl">Title font</span><div class="fonts" data-ytf="ytTitleFont"></div></div>
       <div class="field"><span class="lbl">Title size</span><div class="wrap"><input type="range" min="60" max="150" data-k="ytTitleSize"><span class="val" data-show="ytTitleSize"></span></div></div>
       <div class="field"><span class="lbl">Title colour</span><div class="wrap" id="ytTitlePick"></div></div>
+      <div class="field"><span class="lbl">Stretch the letters (madd, e.g. الــعــلـم): drag for longer</span><div class="wrap"><input type="range" min="0" max="12" data-k="titleMadd"></div></div>
       <div class="subhead">Shaykh's name</div>
-      <div class="field"><span class="lbl">Name font</span><select data-k="ytNameFont" class="ytfont"></select></div>
+      <div class="field yt-gap"><span class="lbl">Space between the title and the name</span><div class="wrap"><input type="range" min="0" max="120" data-k="ytNameGap"></div></div>
+      <div class="field"><span class="lbl">Stretch the letters (madd, e.g. الــعــلـم): drag for longer</span><div class="wrap"><input type="range" min="0" max="12" data-k="nameMadd"></div></div>
+      <div class="field"><span class="lbl">Name font</span><div class="fonts" data-ytf="ytNameFont"></div></div>
       <div class="field"><span class="lbl">Name size</span><div class="wrap"><input type="range" min="60" max="150" data-k="ytNameSize"><span class="val" data-show="ytNameSize"></span></div></div>
       <div class="field"><span class="lbl">Name colour</span><div class="wrap" id="ytNamePick"></div></div>
       <div class="yt-wave"><div class="subhead">Sound wave</div>
@@ -681,7 +693,10 @@ body.amb{background:var(--bg)}body.amb .card{background:linear-gradient(180deg,r
 const FADES={green:'#0f3b2a',black:'#000000',navy:'#0e1a33',maroon:'#3d0f16',brown:'#3b2516',teal:'#0d3236',plum:'#2c1433',slate:'#1e2630',olive:'#2b2f14',amber:'#4a2a05',ink:'#1F1F1D'};
 // madd: add ـ between joined letters (never after a non-joining letter, at a word's end, or inside لا)
 const NOJOIN='اأإآٱدذرزوؤةىءـ';
-function madd(t,n){n=+n||0;if(!n)return t;const ch=[...t];let o='';
+// the word «الله» keeps its proper form, also inside والله، بالله، لله، عبدالله
+const holy=w=>{const b=w.replace(/[\u064B-\u0652\u0670\u0640]/g,'').replace(/ٱ/g,'ا');return b.includes('الله')||/(^|[^\u0621-\u064A])[وف]?لله($|[^\u0621-\u064A])/.test(b)};
+function madd(t,n){return String(t).split(/(\s+)/).map(w=>holy(w)?w:maddWord(w,n)).join('')}
+function maddWord(t,n){n=+n||0;if(!n)return t;const ch=[...t];let o='';
   for(let i=0;i<ch.length;i++){const c=ch[i];o+=c;if(!/[\u0621-\u064A]/.test(c)||NOJOIN.includes(c))continue;
     while(i+1<ch.length&&/[\u064B-\u0652\u0670]/.test(ch[i+1]))o+=ch[++i];  // keep harakat on their letter
     const nx=ch[i+1];if(nx&&/[\u0621-\u064A]/.test(nx)&&nx!=='ء'&&!(c==='ل'&&'اأإآ'.includes(nx)))o+='ـ'.repeat(n)}
@@ -690,7 +705,7 @@ const FADE_CURVE=[[0,1],[.35,1],[.6,.75],[.8,.35],[1,0]];  // [fraction of fade 
 const WAVES={yellow:'#FDE68A',amber:'#F59E0B',white:'#F8FAFC',cream:'#FFFBEB'};
 const FONTS=[['Thmanyah Sans','Thmanyah ★'],['Thmanyah Serif','Thmanyah Serif ★'],['Basseet','Basseet ★'],['AMoshref Naskh','Moshref ★'],['Noto Naskh Arabic','Naskh'],['Amiri','Amiri'],['Scheherazade New','Scheherazade'],['Lateef','Lateef'],['Markazi Text','Markazi'],
   ['Cairo','Cairo'],['Tajawal','Tajawal'],['El Messiri','El Messiri'],['Reem Kufi','Kufi'],['Aref Ruqaa','Ruqaa']];
-const DEFAULTS={ytSubFont:'Thmanyah Sans',ytSubSize:100,ytSubColour:'',ytSubBg:'',ytSubBox:'auto',ytSubY:0,ytVerseColour:'',ytEnglish:false,ytEnColour:'',ytTitleFont:'Thmanyah Serif',ytTitleSize:100,ytTitleColour:'',ytNameFont:'Thmanyah Sans',ytNameSize:100,ytNameColour:'',ytWave:'bars',ytWaveColour:'',ytLayout:'band',ytTheme:'ink',ytSubs:true,ytKicker:'',ytHandle:'',ytZoom:0,ytX:0,ytY:0,socialStyle:'pill',socialHandle:'',socialIcons:[],socialPos:'bottom',socialWhen:'always',socialColour:'#FFFBEB',look:'none',lookVignette:false,lookGrain:false,lookLeak:false,waveOpacity:85,waveSoft:true,introFx:'none',cdStyle:'pill',lessonLabel:'',lessonLabelText:'',hookFirst:false,videoDim:0,coverIntro:true,translate:'off',enPos:'under',enFont:'Manrope',enLook:'shadow',enColour:'#FFFFFF',enSize:'m',enShadow:70,countdown:'',enAnim:'fade',cdColour:'#F59E0B',ratio:'9:16',clipMode:'auto',manualClips:[{from:'',to:'',title:''}],capLook:'shadow',capBg:'#1F1F1D',capAnim:'fadeup',capHighlight:'#F59E0B',capColour:'#FFFFFF',brandColour:'#FDE68A',palLight:'#EDE6DC',palMid:'#1E4D3A',palDark:'#161613',palAcc:'#C9A45C',ttsVoice:'Majed',ttsRate:165,voice:'computer',source:'video',sourceText:'',motionPalette:'classic',motionFont:'Thmanyah Sans',motionSize:'m',fadeAuto:'#141414',mode:'long',motionLook:'minimal',style:'idrisi',showTitle:true,checklists:true,script:'',textMode:'captions',capSize:'m',capFont:'Thmanyah Sans',titleText:'',titlePos:'top',titleLook:'pill',titleBg:'#FDE68A',titleFg:'#1F1F1D',titleFont:'Thmanyah Serif',titleSize:'m',namePos:'bottom',nameLook:'plain',nameBg:'#1F1F1D',nameFg:'#F8FAFC',nameFont:'Thmanyah Sans',nameSize:'m',checkTranscript:true,quranReading:'hafs',verseColour:'#FDE68A',titleAuto:false,titleMadd:0,nameMadd:0,fadeTopHeight:20,fadeTopStrength:60,background:'footage',
+const DEFAULTS={ytSubAnim:'fade',ytNameGap:0,ytBg:'soft',ytBgA:'',ytBgB:'',ytBgAngle:135,ytBgDim:45,ytPanel:'plain',ytReadAlign:'center',ytSubFont:'Thmanyah Sans',ytSubSize:100,ytSubColour:'',ytSubBg:'',ytSubBox:'auto',ytSubY:0,ytVerseColour:'',ytEnglish:false,ytEnColour:'',ytTitleFont:'Thmanyah Serif',ytTitleSize:100,ytTitleColour:'',ytNameFont:'Thmanyah Sans',ytNameSize:100,ytNameColour:'',ytWave:'bars',ytWaveColour:'',ytLayout:'band',ytTheme:'ink',ytSubs:true,ytKicker:'',ytHandle:'',ytZoom:0,ytX:0,ytY:0,socialStyle:'pill',socialHandle:'',socialIcons:[],socialPos:'bottom',socialWhen:'always',socialColour:'#FFFBEB',look:'none',lookVignette:false,lookGrain:false,lookLeak:false,waveOpacity:85,waveSoft:true,introFx:'none',cdStyle:'pill',lessonLabel:'',lessonLabelText:'',hookFirst:false,videoDim:0,coverIntro:true,translate:'off',enPos:'under',enFont:'Manrope',enLook:'shadow',enColour:'#FFFFFF',enSize:'m',enShadow:70,countdown:'',enAnim:'fade',cdColour:'#F59E0B',ratio:'9:16',clipMode:'auto',manualClips:[{from:'',to:'',title:''}],capLook:'shadow',capBg:'#1F1F1D',capAnim:'fadeup',capHighlight:'#F59E0B',capColour:'#FFFFFF',brandColour:'#FDE68A',palLight:'#EDE6DC',palMid:'#1E4D3A',palDark:'#161613',palAcc:'#C9A45C',ttsVoice:'Majed',ttsRate:165,voice:'computer',source:'video',sourceText:'',motionPalette:'classic',motionFont:'Thmanyah Sans',motionSize:'m',fadeAuto:'#141414',mode:'long',motionLook:'minimal',style:'idrisi',showTitle:true,checklists:true,script:'',textMode:'captions',capSize:'m',capFont:'Thmanyah Sans',titleText:'',titlePos:'top',titleLook:'pill',titleBg:'#FDE68A',titleFg:'#1F1F1D',titleFont:'Thmanyah Serif',titleSize:'m',namePos:'bottom',nameLook:'plain',nameBg:'#1F1F1D',nameFg:'#F8FAFC',nameFont:'Thmanyah Sans',nameSize:'m',checkTranscript:true,quranReading:'hafs',verseColour:'#FDE68A',titleAuto:false,titleMadd:0,nameMadd:0,fadeTopHeight:20,fadeTopStrength:60,background:'footage',
   speaker:'',brand:false,outro:false,fade:'green',fadeCustom:'#14302a',fadeStrength:70,fadeHeight:40,fadeDir:'bottom',wave:'off',wavePos:'bottom',waveColour:'#FDE68A',
   cutSilences:true,cutMistakes:true,strictness:'normal',framing:'face',zoom:'subtle',sfx:'subtle',clipCount:5,minLen:30,maxLen:90,guidance:'',quality:'1080'};
 let voiceBlob=null, S={...DEFAULTS}, R=null, job=null, dur=0, autoColour='#1a1d22', frameUrl='';
@@ -710,7 +725,7 @@ function customPalette(){const lum=h=>{const[r,g,b]=[1,3,5].map(i=>parseInt(h.sl
 // One control for every colour: preset swatches, a colour picker, and a box for any hex code.
 // "Auto" on any colour: made from the video's own colour (sampled with the fade), so text, boxes and accents match the footage.
 // Text stays light, boxes stay dark, accents get the frame's hue at full strength; it follows the frame you're on.
-const ROLE={ytSubColour:'light',ytTitleColour:'light',ytNameColour:'light',ytWaveColour:'light',ytVerseColour:'light',ytEnColour:'light',ytSubBg:'dark',capColour:'light',nameFg:'light',enColour:'light',palLight:'light',capBg:'dark',nameBg:'dark',palDark:'dark',
+const ROLE={ytBgA:'dark',ytBgB:'dark',ytSubColour:'light',ytTitleColour:'light',ytNameColour:'light',ytWaveColour:'light',ytVerseColour:'light',ytEnColour:'light',ytSubBg:'dark',capColour:'light',nameFg:'light',enColour:'light',palLight:'light',capBg:'dark',nameBg:'dark',palDark:'dark',
   titleBg:'accent',capHighlight:'accent',verseColour:'accent',waveColour:'accent',palAcc:'accent',palMid:'mid',titleFg:'onTitle'};
 function autoFor(key){const [r,g,b]=[1,3,5].map(i=>parseInt((S.frameAvg||'#806040').slice(i,i+2),16)/255),mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;
   let h=d?(mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4)*60:40;if(h<0)h+=360;const sat=d/(1-Math.abs(mx+mn-1)||1);
@@ -770,9 +785,11 @@ colorPick('#palLightPick','palLight',['#EDE6DC','#F1E7D3','#F3ECE4','#FFFBEB','#
 colorPick('#palMidPick','palMid',['#1E4D3A','#14213D','#5A1A24','#0F4A44','#F59E0B']);
 colorPick('#palDarkPick','palDark',['#161613','#0D1117','#1E1A1A','#1F1F1D','#000000']);
 colorPick('#palAccPick','palAcc',['#C9A45C','#E3C77F','#F2C46D','#F59E0B','#D62828']);
-[['#ytSubColourPick','ytSubColour'],['#ytSubBgPick','ytSubBg'],['#ytVersePick','ytVerseColour'],['#ytEnPick','ytEnColour'],['#ytTitlePick','ytTitleColour'],['#ytNamePick','ytNameColour'],['#ytWavePick','ytWaveColour']].forEach(([i,k])=>colorPick(i,k,[]));
-$$('select.ytfont').forEach(e=>e.innerHTML=[...new Map([...FONTS,...TFONTS]).entries()].map(([f,n])=>`<option value="${f}">${n}</option>`).join(''));
-$('#ytReset').onclick=()=>{const K=['ytSubColour','ytSubBg','ytVerseColour','ytEnColour','ytTitleColour','ytNameColour','ytWaveColour'];K.forEach(k=>S[k]='');S.autoKeys=(S.autoKeys||[]).filter(k=>!K.includes(k));render()};
+[['#ytBgAPick','ytBgA'],['#ytBgBPick','ytBgB'],['#ytSubColourPick','ytSubColour'],['#ytSubBgPick','ytSubBg'],['#ytVersePick','ytVerseColour'],['#ytEnPick','ytEnColour'],['#ytTitlePick','ytTitleColour'],['#ytNamePick','ytNameColour'],['#ytWavePick','ytWaveColour']].forEach(([i,k])=>colorPick(i,k,[]));
+$$('[data-ytf]').forEach(e=>{const k=e.dataset.ytf,word=k==='ytTitleFont'?'عنوان':k==='ytNameFont'?'الشيخ':'بسم الله';  // the same font cards as reels
+  e.innerHTML=[...new Map([...FONTS,...TFONTS]).entries()].map(([f,n])=>`<button class="font glow" data-v="${f}" style="font-family:'${f}'"><b>${word}</b><span>${n}</span></button>`).join('');
+  e.querySelectorAll('button').forEach(x=>x.onclick=()=>{S[k]=x.dataset.v;render()})});
+$('#ytReset').onclick=()=>{const K=['ytBgA','ytBgB','ytSubColour','ytSubBg','ytVerseColour','ytEnColour','ytTitleColour','ytNameColour','ytWaveColour'];K.forEach(k=>S[k]='');S.autoKeys=(S.autoKeys||[]).filter(k=>!K.includes(k));render()};
 $('#nameFonts').innerHTML=TFONTS.map(([f,n])=>`<button class="font glow" data-nfont="${f}" style="font-family:'${f}'"><b>الشيخ</b><span>${n}</span></button>`).join('');
 $$('[data-nfont]').forEach(b=>b.onclick=()=>{S.nameFont=b.dataset.nfont;render()});
 $('#fadechips').innerHTML=Object.entries(FADES).map(([k,c])=>`<button class="sw" data-fade="${k}" title="${k}" aria-label="${k} fade" style="background:${c}"></button>`).join('')
@@ -806,14 +823,17 @@ document.addEventListener('pointermove',e=>{const el=e.target.closest&&e.target.
 // YouTube: the real design (pipeline/yt_frame.html) over the real video, scaled into the preview; zoom and move match the render
 let ytKey='';
 function drawYt(){const yt=S.style==='youtube';$('.steps [data-st="4"] i').textContent=yt?3:4;$('#n4').textContent=yt?'step 3':'step 4';$('#back3').textContent=yt?'← Back to transcript':'← Back to clips';drawYt2(yt)}
-function drawYt2(yt){const f=$('#ytPrev'),pv=$('#pv'),L=S.source==='audio'?'sound':S.ytLayout,board=yt&&L==='board';
-  $('#ytLayoutField').classList.toggle('hidden',S.source==='audio');$('.yt-pic').classList.toggle('hidden',L==='sound');
-  $('.yt-wave').classList.toggle('hidden',L!=='sound');$('.yt-suby').classList.toggle('hidden',L==='board');$('.yt-en').classList.toggle('hidden',!S.ytEnglish);
+function drawYt2(yt){const f=$('#ytPrev'),pv=$('#pv'),L=S.source==='audio'&&S.ytLayout!=='read'?'sound':S.ytLayout,board=yt&&L==='board',bare=L==='sound'||L==='read';
+  if(yt&&S.source==='audio')S.ytLayout=L;$$('#ytLayoutField [data-v="band"],#ytLayoutField [data-v="board"]').forEach(b=>b.classList.toggle('hidden',S.source==='audio'));
+  $('.yt-gap').classList.toggle('hidden',L==='band'||L==='board');
+  if(window._p&&yt!==presetsYt)drawPresets();
+  $('.yt-pic').classList.toggle('hidden',bare);$('.yt-align').classList.toggle('hidden',L!=='read');
+  $('.yt-wave').classList.toggle('hidden',!bare);$('.yt-suby').classList.toggle('hidden',L==='board'||L==='read');$('.yt-en').classList.toggle('hidden',!S.ytEnglish);
   Object.assign(pv.style,{left:board?'1.875%':'',top:board?'3.33%':'',width:board?'72.5%':'',height:board?'72.5%':'',
     transform:yt?`scale(${1+S.ytZoom/100})`:'',transformOrigin:yt?`${50+S.ytX/2}% ${50+S.ytY/2}%`:''});
   $('#phone').style.clipPath=yt?'inset(0)':'';
   if(!yt)return;
-  const key=JSON.stringify({mode:'frame',layout:L,theme:S.ytTheme,title:S.titleText||'عنوان الدرس يظهر هنا',name:S.speaker||'اسم الشيخ',kicker:S.ytKicker,handle:S.ytHandle,sample:S.ytSubs?1:0,preview:1,style:Object.fromEntries(Object.keys(S).filter(k=>/^yt(Sub|Verse|Title|Name|Wave|En)/.test(k)&&S[k]!==''&&k!=='ytSubs').map(k=>[k,S[k]]))});
+  const key=JSON.stringify({mode:'frame',layout:L,theme:S.ytTheme,title:S.titleText||'عنوان الدرس يظهر هنا',name:S.speaker||'اسم الشيخ',kicker:S.ytKicker,handle:S.ytHandle,sample:S.ytSubs?1:0,preview:1,photo:S.background==='picture'&&bgUrl?bgUrl:'',style:Object.fromEntries(Object.keys(S).filter(k=>/^(yt(Sub|Verse|Title|Name|Wave|En|Bg|Panel|Read)|titleMadd$|nameMadd$)/.test(k)&&S[k]!==''&&k!=='ytSubs').map(k=>[k,S[k]]))});
   if(key!==ytKey){ytKey=key;f.src='/yt/frame?'+Date.now()+'#'+encodeURIComponent(key)}
   f.style.transform=`scale(${$('#phone').clientWidth/1920})`}
 new ResizeObserver(()=>{if(S.style==='youtube')drawYt()}).observe(document.querySelector('#phone'));
@@ -822,6 +842,7 @@ function sync(){
   $$('input[data-k],textarea[data-k],select[data-k]').forEach(el=>{if(el.type==='checkbox')el.checked=S[el.dataset.k];else if(document.activeElement!==el)el.value=S[el.dataset.k]});
   $$('[data-show]').forEach(e=>e.textContent=S[e.dataset.show]+'%');
   $$('[data-font]').forEach(b=>b.classList.toggle('on',S.capFont===b.dataset.font));
+  $$('[data-ytf] button').forEach(b=>b.classList.toggle('on',S[b.parentElement.dataset.ytf]===b.dataset.v));
   $$('[data-tfont]').forEach(b=>b.classList.toggle('on',S.titleFont===b.dataset.tfont));
   $$('[data-nfont]').forEach(b=>b.classList.toggle('on',S.nameFont===b.dataset.nfont));
   $$('[data-fade]').forEach(b=>b.classList.toggle('on',S.fade===b.dataset.fade));
@@ -914,7 +935,7 @@ function render(){
   if(S.capAnim!==lastAnim){lastAnim=S.capAnim;demoCaption()}
   $$('.wave-only').forEach(e=>e.classList.toggle('hidden',S.wave==='off'));
   $('#phone').classList.toggle('visualy',vis);
-  const live=!vis&&job&&S.source==='video'&&!(yt&&S.ytLayout==='sound');
+  const live=!vis&&job&&S.source==='video'&&!(yt&&['sound','read'].includes(S.ytLayout));
   drawYt();
   $('#pv').classList.toggle('hidden',!live); if(!live&&!$('#pv').paused)$('#pv').pause();
   $('#phone').style.backgroundImage=!vis&&pic&&bgUrl?`url(${bgUrl})`:'';
@@ -1111,11 +1132,14 @@ $('#t').onchange=loadFrame;
 $('#pvMute').onclick=()=>{pv.muted=!pv.muted;$('#pvMute').textContent=pv.muted?'🔇':'🔊'};
 
 // presets
-function loadPresets(){fetch('/api/presets').then(r=>r.json()).then(p=>{window._p=p;
-  $('#presetSel').innerHTML='<option value="">Load preset…</option>'+Object.keys(p).map(k=>`<option>${k}</option>`).join('')})}
+// reels and YouTube each have their own presets; YouTube ones are stored as "yt: name"
+const YTP='yt: ';let presetsYt=null;
+function drawPresets(){presetsYt=S.style==='youtube';
+  $('#presetSel').innerHTML='<option value="">Load preset…</option>'+Object.keys(window._p).filter(k=>k.startsWith(YTP)===presetsYt).map(k=>`<option value="${esc(k)}">${esc(k.replace(YTP,''))}</option>`).join('')}
+function loadPresets(){fetch('/api/presets').then(r=>r.json()).then(p=>{window._p=p;drawPresets()})}
 $('#presetSel').onchange=e=>{const p=window._p[e.target.value];if(p){S={...DEFAULTS,...p};drawRows();render()}};
 $('#savePreset').onclick=()=>{const name=prompt('Preset name');if(!name)return;
-  fetch('/api/presets',{method:'POST',body:JSON.stringify({name,settings:S})}).then(loadPresets)};
+  fetch('/api/presets',{method:'POST',body:JSON.stringify({name:(S.style==='youtube'?YTP:'')+name,settings:S})}).then(loadPresets)};
 loadPresets();
 
 // ---------- caption animation demo in the preview (the render uses the same styles via GSAP) ----------

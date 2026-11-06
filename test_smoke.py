@@ -1,5 +1,5 @@
 """End-to-end check on this computer: python -X utf8 test_smoke.py
-Makes a test video, then a reel and all three YouTube layouts, into a folder with an Arabic name. Claude isn't needed to pass."""
+Makes a test video, then a reel and all four YouTube layouts, into a folder with an Arabic name. Claude isn't needed to pass."""
 import json
 import os
 import shutil
@@ -64,9 +64,10 @@ if os.environ.get("QITAF_WHISPER"):
 o = run(py, os.path.join(ROOT, "pipeline", "render_clip.py"), d, "1")
 check(next(l[7:] for l in o.splitlines() if l.startswith("OUTPUT ")).strip(), "reel")
 
-for layout in ("band", "board", "sound"):
+for layout in ("band", "board", "sound", "read"):
     # the style options: a font, sizes, colours, no box, and a non-default wave
     S.update(ytSubFont="Cairo", ytSubSize=120, ytSubColour="#FDE68A", ytSubBox="none" if layout == "band" else "auto", ytTitleFont="Amiri", ytTitleSize=120, ytNameFont="Cairo", ytWave="dots")
+    S.update(ytSubAnim={"band": "pop", "board": "rise", "sound": "wipe", "read": "fade"}[layout], ytBg="aurora", ytPanel="glass", titleMadd=3, nameMadd=2, ytNameGap=30)
     S.update(quranReading="warsh" if layout == "sound" else "hafs", style="youtube", ytLayout=layout, ytTheme="navy", ytSubs=True, ytHandle="@test", speaker="الشيخ فلان", titleText="عنوان الاختبار")
     json.dump(S, open(os.path.join(d, "settings.json"), "w"), ensure_ascii=False)
     o = run(py, os.path.join(ROOT, "pipeline", "youtube.py"), d, "1")
@@ -75,7 +76,7 @@ for layout in ("band", "board", "sound"):
     assert os.path.exists(v[:-4] + " thumbnail 1.jpg") and os.path.exists(v[:-4] + ".srt")
     if layout == "sound":  # this pass uses Warsh: the verse must come from al-mushaf.com, with its own reading
         assert "قُلِ" in open(v[:-4] + ".srt", encoding="utf-8").read(), "no Warsh text"
-    if layout != "sound":  # the frame must be fully painted: the bottom edge is the ground colour, never black
+    if layout in ("band", "board"):  # the frame must be fully painted: the bottom edge is the ground colour, never black
         g = subprocess.run(["ffmpeg", "-v", "error", "-ss", "6", "-i", v, "-frames:v", "1", "-vf", "crop=1920:8:0:1068,scale=1:1", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True).stdout
         assert sum(g) > 60, f"unpainted board edge: {list(g)}"
     shutil.copy(v[:-4] + " thumbnail 1.jpg", os.path.join(shots, f"thumb-{layout}.jpg"))

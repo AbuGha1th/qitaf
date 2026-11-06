@@ -4,6 +4,10 @@ const AR = {
   // steps and header
   'Set up':'الإعداد','Words':'النص','Clips':'المقاطع','Videos':'الفيديوهات','Library':'المكتبة','Help':'المساعدة','Qitaf':'قِطاف',
   'harvest the best of every lesson':'اقطف أفضل ما في كل درس','Always on:':'دائمًا:','no music':'بلا موسيقى','· no AI faces · no women on screen':'· بلا وجوه مولّدة · بلا نساء في الصورة',
+  'How the subtitles appear':'طريقة ظهور الترجمة','Slide up':'انزلاق للأعلى','Reveal':'كشف',
+  'Space between the title and the name':'المسافة بين العنوان والاسم',
+  'Reading page':'صفحة قراءة','Text on the reading page':'النص في صفحة القراءة','Centred':'في الوسط','Right aligned':'إلى اليمين','Soft':'ناعم','Solid':'لون واحد','Gradient':'متدرج','Radial':'دائري','Aurora':'شفق','Pattern':'زخرفة','Colour 1':'اللون ١','Colour 2':'اللون ٢','Gradient angle':'زاوية التدرج','Darken a background picture (choose the picture under Source)':'عتّم صورة الخلفية (اختر الصورة من المصدر)','Panels behind the title and name':'لوحات خلف العنوان والاسم','Glass':'زجاجي','Ribbon':'شريط',
+  'green':'أخضر','black':'أسود','navy':'كحلي','maroon':'خمري','brown':'بني','teal':'أزرق مخضر','plum':'بنفسجي','slate':'رمادي','olive':'زيتوني','amber':'كهرماني','ink':'حبري',
   'Skip to content':'تخطَّ إلى المحتوى','Progress':'التقدم','Preview':'المعاينة','step 2':'الخطوة ٢','step 3':'الخطوة ٣','step 4':'الخطوة ٤','library':'المكتبة','batch':'دفعة',
   // source
   'Source':'المصدر','Start from':'ابدأ من','Video':'فيديو','Audio (mp3)':'صوت (mp3)','Audio':'صوت','Length':'الطول','Long lesson → cut into clips':'درس طويل ← قصّه إلى مقاطع','Use the whole thing':'استخدمه كاملًا',

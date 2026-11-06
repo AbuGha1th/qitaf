@@ -30,9 +30,10 @@ html,body{background:transparent;overflow:hidden}
 .band .ti{flex:1;min-width:0;font:900 60px/1.2 QSerif;text-align:left;color:var(--tx)}
 .band.t2 .ti{text-align:center}
 /* ---- board: video on a plain board, subtitles under it, title and name in a column of their own ---- */
-#s.board{background:var(--bg)}
+#s.board{background:transparent}
 .hole{position:absolute;left:36px;top:36px;width:1392px;height:783px;border-radius:20px}
-.ground{position:absolute;left:0;top:0;fill:var(--bg)}
+.gnd{position:absolute;inset:0;background-size:cover}
+.board .gnd{clip-path:path(evenodd,'M0 0H1920V1080H0ZM56 36H1408a20 20 0 0 1 20 20V799a20 20 0 0 1-20 20H56a20 20 0 0 1-20-20V56a20 20 0 0 1 20-20Z')}
 .hole::after{content:'';position:absolute;inset:0;border-radius:20px;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--acc) 35%,transparent)}
 .subpanel{position:absolute;left:36px;top:843px;width:1392px;height:201px;border-radius:20px;background:var(--pn)}
 .col{position:absolute;right:36px;top:36px;bottom:36px;width:420px;display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -51,6 +52,22 @@ html,body{background:transparent;overflow:hidden}
 .sd .nm{margin-top:20px;font:700 40px/1.4 Sans;color:var(--tx);opacity:.82}
 .sd .wv{position:absolute;left:400px;top:600px;width:1120px;height:152px;border-radius:40px;background:var(--wv)}
 .sd .hd{position:absolute;left:0;right:0;bottom:44px;font:500 26px Sans;direction:ltr;letter-spacing:.14em;opacity:.55}
+/* ---- reading page: the words themselves fill the screen, like a page of the book ---- */
+.sd.rd{padding-top:30px}
+.rd .kick{font-size:26px;min-height:0}.rd .ti{margin-top:6px;font-size:64px;line-height:1.35}.rd .nm{margin-top:6px;font-size:30px}
+.rdbox{position:absolute;left:80px;right:80px;top:236px;height:612px}
+.rd .wv{top:862px}.rd .hd{bottom:12px;font-size:21px}
+/* ---- panels behind the title and name ---- */
+.p-glass .pnl{background:color-mix(in srgb,var(--tx) 9%,transparent);border:1px solid color-mix(in srgb,var(--tx) 24%,transparent);box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 22%,transparent),0 18px 50px rgba(0,0,0,.28);backdrop-filter:blur(22px);border-radius:26px}
+.p-outline .pnl{border:2px solid var(--acc);border-radius:20px}
+.p-ribbon .pnl:not(.rdbox){background:var(--acc);color:var(--bg)!important;opacity:1!important;clip-path:polygon(22px 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,22px 100%,0 50%)}
+.p-ribbon .rdbox{background:color-mix(in srgb,var(--tx) 6%,transparent);border-radius:26px}
+.sd .pnl:not(.rdbox){padding:.12em 1.1em;margin-inline:auto}
+.band.glassy{background:color-mix(in srgb,var(--bg) 62%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+@keyframes q-fade{0%{opacity:0}12%,88%{opacity:1}100%{opacity:0}}
+@keyframes q-rise{0%{opacity:0;transform:translateY(40px)}12%,88%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes q-pop{0%{opacity:0;transform:scale(.88)}12%,88%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes q-wipe{0%{clip-path:inset(0 0 0 100%)}18%,88%{clip-path:inset(0)}100%{clip-path:inset(0);opacity:0}}
 /* the sample line in the set-up preview */
 #sample{position:absolute;left:0;right:0;display:none;text-align:center;font:700 46px/1.5 Sans}
 #sample span{padding:8px 30px;border-radius:16px}
@@ -108,41 +125,68 @@ async function subs(){
     const words=it.t.split(/\s+/);let lines=[it.t];
     if(c.measureText(it.t).width>W-H.pad*2-20||words.length>9){let best=1,bd=1e9;for(let k=1;k<words.length;k++){const a=c.measureText(words.slice(0,k).join(' ')).width,b=c.measureText(words.slice(k).join(' ')).width,d=Math.abs(a-b);if(d<bd){bd=d;best=k}}
       lines=[words.slice(0,best).join(' '),words.slice(best).join(' ')]}
-    let sz=size;const widest=()=>Math.max(...lines.map(l=>c.measureText(l).width));const eh=z=>it.en?z*enAt*1.5:0,tall=z=>z*(q?1.85:1.5)*lines.length+eh(z)+16;while((widest()>W-H.pad*2||tall(sz)>Ht)&&sz>22){sz-=2;c.font=face(sz)}
-    const lh=sz*(q?1.85:1.5),bh=lh*lines.length+eh(sz),y0=Ht/2-bh/2;let bw=widest();
+    if(H.layout==='read'){lines=[];let cur='';for(const w of words){const t=cur?cur+' '+w:w;if(c.measureText(t).width>W-H.pad*2&&cur){lines.push(cur);cur=w}else cur=t}lines.push(cur)}
+    let sz=size;const widest=()=>Math.max(...lines.map(l=>c.measureText(l).width));const LH=H.layout==='read'?(q?2:1.75):(q?1.85:1.5),right=H.layout==='read'&&O.ytReadAlign==='right',X=right?W-H.pad:W/2;c.textAlign=right?'right':'center';
+    const eh=z=>it.en?z*enAt*1.5:0,tall=z=>z*LH*lines.length+eh(z)+16;while((widest()>W-H.pad*2||tall(sz)>Ht)&&sz>22){sz-=2;c.font=face(sz)}
+    const lh=sz*LH,bh=lh*lines.length+eh(sz),y0=Ht/2-bh/2;let bw=widest();
     if(it.en){c.font=`600 ${sz*enAt}px Manrope`;bw=Math.max(bw,Math.min(c.measureText(it.en).width,W-H.pad*2));c.font=face(sz)}
     if(H.pill){c.shadowBlur=0;c.fillStyle=H.pill;c.beginPath();c.roundRect(W/2-(bw+64)/2,y0-8,bw+64,bh+16,18);c.fill()}
     if(H.shadow){c.shadowColor='rgba(0,0,0,.85)';c.shadowBlur=10;c.shadowOffsetY=2}
-    c.fillStyle=q?(O.ytVerseColour||T.acc):(H.ink||T.tx);lines.forEach((l,i)=>c.fillText(l,W/2,y0+lh*(i+.5)));
+    c.fillStyle=q?(O.ytVerseColour||T.acc):(H.ink||T.tx);lines.forEach((l,i)=>c.fillText(l,X,y0+lh*(i+.5)));
     if(it.en){c.direction='ltr';let ez=sz*enAt;c.font=`600 ${ez}px Manrope`;while(c.measureText(it.en).width>W-H.pad*2&&ez>16){ez-=1;c.font=`600 ${ez}px Manrope`}
-      c.fillStyle=O.ytEnColour||H.ink||T.tx;c.fillText(it.en,W/2,y0+lh*lines.length+eh(sz)/2)}
+      c.textAlign='center';c.fillStyle=O.ytEnColour||H.ink||T.tx;c.fillText(it.en,W/2,y0+lh*lines.length+eh(sz)/2)}
     c.shadowBlur=0;c.shadowOffsetY=0;
     out.push(cv.toDataURL('image/png').slice(22));
   }
   document.getElementById('out').textContent=JSON.stringify(out);document.title='done'
 }
+// madd, the same as the reels: add ـ between joined letters (never after a non-joining letter, at a word's end, or inside لا)
+const NOJOIN='اأإآٱدذرزوؤةىءـ';
+// the word «الله» keeps its proper form, also inside والله، بالله، لله، عبدالله
+const holy=w=>{const b=w.replace(/[\u064B-\u0652\u0670\u0640]/g,'').replace(/ٱ/g,'ا');return b.includes('الله')||/(^|[^\u0621-\u064A])[وف]?لله($|[^\u0621-\u064A])/.test(b)};
+function madd(t,n){return String(t).split(/(\s+)/).map(w=>holy(w)?w:maddWord(w,n)).join('')}
+function maddWord(t,n){n=+n||0;if(!n)return t;const ch=[...t];let o='';
+  for(let i=0;i<ch.length;i++){const c=ch[i];o+=c;if(!/[\u0621-\u064A]/.test(c)||NOJOIN.includes(c))continue;
+    while(i+1<ch.length&&/[\u064B-\u0652\u0670]/.test(ch[i+1]))o+=ch[++i];
+    const nx=ch[i+1];if(nx&&/[\u0621-\u064A]/.test(nx)&&nx!=='ء'&&!(c==='ل'&&'اأإآ'.includes(nx)))o+='ـ'.repeat(n)}
+  return o}
+// the ground behind everything: colours are the user's, or the theme's
+function ground(O){
+  const a=O.ytBgA||T.bg,b=O.ytBgB||T.pn,ang=O.ytBgAngle??135,k=O.ytBg||'soft',d=(O.ytBgDim??45)/100;
+  if(H.photo)return `linear-gradient(rgba(0,0,0,${d}),rgba(0,0,0,${d})),url("${H.photo}") center/cover no-repeat`;
+  const star=`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><g fill="none" stroke="${T.acc}" stroke-opacity=".16" stroke-width="1.4"><rect x="30" y="30" width="60" height="60"/><rect x="30" y="30" width="60" height="60" transform="rotate(45 60 60)"/><circle cx="60" cy="60" r="11"/></g></svg>`;
+  return {solid:a,linear:`linear-gradient(${ang}deg,${a},${b})`,radial:`radial-gradient(circle at 32% 26%,${b},${a} 74%)`,
+    aurora:`radial-gradient(900px 620px at 14% 18%,${b},transparent 72%),radial-gradient(760px 560px at 86% 26%,${T.acc}40,transparent 72%),radial-gradient(1000px 700px at 58% 104%,${b}B0,transparent 72%),${a}`,
+    pattern:`url('data:image/svg+xml,${encodeURIComponent(star)}'),linear-gradient(${ang}deg,${a},${b})`}[k]||(H.layout==='board'?a:'')}
 function frame(){
-  const ti=esc(H.title).replace(/\n/g,' '),nm=esc(H.name),kk=esc(H.kicker),hd=esc(H.handle),L=H.layout||'band',O=H.style||{};
+  const O=H.style||{},ti=esc(madd(H.title,O.titleMadd)).replace(/\n/g,' '),nm=esc(madd(H.name,O.nameMadd)),kk=esc(H.kicker),hd=esc(H.handle),L=H.layout||'band';
   const ts=(O.ytTitleSize||100)/100;
   const dress=()=>{s.querySelectorAll('.ti').forEach(e=>{if(O.ytTitleFont)e.style.fontFamily=`"${O.ytTitleFont}",QSerif`;if(O.ytTitleColour)e.style.color=O.ytTitleColour});
-    s.querySelectorAll('.who b,.nm').forEach(e=>{if(O.ytNameFont)e.style.fontFamily=`"${O.ytNameFont}",Sans`;if(O.ytNameColour){e.style.color=O.ytNameColour;e.style.opacity=1}e.style.fontSize=parseFloat(getComputedStyle(e).fontSize)*(O.ytNameSize||100)/100+'px'})};
-  if(L==='board'){s.className='board';s.style.background='transparent';
-    s.innerHTML=`<svg class="ground" width="1920" height="1080"><path fill-rule="evenodd" d="M0 0H1920V1080H0ZM56 36H1408a20 20 0 0 1 20 20V799a20 20 0 0 1-20 20H56a20 20 0 0 1-20-20V56a20 20 0 0 1 20-20Z"/></svg><div class="hole"></div><div class="subpanel"></div><div class="col">${logoImg('logo')}${kk?`<div class="kick">${kk}</div>`:''}<div class="ti" id="t"><span>${ti}</span></div><div class="rule"></div><div class="nm">${nm}</div><div class="hd">${hd}</div></div>`;
-    dress();const t=document.getElementById('t');let f=66*ts;t.style.fontSize=f+'px';while(t.scrollHeight>t.clientHeight+2&&f>34){f-=2;t.style.fontSize=f+'px'}
-  }else if(L==='sound'){s.className='sound';
-    s.innerHTML=`<div class="sd">${logoImg('logo')}<div class="kick">${kk}</div><div class="ti" id="t">${ti}</div><div class="nm">${nm}</div><div class="wv"></div><div class="hd">${hd}</div></div>`;
-    dress();if(O.ytWave==='off')s.querySelector('.wv').remove();const t=document.getElementById('t');let f=112*ts;t.style.fontSize=f+'px';while(t.offsetHeight>260&&f>56){f-=4;t.style.fontSize=f+'px'}
+    s.querySelectorAll('.who b,.nm').forEach(e=>{if(O.ytNameFont)e.style.fontFamily=`"${O.ytNameFont}",Sans`;if(O.ytNameColour){e.style.color=O.ytNameColour;e.style.opacity=1}e.style.fontSize=parseFloat(getComputedStyle(e).fontSize)*(O.ytNameSize||100)/100+'px';
+      if(e.classList.contains('nm')&&L!=='board')e.style.marginTop=(L==='read'?16:40)+(+O.ytNameGap||0)+'px'})};
+  const P=O.ytPanel&&O.ytPanel!=='plain'?' p-'+O.ytPanel:'',gnd=`<div class="gnd" style='background:${ground(O).replace(/'/g,'&#39;')}'></div>`;
+  if(L==='board'){s.className='board'+P;s.style.background='transparent';
+    s.innerHTML=`${gnd}<div class="hole"></div><div class="subpanel${P?' pnl':''}"></div><div class="col">${logoImg('logo')}${kk?`<div class="kick">${kk}</div>`:''}<div class="ti" id="t"><span>${ti}</span></div><div class="rule"></div><div class="nm">${nm}</div><div class="hd">${hd}</div></div>`;
+    dress();const t=document.getElementById('t');let f=66*ts;t.style.fontSize=f+'px';while((t.scrollHeight>t.clientHeight+2||t.scrollWidth>t.clientWidth+2)&&f>34){f-=2;t.style.fontSize=f+'px'}
+  }else if(L==='read'){s.className='sound'+P;const n=P?' pnl':'';
+    s.innerHTML=`${gnd}<div class="sd rd">${logoImg('logo')}<div class="kick">${kk}</div><div class="ti${n}" id="t">${ti}</div><div class="nm${n}">${nm}</div><div class="rdbox${n}"></div><div class="wv"></div><div class="hd">${hd}</div></div>`;
+    dress();if(O.ytWave==='off')s.querySelector('.wv').remove();const t=document.getElementById('t');const more=Math.max(0,Math.min(72,(ts-1)*120)),box=s.querySelector('.rdbox');box.style.top=236+more+'px';box.style.height=612-more+'px';t.style.maxWidth='1580px';let f=64*ts;t.style.fontSize=f+'px';while(t.offsetHeight>112+more&&f>30){f-=2;t.style.fontSize=f+'px'}
+  }else if(L==='sound'){s.className='sound'+P;const n=P?' pnl':'';
+    s.innerHTML=`${gnd}<div class="sd">${logoImg('logo')}<div class="kick">${kk}</div><div class="ti${n}" id="t">${ti}</div><div class="nm${n}">${nm}</div><div class="wv"></div><div class="hd">${hd}</div></div>`;
+    dress();if(O.ytWave==='off')s.querySelector('.wv').remove();const t=document.getElementById('t');const lim=Math.min(400,260*Math.max(1,ts));t.style.maxWidth=ts>1?'1780px':'';let f=112*ts;t.style.fontSize=f+'px';while(t.offsetHeight>lim&&f>56){f-=4;t.style.fontSize=f+'px'}
+    s.querySelector('.sd').style.paddingTop=Math.max(30,118-Math.max(0,t.offsetHeight-180))+'px'
   }else{s.className='';
-    s.innerHTML=`<div class="band">${logoImg('logo')}<div class="who"><b class="fit" id="n">${nm}</b>${kk?`<i class="fit">${kk}</i>`:''}</div><div class="ti fit" id="t">${ti}</div></div>`;
-    dress();const t=document.getElementById('t');t.style.fontSize=60*ts+'px';t.style.overflow='hidden';fit(t,34);t.style.overflow='';
+    s.innerHTML=`<div class="band${O.ytPanel==='glass'?' glassy':''}">${logoImg('logo')}<div class="who"><b class="fit" id="n">${nm}</b>${kk?`<i class="fit">${kk}</i>`:''}</div><div class="ti fit" id="t">${ti}</div></div>`;
+    if(O.ytBg&&O.ytBg!=='soft'&&O.ytPanel!=='glass')s.querySelector('.band').style.background=ground(O);dress();const t=document.getElementById('t');let f=60*ts;Object.assign(t.style,{whiteSpace:'normal',lineHeight:1.12,textWrap:'balance',fontSize:f+'px'});while(t.scrollHeight>150&&f>30){f-=2;t.style.fontSize=f+'px'}
   }
   const wv=s.querySelector('.wv');
   if(H.preview&&wv){const k=O.ytWave||'bars',col=O.ytWaveColour||(H.theme==='paper'?'#F4EFE4':'#E8C15A'),bw={thin:3,dots:13}[k]||9;  // a stand-in, so the choice can be seen before rendering
     wv.style.display='flex';wv.style.alignItems='center';wv.style.justifyContent='center';wv.style.gap=({thin:12,dots:2}[k]??6)+'px';
     wv.innerHTML=Array.from({length:72},(_,i)=>{const v=.15+.85*Math.abs(Math.sin(i*.37)*Math.cos(i*.11))*(1-Math.abs(i-36)/60),h=k==='dots'?bw*(.3+.7*v):Math.max(bw,116*v);return `<i style="display:block;flex:none;width:${k==='dots'?h:bw}px;height:${h}px;border-radius:99px;background:${col}"></i>`}).join('')}
-  if(H.sample){const y=({band:802,board:900,sound:806}[L]||802)+(L==='board'?0:+O.ytSubY||0)-(O.ytEnglish?22:0),e=document.createElement('div'),box=O.ytSubBox==='box'||((O.ytSubBox||'auto')==='auto'&&L==='band'),sz=46*(O.ytSubSize||100)/100;e.id='sample';
+  if(H.sample){const y=({band:802,board:900,sound:806,read:330}[L]||802)+(L==='board'?0:+O.ytSubY||0)-(O.ytEnglish?22:0),e=document.createElement('div'),box=O.ytSubBox==='box'||((O.ytSubBox||'auto')==='auto'&&L==='band'),sz=46*(O.ytSubSize||100)/100;e.id='sample';
     e.style.cssText=`display:block;top:${y}px;${L==='board'?'left:36px;right:492px;':''}color:${O.ytSubColour||(L==='band'?'#fff':T.tx)};font-family:"${O.ytSubFont||'Thmanyah Sans'}",Sans;font-size:${sz}px;${box?'':'text-shadow:0 2px 10px rgba(0,0,0,.85)'}`;
-    e.innerHTML=`<span style="display:inline-block;${box?`background:${O.ytSubBg||T.bg}D9`:''}">والله رؤوف بالعباد، فهذا من رحمته بهم${O.ytEnglish?`<div dir="ltr" style="font:600 ${sz*.6}px/1.5 Manrope;color:${O.ytEnColour||'inherit'}">Allah is Kind to His servants</div>`:''}</span>`;s.append(e)}
+    if(L==='read'){e.style.left='120px';e.style.right='120px';e.style.fontSize=60*(O.ytSubSize||100)/100+'px';e.style.lineHeight=1.75;e.style.textAlign=O.ytReadAlign==='right'?'right':'center'}
+    e.innerHTML=`<span style="display:inline-block;${box?`background:${O.ytSubBg||T.bg}D9`:''}">${L==='read'?'والله رؤوف بالعباد، فهذا من رحمته بهم، يحذرهم نفسه ليستقيموا على طاعته ويبتعدوا عن معصيته، فمن رحمته أنه حذرهم قبل أن يأخذهم، ولو شاء لأخذهم بغتة':'والله رؤوف بالعباد، فهذا من رحمته بهم'}${O.ytEnglish?`<div dir="ltr" style="font:600 ${sz*.6}px/1.5 Manrope;color:${O.ytEnColour||'inherit'}">Allah is Kind to His servants</div>`:''}</span>`;s.append(e);const an={fade:'q-fade',rise:'q-rise',pop:'q-pop',wipe:'q-wipe'}[O.ytSubAnim];if(an)e.firstChild.style.animation=an+' 2.6s infinite'}
 }
 function thumb(){
   const v=H.variant||'A',lines=(H.lines||[]).filter(Boolean),hi=H.hi??0;s.className='th t'+v+(H.photo?'':' nophoto');

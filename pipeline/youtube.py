@@ -23,10 +23,12 @@ FPS, W, H = 30, 1920, 1080
 # where the subtitle strip sits: x, y, width, height, font size; band floats a pill over the video
 STRIP = {"band": dict(x=120, y=710, w=1680, h=196, size=46, pad=30),
          "board": dict(x=36, y=843, w=1392, h=201, size=50, pad=40),
-         "sound": dict(x=200, y=772, w=1520, h=196, size=48, pad=30)}
+         "sound": dict(x=200, y=772, w=1520, h=196, size=48, pad=30),
+         "read": dict(x=120, y=246, w=1680, h=592, size=60, pad=40)}
 WAVE_X, WAVE_Y, WAVE_W, WAVE_H, BARS = 400, 600, 1120, 152, 72
 LOOK_KEYS = ("ytSubFont", "ytSubSize", "ytSubColour", "ytSubBg", "ytSubBox", "ytSubY", "ytVerseColour", "ytTitleFont", "ytTitleSize", "ytTitleColour",
-             "ytNameFont", "ytNameSize", "ytNameColour", "ytWave", "ytWaveColour", "ytEnglish", "ytEnColour")
+             "ytNameFont", "ytNameSize", "ytNameColour", "ytWave", "ytWaveColour", "ytEnglish", "ytEnColour",
+             "ytBg", "ytBgA", "ytBgB", "ytBgAngle", "ytBgDim", "ytPanel", "ytReadAlign", "ytNameGap", "ytSubAnim", "titleMadd", "nameMadd")
 
 
 def progress(p, label):
@@ -93,6 +95,56 @@ def chunks(segs, a, b, reading):
     return out
 
 
+def effect(png, kind, into):
+    """A subtitle's entrance and exit as short image runs: (frames in, frames out) as PNG bytes."""
+    im = cv2.imdecode(np.frombuffer(png, np.uint8), cv2.IMREAD_UNCHANGED).astype(np.float32)
+    h, w = im.shape[:2]
+    a = im[..., 3].copy()
+    used = np.where(a.max(0) > 0)[0]  # the wipe crosses the text, not the empty strip around it
+    x0, x1 = (int(used[0]), int(used[-1])) if len(used) else (0, w)
+    steps = 16 if kind == "wipe" else 8
+
+    def shot(p):
+        e = 1 - (1 - p) ** 3  # eases to a stop
+        o = im.copy()
+        if kind == "wipe":  # Arabic reads from the right, so it appears from the right
+            o[..., 3] = a * np.clip((np.arange(w) - (x1 - (x1 - x0 + 60) * e) + 60) / 60, 0, 1)
+        else:
+            o[..., 3] = a * e
+        if kind == "rise":
+            o = cv2.warpAffine(o, np.float32([[1, 0, 0], [0, 1, (1 - e) * 40]]), (w, h))
+        elif kind == "pop":
+            z = .88 + .12 * e
+            o = cv2.warpAffine(o, np.float32([[z, 0, w / 2 * (1 - z)], [0, z, h / 2 * (1 - z)]]), (w, h))
+        return cv2.imencode(".png", o.astype(np.uint8), [cv2.IMWRITE_PNG_COMPRESSION, 1])[1].tobytes()
+
+    def out(p):
+        o = im.copy(); o[..., 3] = a * p
+        return cv2.imencode(".png", o.astype(np.uint8), [cv2.IMWRITE_PNG_COMPRESSION, 1])[1].tobytes()
+    return [shot((k + 1) / steps) for k in range(steps - 1)], [out(1 - (k + 1) / 5) for k in range(4)]
+
+
+def blocks(caps, most=28):
+    """The reading page shows paragraphs: join lines until a pause, a verse boundary, or about 28 words."""
+    out = []
+    for c in caps:
+        p = out[-1] if out else None
+        if p and p["q"] == c["q"] and c["s"] - p["e"] < 1.5 and len(p["t"].split()) + len(c["t"].split()) <= most:
+            p["t"] += " " + c["t"]; p["e"] = c["e"]
+        else:
+            out.append(dict(c))
+    return out
+
+
+def strip(layout, look):
+    """Where subtitles go. On the reading page a bigger title takes room from the text area."""
+    st = dict(STRIP[layout])
+    if layout == "read":
+        more = int(max(0, min(72, (float(look.get("ytTitleSize") or 100) / 100 - 1) * 120)))
+        st["y"] += more; st["h"] -= more
+    return st
+
+
 def english(caps):
     """English for every subtitle, by Claude, in order so it reads as one talk. Kept in yt_en.json, so a re-render costs nothing."""
     p = os.path.join(OUT, "yt_en.json")
@@ -118,7 +170,7 @@ def english(caps):
 
 def draw_subs(caps, layout, theme, work, length, reading, look):
     """Every subtitle as a PNG, and a concat list that shows each for its time (this ffmpeg has no text filters)."""
-    st = STRIP[layout]; d = os.path.join(work, "subs"); os.makedirs(d, exist_ok=True)
+    st = strip(layout, look); d = os.path.join(work, "subs"); os.makedirs(d, exist_ok=True)
     box = look.get("ytSubBox") or "auto"
     bg = look.get("ytSubBg") or {"forest": "#0E3327", "navy": "#0F1C38", "maroon": "#3A1017"}.get(theme, "#131311")
     pill = bg + "D9" if box == "box" or (box == "auto" and layout == "band") else None
@@ -134,10 +186,23 @@ def draw_subs(caps, layout, theme, work, length, reading, look):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", f"color=c=black@0:s={st['w']}x{st['h']},format=rgba", "-frames:v", "1", blank], check=True)
     lines, t = ["ffconcat version 1.0"], 0.0  # names relative to this list: no drive letters or backslashes to escape
     for i, (c, b) in enumerate(zip(caps, pngs)):
-        f = os.path.join(d, f"{i:05d}.png"); open(f, "wb").write(base64.b64decode(b))
+        png = base64.b64decode(b)
+        f = os.path.join(d, f"{i:05d}.png"); open(f, "wb").write(png)
         if c["s"] > t + .01:
             lines += ["file 'blank.png'", f"duration {c['s'] - t:.3f}"]
-        lines += [f"file '{i:05d}.png'", f"duration {max(c['e'] - c['s'], .2):.3f}"]; t = c["s"] + max(c["e"] - c["s"], .2)
+        hold = max(c["e"] - c["s"], .2); t = c["s"] + hold
+        anim = look.get("ytSubAnim") or "none"
+        if anim != "none" and hold > .7:  # too short a line just appears: an effect would eat all of it
+            ins, outs = effect(png, anim, d)
+            for k, img in enumerate(ins):
+                g = os.path.join(d, f"{i:05d}i{k}.png"); open(g, "wb").write(img)
+                lines += [f"file '{os.path.basename(g)}'", f"duration {1 / FPS:.4f}"]
+            lines += [f"file '{i:05d}.png'", f"duration {hold - (len(ins) + len(outs)) / FPS:.3f}"]
+            for k, img in enumerate(outs):
+                g = os.path.join(d, f"{i:05d}o{k}.png"); open(g, "wb").write(img)
+                lines += [f"file '{os.path.basename(g)}'", f"duration {1 / FPS:.4f}"]
+        else:
+            lines += [f"file '{i:05d}.png'", f"duration {hold:.3f}"]
     lines += ["file 'blank.png'", f"duration {max(length - t, .1) + 1:.3f}"]
     p = os.path.join(d, "subs.ffconcat"); open(p, "w").write("\n".join(lines) + "\n")
     return p
@@ -290,7 +355,10 @@ def main():
     whole = clip.get("reason") == "Whole video" and abs(clip["start"] - segs[0]["start"]) < .1 and abs(clip["end"] - segs[-1]["end"]) < .1
     a, b = (0.0, dur) if whole else (clip["start"], clip["end"])
     length = b - a
-    layout = "sound" if META.get("audioOnly") else S.get("ytLayout", "band")
+    layout = S.get("ytLayout", "band")
+    if META.get("audioOnly") and layout != "read":
+        layout = "sound"
+    bare = layout in ("sound", "read")  # no picture from the source
     theme = S.get("ytTheme", "ink")
     name = "" if clip.get("hideName") else clip.get("speaker") or S.get("speaker", "")
     title = (clip.get("title") or S.get("titleText", "")).replace("\n", " ").strip()
@@ -310,8 +378,12 @@ def main():
     progress(6, "Drawing the frame")
     frame = os.path.join(OUT, "yt_frame.png")
     look = {k: S[k] for k in LOOK_KEYS if S.get(k) not in (None, "")}
-    page({"mode": "frame", "layout": layout, "theme": theme, "title": title, "name": name, "kicker": S.get("ytKicker", ""), "handle": handle, "style": look}, frame)
+    bgp = os.path.join(job_dir, "bg.png")
+    page({"mode": "frame", "layout": layout, "theme": theme, "title": title, "name": name, "kicker": S.get("ytKicker", ""), "handle": handle, "style": look,
+          "photo": plat.url(bgp) if S.get("background") == "picture" and os.path.exists(bgp) else ""}, frame)
     caps = chunks(segs, a, b, S.get("quranReading", "hafs")) if S.get("ytSubs", True) else []
+    if layout == "read":
+        caps = blocks(caps)
     if caps and S.get("ytEnglish"):
         english(caps)
     subs = draw_subs(caps, layout, theme, OUT, length, S.get("quranReading", "hafs"), look) if caps else None
@@ -324,11 +396,11 @@ def main():
     tmp = os.path.join(OUT, "youtube.mp4")
 
     cut = ["-ss", f"{a:.3f}", "-t", f"{length:.3f}"]
-    out = ["-map", "[o]", "-map", "0:a:0"] + plat.video_args("9M" if layout != "sound" else "5M") + [
+    out = ["-map", "[o]", "-map", "0:a:0"] + plat.video_args("9M" if not bare else "5M") + [
            "-pix_fmt", "yuv420p", "-r", str(FPS), "-c:a", AAC, "-b:a", "192k", "-t", f"{length:.3f}", "-movflags", "+faststart", tmp]
     sub_in = ["-f", "concat", "-safe", "0", "-i", subs] if subs else []
-    st = dict(STRIP[layout]); base = ["ffmpeg", "-v", "error", "-y"]
-    if layout == "sound":
+    st = strip(layout, look); base = ["ffmpeg", "-v", "error", "-y"]
+    if bare:
         wv = S.get("ytWaveColour") or {"paper": "#F4EFE4"}.get(theme, "#E8C15A")
         wk = S.get("ytWave") or "bars"
         if wk == "off":
@@ -337,7 +409,7 @@ def main():
             cmd = base + cut + ["-i", src, "-loop", "1", "-framerate", str(FPS), "-i", frame] + sub_in
         else:
             n = 3
-            g = f"[1:v]format=rgba[bg];[2:v]format=rgba[w];[bg][w]overlay={WAVE_X + (WAVE_W - BARS * 15) // 2}:{WAVE_Y + 18}:shortest=1[a]"
+            g = f"[1:v]format=rgba[bg];[2:v]format=rgba[w];[bg][w]overlay={WAVE_X + (WAVE_W - BARS * 15) // 2}:{(862 if layout == "read" else WAVE_Y) + 18}:shortest=1[a]"
             cmd = base + cut + ["-i", src, "-loop", "1", "-framerate", str(FPS), "-i", frame,
                                 "-f", "rawvideo", "-pix_fmt", "rgba", "-s", f"{BARS * 15}x{WAVE_H - 36}", "-r", str(FPS), "-i", "pipe:0"] + sub_in
     else:
@@ -352,10 +424,10 @@ def main():
         else:
             g = f"[0:v]{zc}scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps={FPS}[v];[1:v]format=rgba[f];[v][f]overlay=shortest=1[a]"
         cmd = base + cut + ["-i", src, "-loop", "1", "-framerate", str(FPS), "-i", frame] + sub_in
-    g += (f";[{n}:v]format=rgba[s];[a][s]overlay={st['x']}:{st['y'] + (0 if layout == "board" else int(S.get("ytSubY") or 0))}:eof_action=pass,format=yuv420p[o]" if subs else ";[a]format=yuv420p[o]")
+    g += (f";[{n}:v]format=rgba[s];[a][s]overlay={st['x']}:{st['y'] + (0 if layout in ("board", "read") else int(S.get("ytSubY") or 0))}:eof_action=pass,format=yuv420p[o]" if subs else ";[a]format=yuv420p[o]")
     cmd += ["-filter_complex", g] + out
 
-    if layout == "sound" and S.get("ytWave") != "off":
+    if bare and S.get("ytWave") != "off":
         p = subprocess.Popen(cmd + ["-progress", "pipe:1", "-nostats"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=False)
         threading.Thread(target=wave_frames, args=(src, a, length, wv, p.stdin, wk), daemon=True).start()
         err = []; threading.Thread(target=lambda: err.extend(p.stderr.readlines()[-6:]), daemon=True).start()
@@ -376,7 +448,7 @@ def main():
 
     progress(95, "Making the thumbnails")
     stem = os.path.splitext(dest)[0]
-    pic, box = (None, None) if layout == "sound" and META.get("audioOnly") else best_frame(src, a, length, OUT)
+    pic, box = (None, None) if META.get("audioOnly") else best_frame(src, a, length, OUT)
     lines = [l for l in (k.get("thumb") or []) if l.strip()] or [title]
     thumbnails(stem, pic, box, lines, name, theme, OUT)
     if caps:

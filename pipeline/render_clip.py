@@ -503,7 +503,17 @@ if not S.get("showTitle", True):
     TITLE = ""
 
 
+def holy(w):
+    """The word «الله» keeps its proper form, also inside والله، بالله، لله، عبدالله."""
+    b = re.sub(r"[\u064b-\u0652\u0670\u0640]", "", w).replace("ٱ", "ا")
+    return "الله" in b or bool(re.search(r"(^|[^\u0621-\u064a])[وف]?لله($|[^\u0621-\u064a])", b))
+
+
 def madd(t, n):
+    return re.sub(r"\S+", lambda m: m.group(0) if holy(m.group(0)) else madd_word(m.group(0), n), t or "")
+
+
+def madd_word(t, n):
     """Stretch joined letters with ـ (same rule as the site preview): never after a non-joining letter, at a word's end, or inside لا."""
     n = int(n or 0)
     if not n:
