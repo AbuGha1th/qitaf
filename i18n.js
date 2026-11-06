@@ -69,6 +69,7 @@ const AR = {
   'videos · each edited whole':'فيديوهات · كل منها كاملًا',
   // numbering, summaries and hints
   'Your own colours':'ألوانك',
+  'Subtitles':'الترجمة النصية','Subtitle font':'خط الترجمة','Subtitle size':'حجم الترجمة','Subtitle colour':'لون الترجمة','Background behind the subtitles':'الخلفية خلف الترجمة','No box':'بلا مربع','Subtitle height (drag left to move up)':'ارتفاع الترجمة (اسحب يسارًا للأعلى)','English under the Arabic (translated by Claude, adds time)':'إنجليزية تحت العربية (يترجمها Claude، وتأخذ وقتًا أطول)','Title size':'حجم العنوان','Title colour':'لون العنوان','Name size':'حجم الاسم','Name colour':'لون الاسم','Style':'الشكل','Wave colour':'لون الموجة',"Back to the theme's colours":'عُد إلى ألوان التصميم',
   'i.':'١.','ii.':'٢.','iii.':'٣.','iv.':'٤.','v.':'٥.','vi.':'٦.','vii.':'٧.','viii.':'٨.','ix.':'٩.','x.':'١٠.',
   'normal':'عادي','off':'إيقاف','fade':'تدرّج','blur fade':'تدرّج ضبابي','sounds':'مؤثرات','countdown':'عد تنازلي','wave':'موجة','picture background':'خلفية صورة','found automatically':'تُكتشف تلقائيًا','Empty':'فارغ','& export':'والتصدير','click':'اضغط',
   'Wave strength (lower = more faded)':'قوة الموجة (الأقل أبهت)','Your handle & platforms':'معرّفك ومنصاتك','Play hook first (then burn into the clip)':'شغّل الجملة الجاذبة أولًا (ثم انتقال إلى المقطع)','fix anything misheard':'صحّح ما سُمع خطأ',

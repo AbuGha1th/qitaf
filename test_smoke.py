@@ -65,6 +65,8 @@ o = run(py, os.path.join(ROOT, "pipeline", "render_clip.py"), d, "1")
 check(next(l[7:] for l in o.splitlines() if l.startswith("OUTPUT ")).strip(), "reel")
 
 for layout in ("band", "board", "sound"):
+    # the style options: a font, sizes, colours, no box, and a non-default wave
+    S.update(ytSubFont="Cairo", ytSubSize=120, ytSubColour="#FDE68A", ytSubBox="none" if layout == "band" else "auto", ytTitleFont="Amiri", ytTitleSize=120, ytNameFont="Cairo", ytWave="dots")
     S.update(quranReading="warsh" if layout == "sound" else "hafs", style="youtube", ytLayout=layout, ytTheme="navy", ytSubs=True, ytHandle="@test", speaker="الشيخ فلان", titleText="عنوان الاختبار")
     json.dump(S, open(os.path.join(d, "settings.json"), "w"), ensure_ascii=False)
     o = run(py, os.path.join(ROOT, "pipeline", "youtube.py"), d, "1")

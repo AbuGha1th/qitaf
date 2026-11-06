@@ -3,13 +3,17 @@
      Everything comes in through location.hash as JSON: {mode, layout, theme, title, name, kicker, handle, ...}.
      mode: frame = 1920x1080 overlay (transparent where the video shows) · thumb = 1280x720 thumbnail · subs = subtitle strips as PNG data -->
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@600;700&family=Amiri:wght@700&family=Amiri+Quran&family=Cairo:wght@700&family=Tajawal:wght@700&family=Reem+Kufi:wght@600&family=Lateef:wght@700&family=Scheherazade+New:wght@700&family=El+Messiri:wght@600&family=Markazi+Text:wght@600&family=Aref+Ruqaa:wght@700&family=Manrope:wght@600;700&family=Montserrat:wght@600;700&family=Lora:wght@600&family=Playfair+Display:wght@600&family=Merriweather:wght@700&family=Lalezar&family=Marhey:wght@700&family=Rakkas&display=block" rel="stylesheet">
 <style>
 @font-face{font-family:Sans;src:url('__FONTS__/thmanyahsans-Medium.woff2'),local('Segoe UI'),local('Geeza Pro');font-weight:500}
 @font-face{font-family:Sans;src:url('__FONTS__/thmanyahsans-Bold.woff2'),local('Segoe UI Semibold'),local('Geeza Pro Bold');font-weight:700}
 @font-face{font-family:Sans;src:url('__FONTS__/thmanyahsans-Black.woff2'),local('Segoe UI Bold'),local('Geeza Pro Bold');font-weight:900}
 @font-face{font-family:QSerif;src:url('__FONTS__/thmanyahserifdisplay-Bold.woff2'),local('Sakkal Majalla Bold'),local('Baghdad');font-weight:700}
 @font-face{font-family:QSerif;src:url('__FONTS__/thmanyahserifdisplay-Black.woff2'),local('Sakkal Majalla Bold'),local('Baghdad');font-weight:900}
+@font-face{font-family:'Thmanyah Sans';src:url('__FONTS__/thmanyahsans-Black.woff2'),local('Segoe UI Bold'),local('Geeza Pro Bold')}
+@font-face{font-family:'Thmanyah Serif';src:url('__FONTS__/thmanyahserifdisplay-Black.woff2'),local('Sakkal Majalla Bold'),local('Baghdad')}
+@font-face{font-family:'Basseet';src:url('__FONTS__/BasseetFree-Bold.ttf')}
+@font-face{font-family:'AMoshref Naskh';src:url('__FONTS__/AMoshref%20Naskh.ttf')}
 @font-face{font-family:Warsh;src:url('__FONTS__/Almaghribi%20Warsh-Quran.otf')}
 *{box-sizing:border-box;margin:0}
 html,body{background:transparent;overflow:hidden}
@@ -94,37 +98,51 @@ const logoImg=c=>`<img class="${c}" src="${LOGO}" onerror="this.remove()">`;
 function fit(el,min){let f=parseFloat(getComputedStyle(el).fontSize);while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+2)&&f>min){f-=2;el.style.fontSize=f+'px'}}
 // mode=subs: each subtitle drawn to a transparent strip the renderer lays over the video
 async function subs(){
-  const W=H.w,Ht=H.h,dpr=1,lay=H.layout;const QF=H.reading==='warsh'?'Warsh':'"Amiri Quran"';await Promise.allSettled([document.fonts.load('700 50px Sans'),document.fonts.load('50px '+QF,'قُلْ إِن تُخْفُوا۟')]);
+  const W=H.w,Ht=H.h,dpr=1,lay=H.layout;const QF=H.reading==='warsh'?'Warsh':'"Amiri Quran"';const O=H.style||{},SF=`"${O.ytSubFont||'Thmanyah Sans'}",Sans`,scale=(O.ytSubSize||100)/100,enAt=.6;
+  await Promise.allSettled([document.fonts.load('700 50px '+SF,'قل'),document.fonts.load('50px '+QF,'قُلْ إِن تُخْفُوا۟'),document.fonts.load('600 30px Manrope')]);
   const cv=document.createElement('canvas');cv.width=W;cv.height=Ht;const c=cv.getContext('2d');c.direction='rtl';c.textAlign='center';c.textBaseline='middle';
   const out=[];
   for(const it of H.items){
-    c.clearRect(0,0,W,Ht);const q=it.q,size=q?H.size*.92:H.size,fam=q?QF:'Sans';c.font=`${q?400:700} ${size}px ${fam}`;
+    c.clearRect(0,0,W,Ht);const q=it.q,size=(q?H.size*.92:H.size)*scale,fam=q?QF:SF,face=z=>`${q?400:700} ${z}px ${fam}`;c.font=face(size);c.direction='rtl';
     // balance into at most two lines
     const words=it.t.split(/\s+/);let lines=[it.t];
     if(c.measureText(it.t).width>W-H.pad*2-20||words.length>9){let best=1,bd=1e9;for(let k=1;k<words.length;k++){const a=c.measureText(words.slice(0,k).join(' ')).width,b=c.measureText(words.slice(k).join(' ')).width,d=Math.abs(a-b);if(d<bd){bd=d;best=k}}
       lines=[words.slice(0,best).join(' '),words.slice(best).join(' ')]}
-    let sz=size;const widest=()=>Math.max(...lines.map(l=>c.measureText(l).width));while(widest()>W-H.pad*2&&sz>24){sz-=2;c.font=`${q?400:700} ${sz}px ${fam}`}
-    const lh=sz*(q?1.85:1.5),bh=lh*lines.length,y0=Ht/2-bh/2;
-    if(H.pill){const bw=widest()+64;c.fillStyle=H.pill;c.beginPath();c.roundRect(W/2-bw/2,y0-8,bw,bh+16,18);c.fill()}
-    c.fillStyle=q?T.acc:(H.ink||T.tx);lines.forEach((l,i)=>c.fillText(l,W/2,y0+lh*(i+.5)));
+    let sz=size;const widest=()=>Math.max(...lines.map(l=>c.measureText(l).width));const eh=z=>it.en?z*enAt*1.5:0,tall=z=>z*(q?1.85:1.5)*lines.length+eh(z)+16;while((widest()>W-H.pad*2||tall(sz)>Ht)&&sz>22){sz-=2;c.font=face(sz)}
+    const lh=sz*(q?1.85:1.5),bh=lh*lines.length+eh(sz),y0=Ht/2-bh/2;let bw=widest();
+    if(it.en){c.font=`600 ${sz*enAt}px Manrope`;bw=Math.max(bw,Math.min(c.measureText(it.en).width,W-H.pad*2));c.font=face(sz)}
+    if(H.pill){c.shadowBlur=0;c.fillStyle=H.pill;c.beginPath();c.roundRect(W/2-(bw+64)/2,y0-8,bw+64,bh+16,18);c.fill()}
+    if(H.shadow){c.shadowColor='rgba(0,0,0,.85)';c.shadowBlur=10;c.shadowOffsetY=2}
+    c.fillStyle=q?(O.ytVerseColour||T.acc):(H.ink||T.tx);lines.forEach((l,i)=>c.fillText(l,W/2,y0+lh*(i+.5)));
+    if(it.en){c.direction='ltr';let ez=sz*enAt;c.font=`600 ${ez}px Manrope`;while(c.measureText(it.en).width>W-H.pad*2&&ez>16){ez-=1;c.font=`600 ${ez}px Manrope`}
+      c.fillStyle=O.ytEnColour||H.ink||T.tx;c.fillText(it.en,W/2,y0+lh*lines.length+eh(sz)/2)}
+    c.shadowBlur=0;c.shadowOffsetY=0;
     out.push(cv.toDataURL('image/png').slice(22));
   }
   document.getElementById('out').textContent=JSON.stringify(out);document.title='done'
 }
 function frame(){
-  const ti=esc(H.title).replace(/\n/g,' '),nm=esc(H.name),kk=esc(H.kicker),hd=esc(H.handle),L=H.layout||'band';
+  const ti=esc(H.title).replace(/\n/g,' '),nm=esc(H.name),kk=esc(H.kicker),hd=esc(H.handle),L=H.layout||'band',O=H.style||{};
+  const ts=(O.ytTitleSize||100)/100;
+  const dress=()=>{s.querySelectorAll('.ti').forEach(e=>{if(O.ytTitleFont)e.style.fontFamily=`"${O.ytTitleFont}",QSerif`;if(O.ytTitleColour)e.style.color=O.ytTitleColour});
+    s.querySelectorAll('.who b,.nm').forEach(e=>{if(O.ytNameFont)e.style.fontFamily=`"${O.ytNameFont}",Sans`;if(O.ytNameColour){e.style.color=O.ytNameColour;e.style.opacity=1}e.style.fontSize=parseFloat(getComputedStyle(e).fontSize)*(O.ytNameSize||100)/100+'px'})};
   if(L==='board'){s.className='board';s.style.background='transparent';
     s.innerHTML=`<svg class="ground" width="1920" height="1080"><path fill-rule="evenodd" d="M0 0H1920V1080H0ZM56 36H1408a20 20 0 0 1 20 20V799a20 20 0 0 1-20 20H56a20 20 0 0 1-20-20V56a20 20 0 0 1 20-20Z"/></svg><div class="hole"></div><div class="subpanel"></div><div class="col">${logoImg('logo')}${kk?`<div class="kick">${kk}</div>`:''}<div class="ti" id="t"><span>${ti}</span></div><div class="rule"></div><div class="nm">${nm}</div><div class="hd">${hd}</div></div>`;
-    const t=document.getElementById('t');let f=66;while(t.scrollHeight>t.clientHeight+2&&f>34){f-=2;t.style.fontSize=f+'px'}
+    dress();const t=document.getElementById('t');let f=66*ts;t.style.fontSize=f+'px';while(t.scrollHeight>t.clientHeight+2&&f>34){f-=2;t.style.fontSize=f+'px'}
   }else if(L==='sound'){s.className='sound';
     s.innerHTML=`<div class="sd">${logoImg('logo')}<div class="kick">${kk}</div><div class="ti" id="t">${ti}</div><div class="nm">${nm}</div><div class="wv"></div><div class="hd">${hd}</div></div>`;
-    const t=document.getElementById('t');let f=112;while(t.offsetHeight>300&&f>56){f-=4;t.style.fontSize=f+'px'}
+    dress();if(O.ytWave==='off')s.querySelector('.wv').remove();const t=document.getElementById('t');let f=112*ts;t.style.fontSize=f+'px';while(t.offsetHeight>260&&f>56){f-=4;t.style.fontSize=f+'px'}
   }else{s.className='';
     s.innerHTML=`<div class="band">${logoImg('logo')}<div class="who"><b class="fit" id="n">${nm}</b>${kk?`<i class="fit">${kk}</i>`:''}</div><div class="ti fit" id="t">${ti}</div></div>`;
-    const t=document.getElementById('t');t.style.overflow='hidden';fit(t,34);t.style.overflow='';
+    dress();const t=document.getElementById('t');t.style.fontSize=60*ts+'px';t.style.overflow='hidden';fit(t,34);t.style.overflow='';
   }
-  if(H.sample){const y={band:802,board:900,sound:806}[L]||802,e=document.createElement('div');e.id='sample';e.style.cssText=`display:block;top:${y}px;${L==='board'?'left:36px;right:492px;':''}color:${L==='band'?'#fff':T.tx}`;
-    e.innerHTML=`<span style="${L==='band'?`background:${T.bg}D9`:''}">والله رؤوف بالعباد، فهذا من رحمته بهم</span>`;s.append(e)}
+  const wv=s.querySelector('.wv');
+  if(H.sample&&wv){const k=O.ytWave||'bars',col=O.ytWaveColour||(H.theme==='paper'?'#F4EFE4':'#E8C15A'),bw={thin:3,dots:13}[k]||9;  // a stand-in, so the choice can be seen before rendering
+    wv.style.display='flex';wv.style.alignItems='center';wv.style.justifyContent='center';wv.style.gap=({thin:12,dots:2}[k]??6)+'px';
+    wv.innerHTML=Array.from({length:72},(_,i)=>{const v=.15+.85*Math.abs(Math.sin(i*.37)*Math.cos(i*.11))*(1-Math.abs(i-36)/60),h=k==='dots'?bw*(.3+.7*v):Math.max(bw,116*v);return `<i style="display:block;flex:none;width:${k==='dots'?h:bw}px;height:${h}px;border-radius:99px;background:${col}"></i>`}).join('')}
+  if(H.sample){const y=({band:802,board:900,sound:806}[L]||802)+(L==='board'?0:+O.ytSubY||0)-(O.ytEnglish?22:0),e=document.createElement('div'),box=O.ytSubBox==='box'||((O.ytSubBox||'auto')==='auto'&&L==='band'),sz=46*(O.ytSubSize||100)/100;e.id='sample';
+    e.style.cssText=`display:block;top:${y}px;${L==='board'?'left:36px;right:492px;':''}color:${O.ytSubColour||(L==='band'?'#fff':T.tx)};font-family:"${O.ytSubFont||'Thmanyah Sans'}",Sans;font-size:${sz}px;${box?'':'text-shadow:0 2px 10px rgba(0,0,0,.85)'}`;
+    e.innerHTML=`<span style="display:inline-block;${box?`background:${O.ytSubBg||T.bg}D9`:''}">والله رؤوف بالعباد، فهذا من رحمته بهم${O.ytEnglish?`<div dir="ltr" style="font:600 ${sz*.6}px/1.5 Manrope;color:${O.ytEnColour||'inherit'}">Allah is Kind to His servants</div>`:''}</span>`;s.append(e)}
 }
 function thumb(){
   const v=H.variant||'A',lines=(H.lines||[]).filter(Boolean),hi=H.hi??0;s.className='th t'+v+(H.photo?'':' nophoto');
