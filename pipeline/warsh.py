@@ -9,8 +9,8 @@ import difflib
 import json
 import os
 import re
+import subprocess
 import time
-import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE = os.path.join(ROOT, "quran", "warsh")
@@ -21,8 +21,8 @@ _FOLD = str.maketrans({"ٱ": "ا", "أ": "ا", "إ": "ا", "آ": "ا", "ﹹ": "�
 
 
 def _get(path):
-    r = urllib.request.Request(API + path, headers={"User-Agent": "Qitaf"})
-    return urllib.request.urlopen(r, timeout=30).read().decode("utf-8")
+    # curl, not urllib: some Python installs have no certificates and every download would fail
+    return subprocess.run(["curl", "-fsSL", "-m", "30", "-A", "Qitaf", API + path], capture_output=True, check=True).stdout.decode("utf-8")
 
 
 def skeleton(word):

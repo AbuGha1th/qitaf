@@ -137,7 +137,7 @@ function frame(){
     dress();const t=document.getElementById('t');t.style.fontSize=60*ts+'px';t.style.overflow='hidden';fit(t,34);t.style.overflow='';
   }
   const wv=s.querySelector('.wv');
-  if(H.sample&&wv){const k=O.ytWave||'bars',col=O.ytWaveColour||(H.theme==='paper'?'#F4EFE4':'#E8C15A'),bw={thin:3,dots:13}[k]||9;  // a stand-in, so the choice can be seen before rendering
+  if(H.preview&&wv){const k=O.ytWave||'bars',col=O.ytWaveColour||(H.theme==='paper'?'#F4EFE4':'#E8C15A'),bw={thin:3,dots:13}[k]||9;  // a stand-in, so the choice can be seen before rendering
     wv.style.display='flex';wv.style.alignItems='center';wv.style.justifyContent='center';wv.style.gap=({thin:12,dots:2}[k]??6)+'px';
     wv.innerHTML=Array.from({length:72},(_,i)=>{const v=.15+.85*Math.abs(Math.sin(i*.37)*Math.cos(i*.11))*(1-Math.abs(i-36)/60),h=k==='dots'?bw*(.3+.7*v):Math.max(bw,116*v);return `<i style="display:block;flex:none;width:${k==='dots'?h:bw}px;height:${h}px;border-radius:99px;background:${col}"></i>`}).join('')}
   if(H.sample){const y=({band:802,board:900,sound:806}[L]||802)+(L==='board'?0:+O.ytSubY||0)-(O.ytEnglish?22:0),e=document.createElement('div'),box=O.ytSubBox==='box'||((O.ytSubBox||'auto')==='auto'&&L==='band'),sz=46*(O.ytSubSize||100)/100;e.id='sample';

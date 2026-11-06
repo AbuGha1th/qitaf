@@ -308,6 +308,7 @@ input[type=color]::-webkit-color-swatch-wrapper{padding:3px}input[type=color]::-
 body.restyling [data-sec="source"],body.restyling [data-sec="clips"],body.restyling #styleRow,body.restyling .no-restyle,body.restyling #framingField{display:none}
 .yt-only,#ytPrev{display:none}body.yt .yt-only{display:block}
 body.yt .lesson-only,body.yt .visualy-only,body.yt .no-yt,body.yt .no-lesson,body.yt .card.opt:not([data-sec="source"]):not([data-sec="look"]){display:none!important}
+body.yt .steps [data-st="3"]{display:none}
 body.yt #phone>*:not(#pv):not(#ytPrev),body.yt .rules-d,body.yt label:has(#showZones){display:none!important}
 @media(min-width:961px){body.yt main{grid-template-columns:minmax(0,1fr) 540px}}
 body.yt #ytPrev{display:block;position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;pointer-events:none;z-index:2;background:transparent}
@@ -618,7 +619,7 @@ body.amb{background:var(--bg)}body.amb .card{background:linear-gradient(180deg,r
 </div>
 <div id="step4" class="hidden step2">
   <section class="card">
-    <h2><span class="n">step 4</span>Your videos</h2>
+    <h2><span class="n" id="n4">step 4</span>Your videos</h2>
     <p class="hint" id="renderSub" style="margin:0 0 14px"></p>
     <div id="renders" class="clips"></div>
   </section>
@@ -804,14 +805,15 @@ document.addEventListener('pointermove',e=>{const el=e.target.closest&&e.target.
 
 // YouTube: the real design (pipeline/yt_frame.html) over the real video, scaled into the preview; zoom and move match the render
 let ytKey='';
-function drawYt(){const yt=S.style==='youtube',f=$('#ytPrev'),pv=$('#pv'),L=S.source==='audio'?'sound':S.ytLayout,board=yt&&L==='board';
+function drawYt(){const yt=S.style==='youtube';$('.steps [data-st="4"] i').textContent=yt?3:4;$('#n4').textContent=yt?'step 3':'step 4';$('#back3').textContent=yt?'← Back to transcript':'← Back to clips';drawYt2(yt)}
+function drawYt2(yt){const f=$('#ytPrev'),pv=$('#pv'),L=S.source==='audio'?'sound':S.ytLayout,board=yt&&L==='board';
   $('#ytLayoutField').classList.toggle('hidden',S.source==='audio');$('.yt-pic').classList.toggle('hidden',L==='sound');
   $('.yt-wave').classList.toggle('hidden',L!=='sound');$('.yt-suby').classList.toggle('hidden',L==='board');$('.yt-en').classList.toggle('hidden',!S.ytEnglish);
   Object.assign(pv.style,{left:board?'1.875%':'',top:board?'3.33%':'',width:board?'72.5%':'',height:board?'72.5%':'',
     transform:yt?`scale(${1+S.ytZoom/100})`:'',transformOrigin:yt?`${50+S.ytX/2}% ${50+S.ytY/2}%`:''});
   $('#phone').style.clipPath=yt?'inset(0)':'';
   if(!yt)return;
-  const key=JSON.stringify({mode:'frame',layout:L,theme:S.ytTheme,title:S.titleText||'عنوان الدرس يظهر هنا',name:S.speaker||'اسم الشيخ',kicker:S.ytKicker,handle:S.ytHandle,sample:S.ytSubs?1:0,style:Object.fromEntries(Object.keys(S).filter(k=>/^yt(Sub|Verse|Title|Name|Wave|En)/.test(k)&&S[k]!==''&&k!=='ytSubs').map(k=>[k,S[k]]))});
+  const key=JSON.stringify({mode:'frame',layout:L,theme:S.ytTheme,title:S.titleText||'عنوان الدرس يظهر هنا',name:S.speaker||'اسم الشيخ',kicker:S.ytKicker,handle:S.ytHandle,sample:S.ytSubs?1:0,preview:1,style:Object.fromEntries(Object.keys(S).filter(k=>/^yt(Sub|Verse|Title|Name|Wave|En)/.test(k)&&S[k]!==''&&k!=='ytSubs').map(k=>[k,S[k]]))});
   if(key!==ytKey){ytKey=key;f.src='/yt/frame?'+Date.now()+'#'+encodeURIComponent(key)}
   f.style.transform=`scale(${$('#phone').clientWidth/1920})`}
 new ResizeObserver(()=>{if(S.style==='youtube')drawYt()}).observe(document.querySelector('#phone'));
@@ -1339,7 +1341,7 @@ async function pollPick(){
   if(s.stage==='picked'){$('#pickWait').classList.add('hidden');C=(await (await fetch('/api/clips?job='+job)).json()).clips;
     qFound=await (await fetch('/api/quran?job='+job)).json();
     T.segments.forEach((sg,k)=>{if(sg.quran===undefined&&qFound[k]){sg.quran=qFound[k];wordsDirty=true}});
-    if(S.style==='youtube'){C.forEach(c=>c.keep=true);return $('#makeBtn').click()}  // one whole video: no clips to choose
+    if(S.style==='youtube'){C.forEach(c=>c.keep=true);$('#makeBtn').disabled=false;return $('#makeBtn').click()}  // one whole video: no clips to choose
     return drawClips()}
   $('#pickSub').textContent=`${Math.round((Date.now()-t0)/1000)}s · usually under a minute, longer for long lessons`;
   pollT=setTimeout(pollPick,1500);
@@ -1470,7 +1472,7 @@ async function pollRender(){
   // keep watching after the last render while its caption is still being written
   if(s.stage!=='rendered'||Object.values(st).some(r=>(r.output&&r.post===null)||r.label==='Queued'))pollT=setTimeout(pollRender,2000);
 }
-$('#back3').onclick=()=>{clearTimeout(pollT);showStep(3)};
+$('#back3').onclick=()=>{clearTimeout(pollT);showStep(S.style==='youtube'?2:3)};
 async function renderIds(ids,rebuild){await fetch('/api/render',{method:'POST',body:JSON.stringify({job,ids,rebuild})});clearTimeout(pollT);pollRender()}
 // caption editor: fix words or nudge timing, then re-render just this clip (reuses the cut, so it's quicker)
 async function openCaps(id){
@@ -1531,7 +1533,7 @@ async function openJob(j){job=j;
   if(S.source!=='text')$('#audio').src='/api/audio?job='+j;
   if(S.source==='video')$('#pv').src='/api/source?job='+j;
   C=(await (await fetch('/api/clips?job='+j)).json()).clips;qFound=await (await fetch('/api/quran?job='+j)).json();wordsDirty=false;
-  showStep(3);$('#pickWait').classList.add('hidden');drawClips()}
+  showStep(S.style==='youtube'?1:3);$('#pickWait').classList.add('hidden');drawClips()}
 </script>
 </body>
 </html>
